@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<decorators defaultdir="/include">
+    <!-- 此处用来定义不需要过滤的页面 -->
+    <excludes>
+    	<pattern>/index/*</pattern>
+    	<pattern>/a/AdviseServlet?method=init</pattern>
+    	<pattern>/a/OrderServlet?method=pay</pattern>
+    	<pattern>/pages/industrySubAnalysis.jsp</pattern>
+    	<pattern>/pages/brandAnalysis.jsp</pattern>
+    	<pattern>/pages/propAnalysis.jsp</pattern>
+    </excludes>
+
+ 	<!-- 用来定义装饰器要过滤的页面 -->
+    <decorator name="default" page="default.jsp">
+        <pattern>/*</pattern>
+    </decorator>
+</decorators>

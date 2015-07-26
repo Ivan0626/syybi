@@ -1,0 +1,271 @@
+package com.sanyanyu.syybi.service;
+
+import java.util.List;
+import java.util.Map;
+
+import com.sanyanyu.syybi.constants.FinalConstants;
+import com.sanyanyu.syybi.entity.CatData;
+import com.sanyanyu.syybi.entity.CatEntity;
+import com.sanyanyu.syybi.entity.PageEntity;
+import com.sanyanyu.syybi.entity.PageParam;
+import com.sanyanyu.syybi.utils.DateUtils;
+import com.sanyanyu.syybi.utils.SqlUtil;
+import com.sanyanyu.syybi.utils.StringUtils;
+
+/**
+ * 类目Service
+ * 
+ * @Description: TODO
+ * @author Ivan 2862099249@qq.com
+ * @date 2015年6月1日 下午8:59:43 
+ * @version V1.0
+ */
+public class CatService extends BaseService {
+
+	public CatService(){}
+	
+	public CatService(SqlUtil sqlUtil){
+		this.sqlUtil = sqlUtil;
+	}
+	
+	/**
+	 * 根据父级类目的编号查找它的子类目
+	 * @param parentNo 父级类目编号
+	 * @return
+	 * @throws Exception
+	 */
+	public List<CatEntity> getChildCatsByCatNo(String parentNo) throws Exception {
+		
+		String sql = "select cat_no as catNo, cat_name as catName, isparent as isParent from tbbase.tb_base_cat_api where parent_no = ? order by cat_name_single";
+		
+		return sqlUtil.searchList(CatEntity.class, sql, parentNo);
+		
+	}
+	
+	/**
+	 * 获取叶子节点对应的属性列表
+	 * @param catNo
+	 * @return
+	 * @throws Exception
+	 */
+	public List<CatEntity> getChildPropsByCatNo(String catNo) throws Exception{
+		
+		String sql = "select prop_name as propName from tbbase.tb_base_cat_prop where cat_no = ?";
+		
+		return sqlUtil.searchList(CatEntity.class, sql, catNo);
+		
+	}
+	
+	/**
+	 * 根据类目编号获取父级类目或者行业
+	 * @param childNo
+	 * @return
+	 * @throws Exception
+	 */
+	public CatEntity getParentByCatNo(String childNo) throws Exception{
+		
+		//获取父级
+		String sql = "select distinct iid as catNo, ind_name as catName, 'ind' as flag from  tbbase.tb_base_cat_api where iid = (select iid from tbbase.tb_base_cat_api where cat_no = ? limit 1)"
+				+" union all"
+				+" select cat_no as catNo, cat_name as catName, 'cat' from  tbbase.tb_base_cat_api where cat_no = (select parent_no from tbbase.tb_base_cat_api where cat_no = ? limit 1)";
+		
+		return sqlUtil.search(CatEntity.class, sql, childNo, childNo);
+	}
+	
+	/**
+	 * 根据行业id查找该行业下面的子类目
+	 * @param iid 行业id
+	 * @return
+	 * @throws Exception
+	 */
+	public List<CatEntity> getCatesByIid(String iid, String uid) throws Exception{
+		
+		//String sql = "select cat_no as catNo, cat_name as catName, isparent as isParent from tbbase.tb_base_cat_api where iid = ? order by cat_name_single";
+		
+		String sql = "select t1.cat_no as catNo, t1.cat_name as catName, t1.isparent as isParent, t2.att_cat from tbbase.tb_base_cat_api t1"
+		 +" left join tbweb.tb_attn_cat t2 on t1.cat_no = t2.att_cat  and t2.uid = ? where t1.iid = ? order by t1.cat_name_single";
+		
+		return sqlUtil.searchList(CatEntity.class, sql, uid, iid);
+	}
+	
+	/**
+	 * 统计行业下的类目
+	 * @param iid
+	 * @param uid
+	 * @param pageParam
+	 * @return
+	 * @throws Exception
+	 */
+	public PageEntity<CatData> getCateDatasByIid2(String iid, String uid, String startMonth, String endMonth, String shopType,  PageParam pageParam) throws Exception{
+		
+		List<CatData> list = this.getCateDatasByIid(iid, uid, startMonth, endMonth, shopType, pageParam);
+		
+		PageEntity<CatData> pageEntity = PageEntity.getPageEntity(pageParam, list);
+		 
+		return pageEntity;
+		
+	}
+	
+	private List<Map<String, Object>> getLeafList(String iid, String uid){
+		//查找类目对应的叶子节点
+		String sql = "select t1.cat_no,tbbase.getLeafLst(t1.cat_no) as leafNo from tbbase.tb_base_cat_api t1" 
+				+" join tbweb.tb_attn_cat t2 on t1.cat_no = t2.att_cat and t2.uid = ?"
+				+" where t1.iid = ?";
+		
+		List<Map<String, Object>> leafList = sqlUtil.searchList(sql, uid, iid);
+		
+		return leafList;
+	}
+	
+	public List<CatData> getCateDatasByIid(String iid, String uid, String startMonth, String endMonth, String shopType, PageParam pageParam) throws Exception{
+		
+		List<Map<String, Object>> leafList = getLeafList(iid, uid);
+		
+		StringBuffer sb = new StringBuffer();
+		 
+		sb.append("select t2.cat_no,t3.cat_name,t2.sales_volume, round(t2.sales_volume/sum(t2.sales_volume)*100,2) as volumeWeight,t2.sales_amount, round(t2.sales_amount/sum(t2.sales_amount)*100,2) as amountWeight,t2.tran_count, round(t2.tran_count/sum(t2.tran_count)*100,2) as countWeight from ("); 
+		
+		if(StringUtils.isBlank(startMonth)){
+			startMonth = DateUtils.getCurMonth();
+		}
+		if(StringUtils.isBlank(endMonth)){
+			endMonth = DateUtils.getCurMonth();
+		}
+		if(StringUtils.isBlank(shopType)){
+			shopType = FinalConstants.DEFAULT_SHOP_TYPE;
+		}
+		
+		for(int i = 0; i < leafList.size(); i++){
+			
+			Map<String, Object> leaf = leafList.get(i);
+			
+			sb.append(" select '").append(leaf.get("cat_no")).append("' as cat_no, ifnull(sum(t1.sales_volume),0) as sales_volume,ifnull(sum(t1.sales_amount),0) as sales_amount,ifnull(sum(t1.tran_count),0) as tran_count from tbdaily.tb_tran_month_cat t1")
+			.append(" where t1.cat_no in (").append(StringUtils.strIn(leaf.get("leafNo").toString())).append(")")
+			.append(" and str_to_date(t1.tran_month,'%Y-%m') between str_to_date('"+startMonth+"', '%Y-%m') and str_to_date('"+endMonth+"', '%Y-%m') ");
+			
+			if(!"ALL".equals(shopType)){
+				sb.append(" and t1.site = '"+shopType+"'");
+			}
+			
+			if(i != leafList.size() - 1){
+				sb.append(" union all");
+			}
+		}
+		
+		sb.append(" ) t2 left join tbbase.tb_base_cat_api t3 on t2.cat_no = t3.cat_no group by t2.cat_no");
+
+		String pageSql = sb.toString();
+		if(pageParam != null){
+			pageSql = pageParam.buildSql(sb.toString());
+		}
+		
+		List<CatData> list = sqlUtil.searchList(CatData.class, pageSql);
+		
+		return list;
+		
+	}
+	
+	/**
+	 * 获取行业趋势数据（第一层）
+	 * @param iid
+	 * @param uid
+	 * @param startMonth
+	 * @param endMonth
+	 * @param shopType
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Map<String, Object>> getIndTrends(String iid, String uid, String startMonth, String endMonth, String shopType) throws Exception{
+		
+		List<Map<String, Object>> leafList = getLeafList(iid, uid);
+		
+		List<String> monthList = DateUtils.getMonthListBetweenDates(startMonth, endMonth);
+		StringBuffer colTags = new StringBuffer();
+		StringBuffer colTags2 = new StringBuffer();
+		StringBuffer colTags3 = new StringBuffer();
+		StringBuffer cols = new StringBuffer();
+		StringBuffer cols2 = new StringBuffer();
+		StringBuffer cols3 = new StringBuffer();
+		for(int i = 0; i < monthList.size(); i++){
+			
+			String month = monthList.get(i);
+			
+			String cTag = "a"+month.replace("-", "");
+			colTags.append(cTag);
+			
+			String cTag2 = "b"+month.replace("-", "");
+			colTags2.append(cTag2);
+			
+			String cTag3 = "c"+month.replace("-", "");
+			colTags3.append(cTag3);
+			
+			
+			cols.append("sum(if(t1.tran_month='").append(month).append("',t1.sales_volume,0)) as ").append(cTag);
+			
+			cols2.append("sum(if(t1.tran_month='").append(month).append("',t1.sales_amount,0)) as ").append(cTag2);
+			
+			cols3.append("sum(if(t1.tran_month='").append(month).append("',t1.tran_count,0)) as ").append(cTag3);
+			
+			if(i != monthList.size() - 1){
+				
+				colTags.append(",");
+				cols.append(",");
+				
+				colTags2.append(",");
+				cols2.append(",");
+				
+				colTags3.append(",");
+				cols3.append(",");
+			}
+			
+		}
+		
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append("select t2.cat_no,t3.cat_name,").append(colTags).append(",").append(colTags2).append(",").append(colTags3).append(" from (");
+		
+		for(int i = 0; i < leafList.size(); i++){
+			
+			Map<String, Object> leaf = leafList.get(i);
+			
+			sb.append("select '").append(leaf.get("cat_no")).append("' as cat_no,").append(cols).append(",").append(cols2).append(",").append(cols3)
+			.append(" from tbdaily.tb_tran_month_cat t1")
+			.append(" where t1.cat_no in (").append(StringUtils.strIn(leaf.get("leafNo").toString())).append(")")
+			.append(" and str_to_date(t1.tran_month,'%Y-%m') between str_to_date('"+startMonth+"', '%Y-%m') and str_to_date('"+endMonth+"', '%Y-%m') ");
+			
+			if(!"ALL".equals(shopType)){
+				sb.append(" and t1.site = '"+shopType+"'");
+			}
+			
+			if(i != leafList.size() - 1){
+				sb.append(" union all");
+			}
+		}
+		
+		sb.append(" ) t2 left join tbbase.tb_base_cat_api t3 on t2.cat_no = t3.cat_no order by t3.cat_name_single");
+		
+		return sqlUtil.searchList(sb.toString());
+		
+	}
+	
+	/**
+	 * 检索类目
+	 * @param queryCatName 查询条件：类目名称
+	 * @return
+	 * @throws Exception
+	 */
+	public List<CatEntity> queryCat(String queryCatName, String uid) throws Exception{
+		
+//		String sql = "select * from (select distinct iid as catNo, ind_name as catName, 1 as isParent,  'ind' as flag,  cat_name_single from tbbase.tb_base_cat_api where ind_name like '%"+queryCatName+"%'"
+//					+" union all"
+//					+" select cat_no as catNo, cat_name as catName, isparent as isParent, 'cat' as flag, cat_name_single  from tbbase.tb_base_cat_api where cat_name like '%"+queryCatName+"%') t  order by t.cat_name_single";
+		
+		 String sql = "select t1.cat_no as catNo, t1.cat_name as catName, t1.isparent as isParent, 'cat' as flag, t1.cat_name_single,t4.att_cat,t1.top_cat  from tbbase.tb_base_cat_api t1"
+				 +" left join (select t2.att_cat, t3.top_cat from tbweb.tb_attn_cat t2 join tbbase.tb_base_cat_api t3 on t2.att_cat = t3.cat_no and t2.uid = ? ) t4 on t1.top_cat = t4.top_cat"
+				 +" where t1.cat_name like '%"+queryCatName+"%' order by t1.cat_name_single";
+		
+		return sqlUtil.searchList(CatEntity.class, sql, uid);
+		
+	}
+	
+}
