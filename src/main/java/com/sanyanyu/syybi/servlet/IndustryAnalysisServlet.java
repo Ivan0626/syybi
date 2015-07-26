@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sanyanyu.syybi.entity.CatData;
+import com.sanyanyu.syybi.entity.HotGoods;
 import com.sanyanyu.syybi.entity.PageEntity;
 import com.sanyanyu.syybi.entity.PageParam;
 import com.sanyanyu.syybi.service.AccountSettingService;
@@ -72,6 +73,26 @@ public class IndustryAnalysisServlet extends BaseServlet {
 				logger.error("检索行业下的行业规模失败", e);
 			}
 			
+		}else if("ind_scale_sub".equals(m)){
+			
+			try {
+				PageParam pageParam = PageParam.getPageParam(request);
+				String catNo = request.getParameter("catNo");
+				
+				String startMonth = request.getParameter("startMonth");
+				String endMonth = request.getParameter("endMonth");
+				String shopType = request.getParameter("shopType");
+				
+				PageEntity<CatData> pageEntity = catService.getCateDatasByCatNo2(catNo, startMonth, endMonth, shopType, pageParam);
+				
+				JSONObject json = JSONObject.fromObject(pageEntity);
+
+				response.getWriter().write(json.toString());
+				
+			} catch (Exception e) {
+				logger.error("检索行业下的行业规模失败", e);
+			}
+			
 		}else if("ind_trend".equals(m)){
 
 			String iid = request.getParameter("iid");
@@ -91,6 +112,48 @@ public class IndustryAnalysisServlet extends BaseServlet {
 				logger.error("检索行业下的行业趋势失败", e);
 			}
 			
+			
+		}else if("ind_trend_sub".equals(m)){
+
+			String catNo = request.getParameter("catNo");
+			
+			String startMonth = request.getParameter("startMonth");
+			String endMonth = request.getParameter("endMonth");
+			String shopType = request.getParameter("shopType");
+			
+			try {
+				List<Map<String, Object>> mapList = catService.getIndTrendSubs(catNo, startMonth, endMonth, shopType);
+				
+				JSONArray json = JSONArray.fromObject(mapList);
+				
+				response.getWriter().write(json.toString());
+				
+			} catch (Exception e) {
+				logger.error("检索类目下的子行业趋势失败", e);
+			}
+			
+			
+		}else if("ind_goods".equals(m)){
+			
+			String catNo = request.getParameter("catNo");
+			
+			String startMonth = request.getParameter("startMonth");
+			String endMonth = request.getParameter("endMonth");
+			String shopType = request.getParameter("shopType");
+			
+			try {
+				
+				PageParam pageParam = PageParam.getPageParam(request);
+				
+				PageEntity<HotGoods> pageEntity = catService.getHotGoods(catNo, startMonth, endMonth, shopType, pageParam);
+				
+				JSONObject json =  JSONObject.fromObject(pageEntity);
+				
+				response.getWriter().write(json.toString());
+				
+			} catch (Exception e) {
+				logger.error("检索类目下的子行业的热销宝贝失败", e);
+			}
 			
 		}else{
 			try {

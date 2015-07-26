@@ -1,4 +1,4 @@
-function option5(data, chartWay, startMonth, ms){
+function option5(data, chartWay, startMonth, ms, titlePrefix){
 	
 	var legend_data = [], xAxis_data = [], series = [], title_text = '';
 	
@@ -45,7 +45,7 @@ function option5(data, chartWay, startMonth, ms){
 	
 	return {
 			title : {
-		        text: "全行业"+title_text + "趋势图",
+		        text: titlePrefix+title_text + "趋势图",
 		        x:'center'
 		    },	
 		    tooltip : {
@@ -54,7 +54,8 @@ function option5(data, chartWay, startMonth, ms){
 		    legend: {
 		    	x : 'center',
 		        y : 'bottom',
-		        data:legend_data
+		        data:legend_data,
+		        padding: [-5, 5, 5, 5]
 		    },
 		    toolbox: {
 		        show : true,

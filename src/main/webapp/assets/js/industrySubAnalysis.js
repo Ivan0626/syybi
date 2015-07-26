@@ -10,7 +10,7 @@ jQuery(function($) {
 	});
 	$('#syy-industryAnalysis').addClass('active open');
 
-	//=====================================================行业规模====================================================
+	//============================================子行业规模======================================================
 	var scale_table = null;
 	//行业规模检索
 	$('#search-scale-btn').click(function(){
@@ -33,16 +33,18 @@ jQuery(function($) {
 			var chartWay = $('input[name="chartWay"]:checked').val();
 			if(chartType == 'bar'){
 				$.get(global.path+'/a/IndustryAnalysis', {
-					'iid': selectedNo,
+					'catNo': selectedNo,
 					'reType': reType,
 					'startMonth': startMonth,
 					'endMonth': endMonth,
 					'shopType': shopType,
-					'm': 'ind_scale'
+					'm': 'ind_scale_sub'
 				},function(data){
 					
 					$('#chartDiv').show();
 					$('#tableDiv').hide();
+					
+					$('#echarts-scale').css('height', '1000px');
 					
 					//加载图表或数据表
 					renderChart(option1(data.data, chartWay),'echarts-scale');
@@ -51,16 +53,18 @@ jQuery(function($) {
 				
 			}else if(chartType == 'pie'){
 				$.get(global.path+'/a/IndustryAnalysis', {
-					'iid': selectedNo,
+					'catNo': selectedNo,
 					'reType': reType,
 					'startMonth': startMonth,
 					'endMonth': endMonth,
 					'shopType': shopType,
-					'm': 'ind_scale'
+					'm': 'ind_scale_sub'
 				},function(data){
 					
 					$('#chartDiv').show();
 					$('#tableDiv').hide();
+					
+					$('#echarts-scale').css('height', '600px');
 					//加载图表或数据表
 					renderChart(option2_2(data.data, chartWay),'echarts-scale');
 					
@@ -72,13 +76,13 @@ jQuery(function($) {
 				
 				var scale_config = {};
 				scale_config.tableId = 'scale-table';
-				scale_config.url = global.path+'/a/IndustryAnalysis?m=ind_scale';
+				scale_config.url = global.path+'/a/IndustryAnalysis?m=ind_scale_sub';
 				scale_config.maxIndex = 6;
 				scale_config.type = 'POST';//POST提交才能改变scale_config.data参数
 
 				scale_config.data = function(d) {
 
-					d.iid = $('#selected-no').val();
+					d.catNo = $('#selected-no').val();
 					d.reType = $('input[name="reType"]:checked').val();
 					d.startMonth = $('#d4321').val();
 					d.endMonth = $('#d4322').val();
@@ -169,6 +173,8 @@ jQuery(function($) {
 				$('#chartDiv').show();
 				$('#tableDiv').hide();
 				
+				$('#echarts-scale').css('height', '1000px');
+				
 				//加载图表或数据表
 				renderChart(option1(data.data, chartWay),'echarts-scale');
 			};
@@ -179,31 +185,32 @@ jQuery(function($) {
 				$('#chartDiv').show();
 				$('#tableDiv').hide();
 				
+				$('#echarts-scale').css('height', '600px');
 				//加载图表或数据表
 				renderChart(option2_2(data.data, chartWay),'echarts-scale');
 			};
 		}
 		
 		$.get(global.path+'/a/IndustryAnalysis', {
-			'iid': $('#selected-no').val(),
+			'catNo': $('#selected-no').val(),
 			'reType': $('input[name="reType"]:checked').val(),
 			'startMonth': $('#d4321').val(),
 			'endMonth': $('#d4322').val(),
 			'shopType': $('input[name="shopType"]:checked').val(),
-			'm': 'ind_scale'
+			'm': 'ind_scale_sub'
 		},ajaxfn,'json');
 		
 	});
 	
-	//=====================================================行业趋势====================================================
+	//============================================子行业趋势======================================================
 	//行业趋势动态表格
 	function buildTrendTable(){
 		
 		var startMonth = $('#d432112').val();
     	var endMonth = $('#d432222').val();
     	
-    	$.get(global.path+'/a/IndustryAnalysis?m=ind_trend',{
-    		'iid': $('#selected-no').val(),
+    	$.get(global.path+'/a/IndustryAnalysis?m=ind_trend_sub',{
+    		'catNo': $('#selected-no').val(),
     		'startMonth': startMonth,
 			'endMonth': endMonth,
 			'shopType': $('input[name="shopType2"]:checked').val()
@@ -332,8 +339,8 @@ jQuery(function($) {
 		var startMonth = $('#d432112').val();
     	var endMonth = $('#d432222').val();
     	
-    	$.get(global.path+'/a/IndustryAnalysis?m=ind_trend',{
-    		'iid': $('#selected-no').val(),
+    	$.get(global.path+'/a/IndustryAnalysis?m=ind_trend_sub',{
+    		'catNo': $('#selected-no').val(),
     		'startMonth': startMonth,
 			'endMonth': endMonth,
 			'shopType': $('input[name="shopType2"]:checked').val()
@@ -343,7 +350,7 @@ jQuery(function($) {
     		
     		var ms = getMonths(startMonth, endMonth);
     		
-    		renderChart(option5(data, chartWay2, startMonth, ms, '全行业'),'echarts-trend');
+    		renderChart(option5(data, chartWay2, startMonth, ms, '子行业'),'echarts-trend');
     		
     	},'json');
 	}
@@ -383,12 +390,138 @@ jQuery(function($) {
 		buildTrendChart();
 		
 	});
+	//=================================================热销宝贝=============================================
+	var goods_config = {};
+	goods_config.tableId = 'goods-table';
+	goods_config.url = global.path + '/a/IndustryAnalysis?m=ind_goods';
+	goods_config.maxIndex = 9;
+
+	goods_config.type = 'POST';
+
+	goods_config.data = function(d) {
+
+		d.catNo = $('#selected-no').val();
+		d.startMonth = $('#d432113').val();
+		d.endMonth = $('#d432113').val();
+		d.shopType = $('input[name="shopType3"]:checked').val();
+		
+		d.maxIndex = goods_config.maxIndex;
+
+	};
+
+	goods_config.columns = [
+			{
+				data : 'rowNum',
+				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+					$(nTd).css('text-align', 'right').css('vertical-align', 'inherit');
+				}
+			},
+			{
+				data : 'prd_name',
+				render : function(data, type, full, meta) {
+					var html = '<img width="60" height="60" src="' + full.prd_img + '" alt="商品图片">' + ' <a target="_blank" href="' + full.prd_url
+							+ '">' + data + '</a>';
+					return html;
+				}
+			},
+			{
+				data : 'avg_price',
+				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+					$(nTd).css('text-align', 'right').css('vertical-align', 'inherit');
+				}
+			},
+			{
+				data : 'avg_price_tran',
+				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+					$(nTd).css('text-align', 'right').css('vertical-align', 'inherit');
+				},
+				render : function(data, type, full, meta) {
+
+					if (data < full.avg_price) {
+						return data + '<img src="' + global.path + '/assets/img/down_arrow_new.gif">';
+					} else if (data > full.avg_price) {
+						return data + '<img src="' + global.path + '/assets/img/up_arrow_new.gif">';
+					} else {
+						return data;
+					}
+				}
+			},
+			{
+				data : 'sales_volume',
+				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+					$(nTd).css('text-align', 'right').css('vertical-align', 'inherit');
+				}
+			},
+			{
+				data : 'sales_amount',
+				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+					$(nTd).css('text-align', 'right').css('vertical-align', 'inherit');
+				}
+			},
+			{
+				data : 'tran_count',
+				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+					$(nTd).css('text-align', 'right').css('vertical-align', 'inherit');
+				}
+			},
+			{
+				data : 'shop_name',
+				render : function(val, display, val_obj, prop) {
+					var html = '<a target="_blank" href="' + val_obj.shop_url + '">' + val + '</a>';
+
+					if (val_obj.shop_type == 'TMALL') {
+						html = '<img src="' + global.path + '/assets/imagesLocal/bc_shop_icon.png">'
+								+ ' <a target="_blank" href="' + val_obj.shop_url + '">' + val + '</a>';
+					}
+
+					return html;
+				}
+			},
+			{
+				data : 'region'
+			},
+			{
+				data : 'item_id',
+				searchable: false,
+				orderable: false,
+				render : function(val, display, val_obj,prop) {
+					
+					//TODO：宝贝关注
+//					if($.trim(val_obj.asid) != '' ){
+//						return '已关注';
+//					}else{
+//						return '<label class="pos-rel">' + '<input type="checkbox" name="shopIds" value="' + val + "@" + val_obj.shop_name
+//						+ '" class="ace" />' + '<span class="lbl"></span>' + '</label>';
+//					}
+//					return '';
+					
+					return '<label class="pos-rel">' + '<input type="checkbox" name="shopIds" value="' + val + "@" + val_obj.prd_name
+					+ '" class="ace" />' + '<span class="lbl"></span>' + '</label>';
+				}
+			} ];
+
+	// 初始加载
+	var goods_table = null;//loadDataTable(goods_config);
+
+	// 检索
+	$('#search-goods-btn').click(function() {
+
+		if($('#selected-no').val()){
+    		if (goods_table) {
+				goods_table.fnDraw();
+			} else {
+				goods_table = loadDataTable(goods_config);
+			}
+    	}
+
+	});
+	
 	
 	//===================================切换tab===============================================
 	//切换tab
 	var curTabIdx = 1;
 	
-	$('#tab1, #tab2').on('shown.bs.tab', function (e) {
+	$('#tab1, #tab2, #tab3, #tab4').on('shown.bs.tab', function (e) {
 		
 	    curTabIdx = e.target.id.replace('tab','');
 	    
@@ -422,6 +555,15 @@ jQuery(function($) {
 	    		
 	    	}
 	    	
+	    }else if(curTabIdx == 3){
+	    	
+	    	if($('#selected-no').val()){
+	    		if (goods_table) {
+					goods_table.fnDraw();
+				} else {
+					goods_table = loadDataTable(goods_config);
+				}
+	    	}
 	    }
 	});
 	

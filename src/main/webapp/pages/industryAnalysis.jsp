@@ -207,7 +207,7 @@
 												<input name="chartWay" value="amount" type="radio" class="ace" /><span class="lbl"> 销售额</span>
 												<input name="chartWay" value="count" type="radio" class="ace" /><span class="lbl"> 成交次数</span>
 											</div>
-							          		<div class="col-md-12" id="echarts-scale" style="height:500px;"></div>
+							          		<div class="col-md-12" id="echarts-scale" style="height:250px;"></div>
 								        </div>
 										<div class="row" id="tableDiv" style="display:none;">
 											<div class="col-xs-12">
@@ -416,7 +416,7 @@
 		    'catNo': catNo,
 		    'method': "loadCat"
 		}, function(data) {
-			if(data && data.childCats && data.parentCat){
+			if(data && data.childCats && data.parentCat && data.catDataList){
 				
 				var childCats = data.childCats;
 				var parentCat = data.parentCat;
@@ -445,8 +445,17 @@
 				
 				$('#load-content').load(global.path+'/pages/industrySubAnalysis.jsp',{}, function(){
 					
-					//加载子行业数据
+					$('#selected-no').val(catNo);
 					
+					//加载子行业数据图表
+					var chartWay = $('input[name="chartWay"]:checked').val();
+					
+					$('#echarts-scale').css('height', '1000px');
+					
+					$('#chartDiv').show();
+					$('#tableDiv').hide();
+					
+					renderChart(option1(data.catDataList, chartWay),'echarts-scale');
 				});
 				
 			}
@@ -473,7 +482,7 @@
 					html += '</div>';
 					
 					html += '<div class="selected" data-cat="'+catNo+'"> '+catName+'</div>';
-					html += '<ul>';
+					html += '<ul id="prop-list">';
 					
 					$.each(childProps, function(idx, d){
 						html += '<li> <a href="javascript:void(0);" onclick=\"loadLeaf(this, \''+d.propName+'\')\">'+d.propName+'</a></li>';
@@ -495,7 +504,8 @@
 		//加载属性的报表
 		function loadLeaf(obj, propName){
 			
-			//$(obj).parent('a').removeClass('props-showy');//TODO：其他属性去掉颜色
+			$('#prop-list > li > a').removeClass('props-showy');
+			
 			$(obj).addClass('props-showy');
 			
 			var $seleced = $('.selected');

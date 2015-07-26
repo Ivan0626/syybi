@@ -1,11 +1,13 @@
 package com.sanyanyu.syybi.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.sanyanyu.syybi.constants.FinalConstants;
 import com.sanyanyu.syybi.entity.CatData;
 import com.sanyanyu.syybi.entity.CatEntity;
+import com.sanyanyu.syybi.entity.HotGoods;
 import com.sanyanyu.syybi.entity.PageEntity;
 import com.sanyanyu.syybi.entity.PageParam;
 import com.sanyanyu.syybi.utils.DateUtils;
@@ -89,7 +91,7 @@ public class CatService extends BaseService {
 	}
 	
 	/**
-	 * 统计行业下的类目
+	 * 检索行业模块时返回的数据
 	 * @param iid
 	 * @param uid
 	 * @param pageParam
@@ -106,7 +108,33 @@ public class CatService extends BaseService {
 		
 	}
 	
-	private List<Map<String, Object>> getLeafList(String iid, String uid){
+	/**
+	 * 检索子行业模块时返回的数据
+	 * @param catNo
+	 * @param startMonth
+	 * @param endMonth
+	 * @param shopType
+	 * @param pageParam
+	 * @return
+	 * @throws Exception
+	 */
+	public PageEntity<CatData> getCateDatasByCatNo2(String catNo, String startMonth, String endMonth, String shopType,  PageParam pageParam) throws Exception{
+		
+		List<CatData> list = this.getCateDatasByCatNo(catNo, startMonth, endMonth, shopType, pageParam);
+		
+		PageEntity<CatData> pageEntity = PageEntity.getPageEntity(pageParam, list);
+		 
+		return pageEntity;
+		
+	}
+	
+	/**
+	 * 获取行业下的叶子节点
+	 * @param iid
+	 * @param uid
+	 * @return
+	 */
+	private List<Map<String, Object>> getLeafListByIid(String iid, String uid){
 		//查找类目对应的叶子节点
 		String sql = "select t1.cat_no,tbbase.getLeafLst(t1.cat_no) as leafNo from tbbase.tb_base_cat_api t1" 
 				+" join tbweb.tb_attn_cat t2 on t1.cat_no = t2.att_cat and t2.uid = ?"
@@ -117,9 +145,42 @@ public class CatService extends BaseService {
 		return leafList;
 	}
 	
-	public List<CatData> getCateDatasByIid(String iid, String uid, String startMonth, String endMonth, String shopType, PageParam pageParam) throws Exception{
+	/**
+	 * 获取类目下的每个子类目的叶子节点
+	 * @param catNo
+	 * @return
+	 */
+	private List<Map<String, Object>> getLeafListByCatNo(String catNo){
 		
-		List<Map<String, Object>> leafList = getLeafList(iid, uid);
+		String sql = "select cat_no, ifnull(tbbase.getLeafLst(cat_no),cat_no) as leafNo from tbbase.tb_base_cat_api where parent_no = ?";
+		
+		return sqlUtil.searchList(sql, catNo);
+		
+	}
+	
+	/**
+	 * 获取类目下所有叶子节点
+	 * @param catNo
+	 * @return
+	 */
+	private Map<String, Object> getLeafListByCatNo2(String catNo){
+		
+		String sql = "select tbbase.getLeafLst(?) as leafNo";
+		
+		return sqlUtil.search(sql, catNo);
+		
+	}
+	
+	/**
+	 * 统计类目的销量、销售额、成交次数
+	 * @param leafList
+	 * @param startMonth
+	 * @param endMonth
+	 * @param shopType
+	 * @param pageParam
+	 * @return
+	 */
+	private List<CatData> getCatDataByMonths(List<Map<String, Object>> leafList, String startMonth, String endMonth, String shopType, PageParam pageParam){
 		
 		StringBuffer sb = new StringBuffer();
 		 
@@ -144,40 +205,78 @@ public class CatService extends BaseService {
 			.append(" and str_to_date(t1.tran_month,'%Y-%m') between str_to_date('"+startMonth+"', '%Y-%m') and str_to_date('"+endMonth+"', '%Y-%m') ");
 			
 			if(!"ALL".equals(shopType)){
-				sb.append(" and t1.site = '"+shopType+"'");
+				sb.append(" and t1.shop_type = '"+shopType+"'");
 			}
 			
 			if(i != leafList.size() - 1){
-				sb.append(" union all");
+				sb.append(" union all ");
 			}
 		}
 		
 		sb.append(" ) t2 left join tbbase.tb_base_cat_api t3 on t2.cat_no = t3.cat_no group by t2.cat_no");
 
-		String pageSql = sb.toString();
+		String pageSql = "";
 		if(pageParam != null){
 			pageSql = pageParam.buildSql(sb.toString());
+		}else{
+			pageSql = sb.append(" order by t3.cat_name_single desc").toString();
 		}
 		
 		List<CatData> list = sqlUtil.searchList(CatData.class, pageSql);
+		
+		return list;
+	}
+	
+	/**
+	 * 点击行业时返回给行业规模的数据，为柱状图提供数据
+	 * @param iid
+	 * @param uid
+	 * @param startMonth
+	 * @param endMonth
+	 * @param shopType
+	 * @param pageParam
+	 * @return
+	 * @throws Exception
+	 */
+	public List<CatData> getCateDatasByIid(String iid, String uid, String startMonth, String endMonth, String shopType, PageParam pageParam) throws Exception{
+		
+		List<Map<String, Object>> leafList = getLeafListByIid(iid, uid);
+		
+		List<CatData> list = getCatDataByMonths(leafList, startMonth, endMonth, shopType, pageParam);
 		
 		return list;
 		
 	}
 	
 	/**
-	 * 获取行业趋势数据（第一层）
-	 * @param iid
-	 * @param uid
+	 * 点击类目时返回给子行业模块的数据，为柱状图提供数据
+	 * @param catNo
+	 * @param startMonth
+	 * @param endMonth
+	 * @param shopType
+	 * @param pageParam
+	 * @return
+	 * @throws Exception
+	 */
+	public List<CatData> getCateDatasByCatNo(String catNo, String startMonth, String endMonth, String shopType, PageParam pageParam) throws Exception{
+		
+		List<Map<String, Object>> leafList = getLeafListByCatNo(catNo);
+		
+		List<CatData> list = getCatDataByMonths(leafList, startMonth, endMonth, shopType, pageParam);
+		
+		return list;
+		
+	}
+	
+	/**
+	 * 封装获取行业趋势的数据业务逻辑
+	 * @param leafList
 	 * @param startMonth
 	 * @param endMonth
 	 * @param shopType
 	 * @return
-	 * @throws Exception
 	 */
-	public List<Map<String, Object>> getIndTrends(String iid, String uid, String startMonth, String endMonth, String shopType) throws Exception{
-		
-		List<Map<String, Object>> leafList = getLeafList(iid, uid);
+	private List<Map<String, Object>> getIndTrendDatas(List<Map<String, Object>> leafList, String startMonth, String endMonth, String shopType){
 		
 		List<String> monthList = DateUtils.getMonthListBetweenDates(startMonth, endMonth);
 		StringBuffer colTags = new StringBuffer();
@@ -200,11 +299,11 @@ public class CatService extends BaseService {
 			colTags3.append(cTag3);
 			
 			
-			cols.append("sum(if(t1.tran_month='").append(month).append("',t1.sales_volume,0)) as ").append(cTag);
+			cols.append("ifnull(sum(if(t1.tran_month='").append(month).append("',t1.sales_volume,0)),0) as ").append(cTag);
 			
-			cols2.append("sum(if(t1.tran_month='").append(month).append("',t1.sales_amount,0)) as ").append(cTag2);
+			cols2.append("ifnull(sum(if(t1.tran_month='").append(month).append("',t1.sales_amount,0)),0) as ").append(cTag2);
 			
-			cols3.append("sum(if(t1.tran_month='").append(month).append("',t1.tran_count,0)) as ").append(cTag3);
+			cols3.append("ifnull(sum(if(t1.tran_month='").append(month).append("',t1.tran_count,0)),0) as ").append(cTag3);
 			
 			if(i != monthList.size() - 1){
 				
@@ -234,17 +333,56 @@ public class CatService extends BaseService {
 			.append(" and str_to_date(t1.tran_month,'%Y-%m') between str_to_date('"+startMonth+"', '%Y-%m') and str_to_date('"+endMonth+"', '%Y-%m') ");
 			
 			if(!"ALL".equals(shopType)){
-				sb.append(" and t1.site = '"+shopType+"'");
+				sb.append(" and t1.shop_type = '"+shopType+"'");
 			}
 			
 			if(i != leafList.size() - 1){
-				sb.append(" union all");
+				sb.append(" union all ");
 			}
 		}
 		
 		sb.append(" ) t2 left join tbbase.tb_base_cat_api t3 on t2.cat_no = t3.cat_no order by t3.cat_name_single");
 		
 		return sqlUtil.searchList(sb.toString());
+		
+	}
+	
+	/**
+	 * 获取行业趋势数据（第一层）
+	 * @param iid
+	 * @param uid
+	 * @param startMonth
+	 * @param endMonth
+	 * @param shopType
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Map<String, Object>> getIndTrends(String iid, String uid, String startMonth, String endMonth, String shopType) throws Exception{
+		
+		List<Map<String, Object>> leafList = getLeafListByIid(iid, uid);
+		
+		List<Map<String, Object>> list = getIndTrendDatas(leafList, startMonth, endMonth, shopType);
+		
+		return list;
+		
+	}
+	
+	/**
+	 * 获取子行业趋势数据
+	 * @param catNo
+	 * @param startMonth
+	 * @param endMonth
+	 * @param shopType
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Map<String, Object>> getIndTrendSubs(String catNo, String startMonth, String endMonth, String shopType) throws Exception{
+		
+		List<Map<String, Object>> leafList = getLeafListByCatNo(catNo);
+		
+		List<Map<String, Object>> list = getIndTrendDatas(leafList, startMonth, endMonth, shopType);
+		
+		return list;
 		
 	}
 	
@@ -265,6 +403,48 @@ public class CatService extends BaseService {
 				 +" where t1.cat_name like '%"+queryCatName+"%' order by t1.cat_name_single";
 		
 		return sqlUtil.searchList(CatEntity.class, sql, uid);
+		
+	}
+	
+	/**
+	 * 获取热销宝贝数据
+	 * @param catNo
+	 * @param startMonth
+	 * @param endMonth
+	 * @param shopType
+	 * @param pageParam
+	 * @return
+	 * @throws Exception
+	 */
+	public PageEntity<HotGoods> getHotGoods(String catNo, String startMonth, String endMonth, String shopType, PageParam pageParam) throws Exception{
+		
+		Map<String, Object> leaf = this.getLeafListByCatNo2(catNo);
+		
+		StringBuffer sb = new StringBuffer();
+		
+		List<Object> params = new ArrayList<Object>();
+		params.add(startMonth);
+		params.add(endMonth);
+		
+		sb.append(" select (@rowNum:=@rowNum+1) as rowNum,t2.prd_img,t2.prd_name,t1.avg_price, avg(t1.avg_price_tran) as avg_price_tran,sum(t1.sales_volume) as sales_volume,sum(t1.sales_amount) as sales_amount,")
+		.append(" sum(t1.tran_count) as tran_count,t1.shop_name,t1.shop_id,t1.shop_type,t2.region,t2.item_id from  tbdaily.tb_tran_month t1 ")
+		.append(" join tbbase.tb_base_product t2 on t1.shop_id = t2.shop_id and t1.item_id = t2.item_id,(Select (@rowNum :=0) ) tt")
+		.append(" where str_to_date(t1.tran_month,'%Y-%m') between str_to_date(?, '%Y-%m') and str_to_date(?, '%Y-%m')");
+		
+		if(!"ALL".equals(shopType)){
+			sb.append(" and t1.shop_type = ?");
+			params.add(shopType);
+		}
+		
+		sb.append(" and t2.cat_no in ("+StringUtils.strIn(leaf.get("leafNo").toString())+")");
+		
+		String pageSql = pageParam.buildSql(sb.toString());
+		
+		pageSql += " limit 0, 100";
+		
+		List<HotGoods> list = sqlUtil.searchList(HotGoods.class, pageSql, params.toArray());
+		
+		return PageEntity.getPageEntity(pageParam, list);
 		
 	}
 	

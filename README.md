@@ -1,4 +1,4 @@
-# syybi电商数据平台
+# syybi
 
 ## 平台简介
 
@@ -45,7 +45,7 @@ xxx
 ## 快速体验
 
 1. 具备运行环境：JDK1.7+、Maven3.0+、MySql5+。
-2. 修改src\main\resources\syybi.properties文件中的数据库设置参数。
+2. 修改src\main\resources\dbconfig.properties文件中的数据库设置参数。
 3. 根据修改参数创建对应MySql数据库用户和参数。
 
 ## 常见问题
@@ -103,3 +103,9 @@ xxx
 2015-07-21
 
 * 里程碑版本
+
+2015-07-26
+
+* 新增子行业模块功能
+* 新增子行业趋势功能
+* 新增热销宝贝功能

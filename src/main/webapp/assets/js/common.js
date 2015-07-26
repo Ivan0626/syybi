@@ -549,3 +549,63 @@ function loadSelectCat(sId, path) {
 	}
 }
 
+//============================封装echarts组件=================================
+var EC_READY = false;
+var chart = null;
+
+//加载Echarts组件
+function loadEcharts(ecfn){
+	require.config({
+        paths: {
+            echarts: global.path+'/assets/js/echarts/source'
+        }
+    });
+	// 按需加载
+    require(
+        [
+            'echarts',//加载echarts.js
+            'echarts/chart/line',// 加载line.js
+            'echarts/chart/bar',
+            'echarts/chart/pie',
+            'echarts/chart/map'
+        ],ecfn
+    );
+}
+
+//渲染图表
+function renderChart(option, chartId){
+	
+	if(EC_READY){
+		
+		var ec = require('echarts');
+		
+		// 基于准备好的dom，初始化echarts图表
+    	chart = ec.init(document.getElementById(chartId));
+    	chart.setOption(option);
+		
+	}else{
+		
+		var ecfn = function (ec) {
+		    
+			EC_READY = true;
+			
+			// 基于准备好的dom，初始化echarts图表
+			chart = ec.init(document.getElementById(chartId));
+			chart.setOption(option);
+		};
+		loadEcharts(ecfn);
+	}
+	
+}
+
+var resizeTicket = null;
+window.onload = function () {
+    window.onresize = function () {
+        clearTimeout(resizeTicket);
+        resizeTicket = setTimeout(function (){
+        	if(chart){
+        		chart.resize();
+        	}
+        },200);
+    };
+};

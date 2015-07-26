@@ -47,14 +47,14 @@
 						</li>
 						
 						<li>
-							<a data-toggle="tab" id="tab2" href="#goods">
+							<a data-toggle="tab" id="tab3" href="#goods">
 								<i class="green ace-icon fa fa-home bigger-120"></i>
 								热销宝贝
 							</a>
 						</li>
 						
 						<li>
-							<a data-toggle="tab" id="tab2" href="#shop">
+							<a data-toggle="tab" id="tab4" href="#shop">
 								<i class="green ace-icon fa fa-home bigger-120"></i>
 								热销店铺
 							</a>
@@ -157,7 +157,7 @@
 									<input name="chartWay" value="amount" type="radio" class="ace" /><span class="lbl"> 销售额</span>
 									<input name="chartWay" value="count" type="radio" class="ace" /><span class="lbl"> 成交次数</span>
 								</div>
-				          		<div class="col-md-12" id="echarts-scale" style="height:500px;"></div>
+				          		<div class="col-md-12" id="echarts-scale" style="height:1000px;"></div>
 					        </div>
 							<div class="row" id="tableDiv" style="display:none;">
 								<div class="col-xs-12">
@@ -390,7 +390,7 @@
 											</thead>
 		
 											<tbody>
-												<tr>
+												<!-- <tr>
 													<td>1</td>
 													<td>
 														<img width="60" height="60" src="http://img.alicdn.com/imgextra/i2/1936285526/TB2gHi.dpXXXXXEXpXXXXXXXXXX_!!1936285526.jpg_60x60q70.jpg" alt="商品图片">
@@ -407,7 +407,7 @@
                                              				</td>
 													<td>广东中山</td>
 													<td><label class="pos-rel"><input type="checkbox" name="shopIds" value="" class="ace" /><span class="lbl"></span></label></td>
-												</tr>
+												</tr> -->
 											</tbody>
 											
 										</table>
@@ -521,7 +521,7 @@
 												<tr>
 													<td>1</td>
 													<td>
-														<img src="/img/bc_shop_icon.png">
+														<img src="${ctx }/assets/img/bc_shop_icon.png">
                                              					<a href="http://shop108086480.taobao.com" target="_blank"> 金煌旗舰店</a>
                                              				</td>
 													<td>11</td>
@@ -549,18 +549,11 @@
 	</div><!-- /.page-content -->
 </div>
 
+<script src="../assets/js/industrySubAnalysis.js"></script>
+
 <script type="text/javascript">
 
 	$(function(){
-		
-		
-		$('#goods-table').dataTable({
-    		paging: false,
-    		autoWidth: false,
-    		processing: true,
-    		language : dataTableConfig.language,
-    		dom : dataTableConfig.dom
-    	});
 		
 		$('#shop-table').dataTable({
     		paging: false,

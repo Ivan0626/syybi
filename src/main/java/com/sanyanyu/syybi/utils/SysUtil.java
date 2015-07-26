@@ -60,4 +60,22 @@ public class SysUtil {
 		
 	}
 	
+	/**
+	 * 生成店铺的URL
+	 * @param shopId
+	 * @return
+	 */
+	public static String getShopUrl(String shopId){
+		return getValue("shop.url").replace("{0}", shopId);
+	}
+	
+	/**
+	 * 生成产品的URL
+	 * @param itemId
+	 * @return
+	 */
+	public static String getPrdUrl(String itemId){
+		return getValue("product.url").replace("{0}", itemId);
+	}
+	
 }

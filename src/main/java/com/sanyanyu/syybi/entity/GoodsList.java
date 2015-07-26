@@ -142,9 +142,7 @@ public class GoodsList implements Serializable {
 	}
 	public String getPrd_url() {
 		
-		String prdUrl = SysUtil.getValue("product.url");
-		
-		return prdUrl + this.getItem_id();
+		return SysUtil.getPrdUrl(this.getItem_id());
 	}
 	public void setPrd_url(String prd_url) {
 		this.prd_url = prd_url;

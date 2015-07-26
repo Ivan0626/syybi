@@ -1,6 +1,5 @@
 package com.sanyanyu.syybi.entity;
 
-import com.sanyanyu.syybi.utils.SysUtil;
 
 /**
  * 店铺营销组合分析-宝贝列表
@@ -30,9 +29,6 @@ public class GoodsEntity extends AdvertBase {
 	private int activity_mobile;// 手机淘宝活动数量
 	private int ztc_mobile;// 手机直通车数量
 
-	private String prd_img;
-	private String prd_name;
-	private String prd_url;
 	private String category;
 	private String avg_price;
 	private String avg_price_tran;
@@ -42,15 +38,6 @@ public class GoodsEntity extends AdvertBase {
 	
 	private String cat_path;
 	
-	private String item_id;
-
-	public String getItem_id() {
-		return item_id;
-	}
-
-	public void setItem_id(String item_id) {
-		this.item_id = item_id;
-	}
 
 	public String getCat_path() {
 		return cat_path;
@@ -162,32 +149,6 @@ public class GoodsEntity extends AdvertBase {
 
 	public void setZtc_mobile(int ztc_mobile) {
 		this.ztc_mobile = ztc_mobile;
-	}
-
-	public String getPrd_img() {
-		return prd_img;
-	}
-
-	public void setPrd_img(String prd_img) {
-		this.prd_img = prd_img;
-	}
-
-	public String getPrd_name() {
-		return prd_name;
-	}
-
-	public void setPrd_name(String prd_name) {
-		this.prd_name = prd_name;
-	}
-
-	public String getPrd_url() {
-		String prdUrl = SysUtil.getValue("product.url");
-		
-		return prdUrl + this.getItem_id();
-	}
-
-	public void setPrd_url(String prd_url) {
-		this.prd_url = prd_url;
 	}
 
 	public String getCategory() {

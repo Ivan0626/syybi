@@ -72,11 +72,17 @@ function option1(data, chartWay){
 		                normal: {
 		                    color: function(params) {
 		                        // build a color map as your need.
-		                        var colorList = [
-		                          '#60C0DD','#B5C334','#FCCE10','#E87C25','#27727B',
-		                           '#FE8463','#9BCA63','#FAD860','#F3A43B','#C1232B',
-		                           '#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'
-		                        ];
+		                    	
+		                    	 var colorList = [
+		        		                          '#60C0DD','#B5C334','#FCCE10','#E87C25','#27727B',
+		        		                           '#FE8463','#9BCA63','#FAD860','#F3A43B','#C1232B',
+		        		                           '#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'
+		        		                        ];
+		                    	
+		                    	if(params.dataIndex >= colorList.length){
+			                        return '#'+('00000'+(Math.random()*0x1000000<<0).toString(16)).slice(-6);
+			                    }
+		                        
 		                        return colorList[params.dataIndex];
 		                    },
 		                    label: {

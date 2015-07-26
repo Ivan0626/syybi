@@ -91,19 +91,31 @@ public class CategoryServlet extends BaseServlet {
 			
 			String catNo = request.getParameter("catNo");
 			if(StringUtils.isNotBlank(catNo)){
+				
+				List<CatData> catDataList = null;
+				List<CatEntity> childCats = null;
+				CatEntity parentCat = null;
 				try {
-					List<CatEntity> childCats = catService.getChildCatsByCatNo(catNo);
+					childCats = catService.getChildCatsByCatNo(catNo);
 					
-					CatEntity parentCat = catService.getParentByCatNo(catNo);
+					parentCat = catService.getParentByCatNo(catNo);
 					
-					JSONObject json = new JSONObject();
-					json.put("childCats", JSONArray.fromObject(childCats));
-					json.put("parentCat", JSONObject.fromObject(parentCat));
-					
-					response.getWriter().write(json.toString());
 				} catch (Exception e) {
 					logger.error("获取类目下的子类目以及父级信息失败", e);
 				}
+				
+				try {
+					catDataList = catService.getCateDatasByCatNo(catNo, null, null, null, null);
+				} catch (Exception e) {
+					logger.error("获取类目下对应叶子节点的统计数据失败", e);
+				}
+				
+				JSONObject json = new JSONObject();
+				json.put("childCats", JSONArray.fromObject(childCats));
+				json.put("parentCat", JSONObject.fromObject(parentCat));
+				json.put("catDataList", catDataList);
+				
+				response.getWriter().write(json.toString());
 			}
 			
 		}else if("loadProp".equals(method)){
