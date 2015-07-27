@@ -8,6 +8,7 @@
     	<pattern>/pages/industrySubAnalysis.jsp</pattern>
     	<pattern>/pages/brandAnalysis.jsp</pattern>
     	<pattern>/pages/propAnalysis.jsp</pattern>
+    	<pattern>/pages/industryAnalysis2.jsp</pattern>
     </excludes>
 
  	<!-- 用来定义装饰器要过滤的页面 -->

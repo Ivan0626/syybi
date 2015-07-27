@@ -575,6 +575,8 @@ function loadEcharts(ecfn){
 //渲染图表
 function renderChart(option, chartId){
 	
+	var chart = null;
+	
 	if(EC_READY){
 		
 		var ec = require('echarts');
@@ -595,7 +597,7 @@ function renderChart(option, chartId){
 		};
 		loadEcharts(ecfn);
 	}
-	
+	return chart;
 }
 
 var resizeTicket = null;

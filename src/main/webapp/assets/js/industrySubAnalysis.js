@@ -18,7 +18,7 @@ jQuery(function($) {
 		//左侧类目树选中的行业或类目编号
 		var selectedNo = $('#selected-no').val();
 		if(!selectedNo){
-			showMsg('请先选择行业');
+			showMsg('请选择左侧行业');
 		}else{
 			//报表类型
 			var reType = $('input[name="reType"]:checked').val();
@@ -47,7 +47,7 @@ jQuery(function($) {
 					$('#echarts-scale').css('height', '1000px');
 					
 					//加载图表或数据表
-					renderChart(option1(data.data, chartWay),'echarts-scale');
+					renderChart(option1(data.data, chartWay, '各类别'),'echarts-scale');
 					
 				},'json');
 				
@@ -66,7 +66,7 @@ jQuery(function($) {
 					
 					$('#echarts-scale').css('height', '600px');
 					//加载图表或数据表
-					renderChart(option2_2(data.data, chartWay),'echarts-scale');
+					renderChart(option2_2(data.data, chartWay, '各类别'),'echarts-scale');
 					
 				},'json');
 			}else if(chartType == 'data'){
@@ -176,7 +176,7 @@ jQuery(function($) {
 				$('#echarts-scale').css('height', '1000px');
 				
 				//加载图表或数据表
-				renderChart(option1(data.data, chartWay),'echarts-scale');
+				renderChart(option1(data.data, chartWay, '各类别'),'echarts-scale');
 			};
 			
 		}else if(chartType == 'pie'){
@@ -187,7 +187,7 @@ jQuery(function($) {
 				
 				$('#echarts-scale').css('height', '600px');
 				//加载图表或数据表
-				renderChart(option2_2(data.data, chartWay),'echarts-scale');
+				renderChart(option2_2(data.data, chartWay, '各类别'),'echarts-scale');
 			};
 		}
 		
@@ -262,7 +262,7 @@ jQuery(function($) {
     			$.each(data, function(idx, d){
     				
     				tbody += '<tr role="row">'
-    					+'<td>'+d.cat_name+'</td>'
+    					+'<td style="text-align:center">'+d.cat_name+'</td>'
     					+'<td style="text-align:right">'+d['a'+startMonth.replace('-','')]+'</td>';
     				
     				startColTotal += parseInt(d['a'+startMonth.replace('-','')]);
@@ -363,7 +363,7 @@ jQuery(function($) {
 		//左侧类目树选中的行业或类目编号
 		var selectedNo = $('#selected-no').val();
 		if(!selectedNo){
-			showMsg('请先选择行业');
+			showMsg('请选择左侧行业');
 		}else{
 
 			if(chartType2 == 'data'){
@@ -517,6 +517,103 @@ jQuery(function($) {
 	});
 	
 	
+	//=================================================热销店铺=============================================
+	var shop_config = {};
+	shop_config.tableId = 'shop-table';
+	shop_config.url = global.path + '/a/IndustryAnalysis?m=ind_shop';
+	shop_config.maxIndex = 6;
+
+	shop_config.type = 'POST';
+
+	shop_config.data = function(d) {
+
+		d.catNo = $('#selected-no').val();
+		d.startMonth = $('#d432114').val();
+		d.endMonth = $('#d432114').val();
+		d.shopType = $('input[name="shopType4"]:checked').val();
+		
+		d.maxIndex = shop_config.maxIndex;
+
+	};
+
+	shop_config.columns = [
+			{
+				data : 'rowNum',
+				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+					$(nTd).css('text-align', 'right').css('vertical-align', 'inherit');
+				}
+			},
+			{
+				data : 'shop_name',
+				render : function(val, display, val_obj, prop) {
+					var html = '<a target="_blank" href="' + val_obj.shop_url + '">' + val + '</a>';
+
+					if (val_obj.shop_type == 'TMALL') {
+						html = '<img src="' + global.path + '/assets/imagesLocal/bc_shop_icon.png">'
+								+ ' <a target="_blank" href="' + val_obj.shop_url + '">' + val + '</a>';
+					}
+
+					return html;
+				}
+			},
+			{
+				data : 'sales_volume',
+				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+					$(nTd).css('text-align', 'right').css('vertical-align', 'inherit');
+				}
+			},
+			{
+				data : 'sales_amount',
+				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+					$(nTd).css('text-align', 'right').css('vertical-align', 'inherit');
+				}
+			},
+			{
+				data : 'tran_count',
+				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+					$(nTd).css('text-align', 'right').css('vertical-align', 'inherit');
+				}
+			},
+			{
+				data : 'region'
+			},
+			{
+				data : 'shop_id',
+				searchable: false,
+				orderable: false,
+				render : function(val, display, val_obj,prop) {
+					
+					//TODO：宝贝关注
+//					if($.trim(val_obj.asid) != '' ){
+//						return '已关注';
+//					}else{
+//						return '<label class="pos-rel">' + '<input type="checkbox" name="shopIds" value="' + val + "@" + val_obj.shop_name
+//						+ '" class="ace" />' + '<span class="lbl"></span>' + '</label>';
+//					}
+//					return '';
+					
+					return '<label class="pos-rel">' + '<input type="checkbox" name="shopIds" value="' + val + "@" + val_obj.shop_name
+					+ '" class="ace" />' + '<span class="lbl"></span>' + '</label>';
+				}
+			} ];
+
+	// 初始加载
+	var shop_table = null;//loadDataTable(shop_config);
+
+	// 检索
+	$('#search-shop-btn').click(function() {
+
+		if($('#selected-no').val()){
+    		if (shop_table) {
+				shop_table.fnDraw();
+			} else {
+				shop_table = loadDataTable(shop_config);
+			}
+    	}
+
+	});
+	
+	
 	//===================================切换tab===============================================
 	//切换tab
 	var curTabIdx = 1;
@@ -525,13 +622,11 @@ jQuery(function($) {
 		
 	    curTabIdx = e.target.id.replace('tab','');
 	    
-	    $('.breadcrumb .active').remove();
+	    $('.breadcrumb .active:last').remove();
 	    
 	    if(curTabIdx == 1){
 	    	
-	    	$('.breadcrumb').append('<li class="active">'+$('div.selected').text()+'</li>');
-			
-			$('.breadcrumb').append('<li class="active">行业规模</li>');
+			$('.breadcrumb').append('<li class="active">子行业规模 (类目报表)</li>');
 	    	
 	    	if($('#selected-no').val()){
 	    		$('#tableDiv2').hide();
@@ -542,9 +637,7 @@ jQuery(function($) {
 	    	
 	    }else if(curTabIdx == 2){
 	    	
-	    	$('.breadcrumb').append('<li class="active">'+$('div.selected').text()+'</li>');
-			
-			$('.breadcrumb').append('<li class="active">行业趋势</li>');
+			$('.breadcrumb').append('<li class="active">子行业趋势 (类目报表)</li>');
 	    	
 	    	if($('#selected-no').val()){
 	    		
@@ -557,11 +650,24 @@ jQuery(function($) {
 	    	
 	    }else if(curTabIdx == 3){
 	    	
+	    	$('.breadcrumb').append('<li class="active">热销宝贝 (类目报表之热销宝贝)</li>');
+	    	
 	    	if($('#selected-no').val()){
 	    		if (goods_table) {
 					goods_table.fnDraw();
 				} else {
 					goods_table = loadDataTable(goods_config);
+				}
+	    	}
+	    }else if(curTabIdx == 4){
+	    	
+	    	$('.breadcrumb').append('<li class="active">热销店铺 (类目报表之热销店铺)</li>');
+	    	
+	    	if($('#selected-no').val()){
+	    		if (shop_table) {
+					shop_table.fnDraw();
+				} else {
+					shop_table = loadDataTable(shop_config);
 				}
 	    	}
 	    }

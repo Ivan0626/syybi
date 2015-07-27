@@ -153,6 +153,12 @@
                            var html = '<td><a target="_blank" href="${imagePath}/'+val+'">查看</a></td>';
                            return html;
                        }
+                   },
+                   {
+                	   fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {//内容居左
+           	            $(nTd).css('text-align', 'center').css('vertical-align', 'inherit');
+           		    	},
+           		    	targets: [0,1,2,3]
                    }
                ]
                

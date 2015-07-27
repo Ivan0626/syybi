@@ -2,6 +2,8 @@ package com.sanyanyu.syybi.entity;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.sanyanyu.syybi.utils.SysUtil;
 
 /**
@@ -31,7 +33,10 @@ public class ChngName implements Serializable {
 	private String prd_url;
 
 	public String getPrd_url() {
-		return SysUtil.getPrdUrl(this.getItem_id());
+		if(StringUtils.isNotBlank(this.getItem_id())){
+			return SysUtil.getPrdUrl(this.getItem_id());
+		}
+		return prd_url;
 	}
 
 	public void setPrd_url(String prd_url) {

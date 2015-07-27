@@ -283,13 +283,22 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 	 * @param val
 	 * @return
 	 */
-	public static String formatPercent(Double val){
+	public static String formatPercent100(Double val){
 		if(val == null) return null;
 		NumberFormat format = NumberFormat.getPercentInstance();// 获取格式化类实例 
 
 	    format.setMinimumFractionDigits(2);// 设置小数位 
 	    
 	    return format.format(val / 100.0);
+	}
+	
+	public static String formatPercent(Double val){
+		if(val == null) return null;
+		NumberFormat format = NumberFormat.getPercentInstance();// 获取格式化类实例 
+
+	    format.setMinimumFractionDigits(2);// 设置小数位 
+	    
+	    return format.format(val);
 	}
 
 	/**

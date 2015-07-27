@@ -8,6 +8,7 @@ import com.sanyanyu.syybi.constants.FinalConstants;
 import com.sanyanyu.syybi.entity.CatData;
 import com.sanyanyu.syybi.entity.CatEntity;
 import com.sanyanyu.syybi.entity.HotGoods;
+import com.sanyanyu.syybi.entity.HotShop;
 import com.sanyanyu.syybi.entity.PageEntity;
 import com.sanyanyu.syybi.entity.PageParam;
 import com.sanyanyu.syybi.utils.DateUtils;
@@ -52,7 +53,7 @@ public class CatService extends BaseService {
 	 */
 	public List<CatEntity> getChildPropsByCatNo(String catNo) throws Exception{
 		
-		String sql = "select prop_name as propName from tbbase.tb_base_cat_prop where cat_no = ?";
+		String sql = "select prop_name as propName from tbbase.tb_base_cat_prop where cat_no = ? and prop_name <> '品牌'";
 		
 		return sqlUtil.searchList(CatEntity.class, sql, catNo);
 		
@@ -416,9 +417,15 @@ public class CatService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public PageEntity<HotGoods> getHotGoods(String catNo, String startMonth, String endMonth, String shopType, PageParam pageParam) throws Exception{
+	public PageEntity<HotGoods> getHotGoods(String catNo, String startMonth, String endMonth, String shopType, PageParam pageParam, String flag) throws Exception{
 		
-		Map<String, Object> leaf = this.getLeafListByCatNo2(catNo);
+		String catNoIns = "";
+		if("ind".equals(flag)){
+			Map<String, Object> leaf = this.getLeafListByCatNo2(catNo);
+			catNoIns = StringUtils.strIn(leaf.get("leafNo").toString());
+		}else if("brand".equals(flag)){
+			catNoIns = catNo;
+		}
 		
 		StringBuffer sb = new StringBuffer();
 		
@@ -426,7 +433,7 @@ public class CatService extends BaseService {
 		params.add(startMonth);
 		params.add(endMonth);
 		
-		sb.append(" select (@rowNum:=@rowNum+1) as rowNum,t2.prd_img,t2.prd_name,t1.avg_price, avg(t1.avg_price_tran) as avg_price_tran,sum(t1.sales_volume) as sales_volume,sum(t1.sales_amount) as sales_amount,")
+		sb.append(" select (@rowNum:=@rowNum+1) as rowNum,t2.prd_img,t2.prd_name,t1.avg_price, round(avg(t1.avg_price_tran),2) as avg_price_tran,sum(t1.sales_volume) as sales_volume,sum(t1.sales_amount) as sales_amount,")
 		.append(" sum(t1.tran_count) as tran_count,t1.shop_name,t1.shop_id,t1.shop_type,t2.region,t2.item_id from  tbdaily.tb_tran_month t1 ")
 		.append(" join tbbase.tb_base_product t2 on t1.shop_id = t2.shop_id and t1.item_id = t2.item_id,(Select (@rowNum :=0) ) tt")
 		.append(" where str_to_date(t1.tran_month,'%Y-%m') between str_to_date(?, '%Y-%m') and str_to_date(?, '%Y-%m')");
@@ -436,7 +443,7 @@ public class CatService extends BaseService {
 			params.add(shopType);
 		}
 		
-		sb.append(" and t2.cat_no in ("+StringUtils.strIn(leaf.get("leafNo").toString())+")");
+		sb.append(" and t2.cat_no in ("+catNoIns+") GROUP BY NULL");
 		
 		String pageSql = pageParam.buildSql(sb.toString());
 		
@@ -446,6 +453,279 @@ public class CatService extends BaseService {
 		
 		return PageEntity.getPageEntity(pageParam, list);
 		
+	}
+	
+	/**
+	 * 热销店铺
+	 * @param catNo
+	 * @param startMonth
+	 * @param endMonth
+	 * @param shopType
+	 * @param pageParam
+	 * @return
+	 * @throws Exception
+	 */
+	public PageEntity<HotShop> getHotShops(String catNo, String startMonth, String endMonth, String shopType, PageParam pageParam, String flag) throws Exception{
+		
+		String catNoIns = "";
+		if("ind".equals(flag)){
+			Map<String, Object> leaf = this.getLeafListByCatNo2(catNo);
+			catNoIns = StringUtils.strIn(leaf.get("leafNo").toString());
+		}else if("brand".equals(flag)){
+			catNoIns = catNo;
+		}
+		
+		
+		StringBuffer sb = new StringBuffer();
+		
+		List<Object> params = new ArrayList<Object>();
+		params.add(startMonth);
+		params.add(endMonth);
+		
+		sb.append(" select (@rowNum:=@rowNum+1) as rowNum, t4.shop_name,t4.shop_img,t4.region,t3.sales_volume,t3.sales_amount,t3.tran_count,t3.shop_id,t4.shop_type from (")
+		.append(" select t1.shop_id,sum(t1.sales_volume) as sales_volume,sum(t1.sales_amount) as sales_amount,")
+		.append(" sum(t1.tran_count) as tran_count from  tbdaily.tb_tran_month t1")
+		.append(" join tbbase.tb_base_product t2 on t1.shop_id = t2.shop_id and t1.item_id = t2.item_id")
+		.append(" where str_to_date(t1.tran_month,'%Y-%m') between str_to_date(?, '%Y-%m') and str_to_date(?, '%Y-%m')");
+		
+		if(!"ALL".equals(shopType)){
+			sb.append(" and t1.shop_type = ?");
+			params.add(shopType);
+		}
+		
+		sb.append(" and t2.cat_no in ("+catNoIns+") group by t1.shop_id)")
+			.append(" t3 join tbbase.tb_base_shop t4 on t3.shop_id = t4.shop_id,(Select (@rowNum :=0) ) tt GROUP BY NULL");
+		
+		String pageSql = pageParam.buildSql(sb.toString());
+		
+		pageSql += " limit 0, 100";
+		
+		List<HotShop> list = sqlUtil.searchList(HotShop.class, pageSql, params.toArray());
+		
+		return PageEntity.getPageEntity(pageParam, list);
+		
+	}
+	
+	/**
+	 * 获取子类目各品牌规模数据（Top20）
+	 * @param catNo
+	 * @param startMonth
+	 * @param endMonth
+	 * @param shopType
+	 * @param pageParam
+	 * @return
+	 * @throws Exception
+	 */
+	public List<CatData> getBrandScale(String catNo, String startMonth, String endMonth, String shopType, PageParam pageParam) throws Exception{
+		
+		return getPropScale(catNo, startMonth, endMonth, shopType, pageParam, "品牌");
+		
+	}
+
+	/**
+	 * 获取属性规模数据
+	 * @param catNo
+	 * @param startMonth
+	 * @param endMonth
+	 * @param shopType
+	 * @param pageParam
+	 * @param propName
+	 * @return
+	 * @throws Exception
+	 */
+	public List<CatData> getPropScale(String catNo, String startMonth, String endMonth, String shopType,
+			PageParam pageParam, String propName) throws Exception {
+		StringBuffer sb = new StringBuffer();
+		
+		List<Object> params = new ArrayList<Object>();
+		
+		params.add(propName);
+		params.add(catNo);
+		if(StringUtils.isNotBlank(startMonth)){
+			params.add(startMonth);
+		}else{
+			params.add(DateUtils.getCurMonth());
+		}
+		
+		if(StringUtils.isNotBlank(endMonth)){
+			params.add(endMonth);
+		}else{
+			params.add(DateUtils.getCurMonth());
+		}
+		
+		sb.append("select t1.prop_value as cat_name,sum(t1.sales_volume) as sales_volume,sum(t1.sales_amount) as sales_amount,")
+		.append(" sum(t1.tran_count) as tran_count from tbdaily.tb_tran_month_prop t1")
+		.append(" join tbbase.tb_base_cat_prop t2 on t1.cat_no = t2.cat_no and t1.prop_name = t2.prop_name")
+		.append(" where t1.prop_name = ? and t1.cat_no = ?")
+		.append(" and str_to_date(t1.tran_month,'%Y-%m') between str_to_date(?, '%Y-%m') and str_to_date(?, '%Y-%m')");
+		
+		if(StringUtils.isNotBlank(shopType)){
+			if(!"ALL".equals(shopType)){
+				sb.append(" and t1.shop_type = ?");
+				params.add(shopType);
+			}
+		}else{
+			sb.append(" and t1.shop_type = ?");
+			params.add(FinalConstants.DEFAULT_SHOP_TYPE);
+		}
+		
+		sb.append(" group by t1.prop_value");
+		
+		
+		String pageSql = "";
+		if(pageParam != null){
+			pageSql = pageParam.buildSql(sb.toString());
+		}else{
+			pageSql = sb.toString();
+		}
+         
+		pageSql += " limit 0,20";
+
+		List<CatData> list = sqlUtil.searchList(CatData.class, pageSql, params.toArray());
+		
+		//统计占比
+		double salesAmountTotal = 0, salesVolumeTotal = 0, tranCountTotal = 0;
+		for(CatData catData : list){
+			
+			salesAmountTotal += StringUtils.toDouble(catData.getSales_amount());
+			salesVolumeTotal += StringUtils.toDouble(catData.getSales_volume());
+			tranCountTotal += StringUtils.toDouble(catData.getTran_count());
+		}
+		
+		for(CatData catData : list){
+			
+			catData.setAmountWeight(StringUtils.formatPercent(StringUtils.toDouble(catData.getSales_amount()) / salesAmountTotal));
+			catData.setCountWeight(StringUtils.formatPercent(StringUtils.toDouble(catData.getTran_count()) / tranCountTotal));
+			catData.setVolumeWeight(StringUtils.formatPercent(StringUtils.toDouble(catData.getSales_volume()) / salesVolumeTotal));
+		}
+		
+		return list;
+	}
+	
+	/**
+	 * 属性规模（TOP20）
+	 * @param catNo
+	 * @param startMonth
+	 * @param endMonth
+	 * @param shopType
+	 * @param pageParam
+	 * @param propName
+	 * @return
+	 * @throws Exception
+	 */
+	public PageEntity<CatData> getPropScaleByCatNo(String catNo, String startMonth, String endMonth, String shopType,  PageParam pageParam, String propName) throws Exception{
+		
+		List<CatData> list = this.getPropScale(catNo, startMonth, endMonth, shopType, pageParam, propName);
+		
+		PageEntity<CatData> pageEntity = PageEntity.getPageEntity(pageParam, list);
+		 
+		return pageEntity;
+		
+	}
+	
+	/**
+	 * 检索各品牌规模（TOP20）
+	 * @param catNo
+	 * @param startMonth
+	 * @param endMonth
+	 * @param shopType
+	 * @param pageParam
+	 * @return
+	 * @throws Exception
+	 */
+	public PageEntity<CatData> getBrandScaleByCatNo(String catNo, String startMonth, String endMonth, String shopType,  PageParam pageParam) throws Exception{
+		
+		List<CatData> list = this.getBrandScale(catNo, startMonth, endMonth, shopType, pageParam);
+		
+		PageEntity<CatData> pageEntity = PageEntity.getPageEntity(pageParam, list);
+		 
+		return pageEntity;
+		
+	}
+	
+	/**
+	 * 各品牌趋势（TOP20）
+	 * @param catNo
+	 * @param startMonth
+	 * @param endMonth
+	 * @param shopType
+	 * @return
+	 */
+	public List<Map<String, Object>> getBrandTrends(String catNo, String startMonth, String endMonth, String shopType){
+		
+		return getPropTrend(catNo, startMonth, endMonth, shopType, "品牌");
+		
+	}
+
+	/**
+	 * 属性趋势（TOP20）
+	 * @param catNo
+	 * @param startMonth
+	 * @param endMonth
+	 * @param shopType
+	 * @param propName
+	 * @return
+	 */
+	public List<Map<String, Object>> getPropTrend(String catNo, String startMonth, String endMonth, String shopType, String propName) {
+		List<String> monthList = DateUtils.getMonthListBetweenDates(startMonth, endMonth);
+		StringBuffer colTags = new StringBuffer();
+		StringBuffer colTags2 = new StringBuffer();
+		StringBuffer colTags3 = new StringBuffer();
+		StringBuffer cols = new StringBuffer();
+		StringBuffer cols2 = new StringBuffer();
+		StringBuffer cols3 = new StringBuffer();
+		for(int i = 0; i < monthList.size(); i++){
+			
+			String month = monthList.get(i);
+			
+			String cTag = "a"+month.replace("-", "");
+			colTags.append(cTag);
+			
+			String cTag2 = "b"+month.replace("-", "");
+			colTags2.append(cTag2);
+			
+			String cTag3 = "c"+month.replace("-", "");
+			colTags3.append(cTag3);
+			
+			
+			cols.append("ifnull(sum(if(t1.tran_month='").append(month).append("',t1.sales_volume,0)),0) as ").append(cTag);
+			
+			cols2.append("ifnull(sum(if(t1.tran_month='").append(month).append("',t1.sales_amount,0)),0) as ").append(cTag2);
+			
+			cols3.append("ifnull(sum(if(t1.tran_month='").append(month).append("',t1.tran_count,0)),0) as ").append(cTag3);
+			
+			if(i != monthList.size() - 1){
+				
+				colTags.append(",");
+				cols.append(",");
+				
+				colTags2.append(",");
+				cols2.append(",");
+				
+				colTags3.append(",");
+				cols3.append(",");
+			}
+			
+		}
+		
+		StringBuffer sb = new StringBuffer();
+		List<Object> params = new ArrayList<Object>();
+		params.add(propName);
+		params.add(catNo);
+		params.add(startMonth);
+		params.add(endMonth);
+		sb.append("select * from (select t1.prop_value as cat_name,").append(cols).append(",").append(cols2).append(",").append(cols3).append(" from tbdaily.tb_tran_month_prop t1")
+			.append(" join tbbase.tb_base_cat_prop t2 on t1.cat_no = t2.cat_no and t1.prop_name = t2.prop_name")
+			.append(" where t1.prop_name = ? and t1.cat_no = ?")
+			.append(" and str_to_date(t1.tran_month,'%Y-%m') between str_to_date(?, '%Y-%m') and str_to_date(?, '%Y-%m')");
+			
+		if(!"ALL".equals(shopType)){
+			sb.append(" and t1.shop_type = ?");
+			params.add(shopType);
+		}	
+		sb.append(" group by t1.prop_value limit 0,20) t");
+		
+		return sqlUtil.searchList(sb.toString(), params.toArray());
 	}
 	
 }

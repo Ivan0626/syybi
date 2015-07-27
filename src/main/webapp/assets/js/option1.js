@@ -1,4 +1,4 @@
-function option1(data, chartWay){
+function option1(data, chartWay, titlePrifix){
 	
 	var yAxis_data = [], series_data = [], total = 0;
 	
@@ -28,7 +28,7 @@ function option1(data, chartWay){
 	
 	return {
 			title : {
-		        text: "各类别"+legend_data+"(共"+total+"万件)",
+		        text: titlePrifix+legend_data+"(共"+total+"万件)",
 		        x:'center'
 		    },	
 		    tooltip : {

@@ -1,34 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="com.sanyanyu.syybi.utils.DateUtils"%>
-    
-<div class="main-content-inner">
-	<!-- #section:basics/content.breadcrumbs -->
-	<div class="breadcrumbs" id="breadcrumbs">
-		<script type="text/javascript">
-			try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
-		</script>
 
-		<ul class="breadcrumb">
-			<li>
-				<i class="ace-icon fa fa-home home-icon"></i>
-				<a href="${ctx }/a/Dashboard">首页</a>
-			</li>
-			<li><a href="${ctx }/a/IndustryAnalysis">所有分类</a></li>
-			<li>食品/保健 </li>
-			<li>粮油米面/南北干货/调味品 </li>
-			<li>调味品/果酱/沙拉 </li>
-			<li>其它调味品  </li>
-			<li class="active">各品牌规模 (子类报表) </li>
-		</ul><!-- /.breadcrumb -->
-
-	</div>
-
-	<!-- /section:basics/content.breadcrumbs -->
-	<div class="page-content">
 		
-		<%@ include file="/pages/aceSettings.jsp"%>
-		
-		<div class="row">
+<div class="row">
 		
 			<div class="col-sm-12">
 				<!-- #section:elements.tab -->
@@ -49,14 +23,14 @@
 						</li>
 						
 						<li>
-							<a data-toggle="tab" id="tab2" href="#goods">
+							<a data-toggle="tab" id="tab3" href="#goods">
 								<i class="green ace-icon fa fa-home bigger-120"></i>
 								热销宝贝
 							</a>
 						</li>
 						
 						<li>
-							<a data-toggle="tab" id="tab2" href="#shop">
+							<a data-toggle="tab" id="tab4" href="#shop">
 								<i class="green ace-icon fa fa-home bigger-120"></i>
 								热销店铺
 							</a>
@@ -168,13 +142,13 @@
 										<table id="scale-table" class="table table-striped table-bordered table-hover">
 											<thead>
 												<tr role="row">
-													<th>类别名称</th>
+													<th>品牌名称</th>
 													<th>销量</th>
-													<th>销量占比</th>
+													<th>销量前20品牌占比</th>
 													<th>销售额</th>
-													<th>销售额占比</th>
+													<th>销售额前20品牌占比</th>
 													<th>成交次数</th>
-													<th>成交次数占比</th>
+													<th>成交次数前20品牌占比</th>
 												</tr>
 											</thead>
 
@@ -379,7 +353,7 @@
 													<th>销量</th>
 													<th>销售额</th>
 													<th>成交次数</th>
-													<th>掌柜</th>
+													<th>店铺名称</th>
 													<th>地域</th>
 													<th class="center">
 														<label class="pos-rel">
@@ -392,7 +366,7 @@
 											</thead>
 		
 											<tbody>
-												<tr>
+												<!-- <tr>
 													<td>1</td>
 													<td>
 														<img width="60" height="60" src="http://img.alicdn.com/imgextra/i2/1936285526/TB2gHi.dpXXXXXEXpXXXXXXXXXX_!!1936285526.jpg_60x60q70.jpg" alt="商品图片">
@@ -409,7 +383,7 @@
                                              				</td>
 													<td>广东中山</td>
 													<td><label class="pos-rel"><input type="checkbox" name="shopIds" value="" class="ace" /><span class="lbl"></span></label></td>
-												</tr>
+												</tr> -->
 											</tbody>
 											
 										</table>
@@ -504,7 +478,7 @@
 											<thead>
 												<tr role="row">
 													<th>排名</th>
-													<th>掌柜名</th>
+													<th>店铺名称</th>
 													<th>销量</th>
 													<th>销售额</th>
 													<th>成交次数</th>
@@ -520,7 +494,7 @@
 											</thead>
 		
 											<tbody>
-												<tr>
+												<!-- <tr>
 													<td>1</td>
 													<td>
 														<img src="/img/bc_shop_icon.png">
@@ -531,7 +505,7 @@
 													<td>44</td>
 													<td>广东中山</td>
 													<td><label class="pos-rel"><input type="checkbox" name="shopIds" value="" class="ace" /><span class="lbl"></span></label></td>
-												</tr>
+												</tr> -->
 											</tbody>
 											
 										</table>
@@ -548,30 +522,5 @@
 			</div><!-- /.col -->
 		
 		</div>
-	</div><!-- /.page-content -->
-</div>
 
-<script type="text/javascript">
-
-	$(function(){
-		
-		
-		$('#goods-table').dataTable({
-    		paging: false,
-    		autoWidth: false,
-    		processing: true,
-    		language : dataTableConfig.language,
-    		dom : dataTableConfig.dom
-    	});
-		
-		$('#shop-table').dataTable({
-    		paging: false,
-    		autoWidth: false,
-    		processing: true,
-    		language : dataTableConfig.language,
-    		dom : dataTableConfig.dom
-    	});
-		
-	});
-
-</script>
+<script src="../assets/js/brandAnalysis.js"></script>

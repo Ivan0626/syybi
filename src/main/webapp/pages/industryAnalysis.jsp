@@ -15,6 +15,7 @@
 	
 	<!-- 选中的行业或者类目编号 -->
 	<input type="hidden" id="selected-no" />
+	<input type="hidden" id="propName" />
 	
 	<!-- /section:basics/navbar.layout -->
 	<div class="main-container" id="main-container">
@@ -90,7 +91,7 @@
 					
 					<%@ include file="/pages/aceSettings.jsp"%>
 					
-					<div class="row">
+					<div class="row" id="ajax-content">
 					
 						<div class="col-sm-12">
 							<!-- #section:elements.tab -->
@@ -366,10 +367,6 @@
 		//加载行业下的类目信息
 		function loadInd(iid, indName){
 			
-			$('#selected-no').val(iid);
-			
-			$('.breadcrumb .active').remove();
-			
 			$.post(global.path+'/a/Category', {
 		    'iid': iid,
 		    'method': "loadInd"
@@ -377,7 +374,7 @@
 			if(data.catList && data.catList.length > 0){
 				
 				//生成类目树
-				var html = '<div class="selected" data-cat="'+iid+'"> '+indName+'</div>';
+				var html = '<div class="selected" data-cat="'+iid+'">'+indName+'</div>';
 					html += '<ul>';
 				
 				$.each(data.catList, function(idx, d){
@@ -394,24 +391,38 @@
 				html += '</ul>';
 				$("#syy-sidebar_category").empty().html(html);
 				
-				$('.breadcrumb').append('<li class="active">'+indName+'</li>');
+				$('#ajax-content').load(global.path+'/pages/industryAnalysis2.jsp',{}, function(){
+					
+					$('.breadcrumb .active').remove();
+					
+					$('.breadcrumb').append('<li class="active"><a href="javascript:void(0);" onclick=\"loadInd(\''+iid+'\', \''+indName+'\')\">'+indName+'</a></li>');
+					
+					$('.breadcrumb').append('<li class="active">行业规模 (行业报表)</li>');
+					
+					$('#selected-no').val(iid);
+					$('#propName').val('');
+					
+					//选中tab1
+					$("#tab1").parent().addClass("active");
+					$("#tab2").parent().removeClass("active");
+					$("#scale").addClass("in active");
+					$("#trend").removeClass("in active");
+					
+					//加载图表或数据表
+					var chartWay = $('input[name="chartWay"]:checked').val();
+					
+					$('#chartDiv').show();
+					$('#tableDiv').hide();
+					
+					renderChart(option1(data.catDataList, chartWay, '各类别'),'echarts-scale');
+				});
 				
-				$('.breadcrumb').append('<li class="active">行业规模</li>');
-				
-				//加载图表或数据表
-				var chartWay = $('input[name="chartWay"]:checked').val();
-				
-				$('#chartDiv').show();
-				$('#tableDiv').hide();
-				
-				renderChart(option1(data.catDataList, chartWay),'echarts-scale');
 			}
 		}, 'json');
 		}
 		
 		//加载类目下的子类目信息以及父级（父类目或者行业）
 		function loadCat(catNo, catName){
-			
 			$.post(global.path+'/a/Category', {
 		    'catNo': catNo,
 		    'method': "loadCat"
@@ -430,7 +441,7 @@
 				
 				html += '</div>';
 				
-				html += '<div class="selected" data-cat="'+catNo+'"> '+catName+'</div>';
+				html += '<div class="selected" data-cat="'+catNo+'">'+catName+'</div>';
 					html += '<ul>';
 				
 				$.each(childCats, function(idx, d){
@@ -443,9 +454,29 @@
 				html += '</ul>';
 				$("#syy-sidebar_category").empty().html(html);
 				
-				$('#load-content').load(global.path+'/pages/industrySubAnalysis.jsp',{}, function(){
+				
+				$('#ajax-content').load(global.path+'/pages/industrySubAnalysis.jsp',{}, function(){
+					
+					var $curSelecedNav = $('.breadcrumb > .active > a:contains("'+catName+'")');
+					
+					if($curSelecedNav.length > 0){
+						$curSelecedNav.parent().prev().nextAll('li.active').remove();
+					}else{
+						$('.breadcrumb .active:last').remove();
+					}
+					//$('.breadcrumb').append('<li class="active"><a href="javascript:void(0);" data-no="'+parentCat.catNo+'" onclick=\"loadInd(\''+parentCat.catNo+'\', \''+parentCat.catName+'\')\">'+parentCat.catName+'</a></li>');
+					$('.breadcrumb').append('<li class="active"><a href="javascript:void(0);" data-no="'+catNo+'" onclick=\"loadCat(\''+catNo+'\', \''+catName+'\')\">'+catName+'</a></li>');
+					
+					$('.breadcrumb').append('<li class="active">子行业规模 (类目报表)</li>');
+					
+					//选中tab1
+					$("#tab1").parent().addClass("active");
+					$("#tab2,#tab3,#tab4").parent().removeClass("active");
+					$("#scaleSub").addClass("in active");
+					$("#trendSub,#goods,#shop").removeClass("in active");
 					
 					$('#selected-no').val(catNo);
+					$('#propName').val('');
 					
 					//加载子行业数据图表
 					var chartWay = $('input[name="chartWay"]:checked').val();
@@ -455,7 +486,7 @@
 					$('#chartDiv').show();
 					$('#tableDiv').hide();
 					
-					renderChart(option1(data.catDataList, chartWay),'echarts-scale');
+					renderChart(option1(data.catDataList, chartWay, '各类别'),'echarts-scale');
 				});
 				
 			}
@@ -481,7 +512,7 @@
 					
 					html += '</div>';
 					
-					html += '<div class="selected" data-cat="'+catNo+'"> '+catName+'</div>';
+					html += '<div class="selected" data-cat="'+catNo+'">'+catName+'</div>';
 					html += '<ul id="prop-list">';
 					
 					$.each(childProps, function(idx, d){
@@ -490,10 +521,31 @@
 					html += '</ul>';
 					$("#syy-sidebar_category").empty().html(html);
 					
-					$('#load-content').load(global.path+'/pages/brandAnalysis.jsp',{}, function(){
+					$('#ajax-content').load(global.path+'/pages/brandAnalysis.jsp',{}, function(){
+						
+						var $curSelecedNav = $('.breadcrumb > .active > a:contains("'+catName+'")');
+						if($curSelecedNav.length > 0){
+							$curSelecedNav.parent().prev().nextAll('li.active').remove();
+						}else{
+							$('.breadcrumb .active:last').remove();
+						}
+						
+						//$('.breadcrumb').append('<li class="active"><a href="javascript:void(0);" data-no="'+parentCat.catNo+'" onclick=\"loadInd(\''+parentCat.catNo+'\', \''+parentCat.catName+'\')\">'+parentCat.catName+'</a></li>');
+						$('.breadcrumb').append('<li class="active"><a href="javascript:void(0);" data-no="'+catNo+'" onclick=\"loadCat(\''+catNo+'\', \''+catName+'\')\">'+catName+'</a></li>');
+						
+						$('.breadcrumb').append('<li class="active">各品牌规模 (子类报表)</li>');
 						
 						//各品牌数据
+						$('#selected-no').val(catNo);
+						$('#propName').val('');
 						
+						//加载子行业数据图表
+						var chartWay = $('input[name="chartWay"]:checked').val();
+						
+						$('#chartDiv').show();
+						$('#tableDiv').hide();
+						
+						renderChart(option1(data.catDataList, chartWay, '各品牌'),'echarts-scale');
 					});
 				}
 				
@@ -508,12 +560,51 @@
 			
 			$(obj).addClass('props-showy');
 			
-			var $seleced = $('.selected');
-			$('.selected').html('<a href="javascript:void(0);" onclick=\"loadProp(\''+$seleced.attr('data-cat')+'\',\''+$seleced.text()+'\')\">'+$seleced.text()+'</a>');
+			var $seleced = $('#prop-list').prev();
+			$seleced.html('<a href="javascript:void(0);" onclick=\"loadProp(\''+$seleced.attr('data-cat')+'\',\''+$seleced.text()+'\')\">'+$seleced.text()+'</a>');
 			
-			$('#load-content').load(global.path+'/pages/propAnalysis.jsp',{}, function(){
+			var catNo = $('#selected-no').val();
+			$('#ajax-content').load(global.path+'/pages/propAnalysis.jsp',{}, function(){
+				
+				var $curSelecedNav = $('.breadcrumb > .active > a:contains("'+propName+'")');
+				if($curSelecedNav.length > 0){
+					$curSelecedNav.parent().prev().nextAll('li.active').remove();
+				}else{
+					
+					if($('#propName').val()){//属性列表同级切换
+						$('.breadcrumb .active:last').prev().remove();
+					}
+					$('.breadcrumb .active:last').remove();
+					
+				}
+				
+				$('.breadcrumb').append('<li class="active"><a href="javascript:void(0);" data-no="'+propName+'" onclick=\"loadLeaf(\''+obj+'\', \''+propName+'\')\">'+propName+'</a></li>');
+				
+				$('.breadcrumb').append('<li class="active">属性规模 (属性报表)</li>');
 				
 				//各属性数据
+				$('#selected-no').val(catNo);
+				$('#propName').val(propName);
+				
+				//加载子行业数据图表
+				var chartWay = $('input[name="chartWay"]:checked').val();
+				
+				$('#chartDiv').show();
+				$('#tableDiv').hide();
+				
+				$.post(global.path+'/a/Category', {
+					'catNo': catNo,
+					'propName': propName,
+					'method': 'loadLeaf'
+				},function(data){
+					
+					$('#chartDiv').show();
+					$('#tableDiv').hide();
+					
+					//加载图表或数据表
+					renderChart(option1(data, chartWay,'各'+propName),'echarts-scale');
+					
+				},'json');
 				
 			});
 		}

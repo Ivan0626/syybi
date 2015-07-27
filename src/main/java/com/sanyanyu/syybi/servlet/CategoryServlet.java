@@ -121,19 +121,48 @@ public class CategoryServlet extends BaseServlet {
 		}else if("loadProp".equals(method)){
 			String catNo = request.getParameter("catNo");
 			if(StringUtils.isNotBlank(catNo)){
+				List<CatData> catDataList = null;
+				List<CatEntity> childProps = null;
+				CatEntity parentCat = null;
 				try {
-					List<CatEntity> childProps = catService.getChildPropsByCatNo(catNo);
+					childProps = catService.getChildPropsByCatNo(catNo);
 					
-					CatEntity parentCat = catService.getParentByCatNo(catNo);
+					parentCat = catService.getParentByCatNo(catNo);
 					
-					JSONObject json = new JSONObject();
-					json.put("childProps", JSONArray.fromObject(childProps));
-					json.put("parentCat", JSONObject.fromObject(parentCat));
 					
-					response.getWriter().write(json.toString());
 				} catch (Exception e) {
 					logger.error("获取类目下的子类目以及父级信息失败", e);
 				}
+				
+				try {
+					catDataList = catService.getBrandScale(catNo, null, null, null, null);
+				} catch (Exception e) {
+					logger.error("获取叶子类目对应的品牌（TOP20）的统计数据失败", e);
+				}
+				
+				JSONObject json = new JSONObject();
+				json.put("childProps", childProps);
+				json.put("parentCat", parentCat);
+				json.put("catDataList", catDataList);
+				
+				response.getWriter().write(json.toString());
+				
+			}
+		}else if("loadLeaf".equals(method)){
+			String catNo = request.getParameter("catNo");
+			String propName = request.getParameter("propName");
+			if(StringUtils.isNotBlank(catNo)){
+				List<CatData> catDataList = null;
+				try {
+					catDataList = catService.getPropScale(catNo, null, null, null, null, propName);
+				} catch (Exception e) {
+					logger.error("获取叶子类目对应的属性（TOP20）的统计数据失败", e);
+				}
+				
+				JSONArray json = JSONArray.fromObject(catDataList);
+				
+				response.getWriter().write(json.toString());
+				
 			}
 		}
 		

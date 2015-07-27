@@ -339,7 +339,7 @@ public class MarketService extends BaseService {
 		}
 		orderSql += " " + pageParam.getOrderDir();
 
-		String searchFields = "t1.item_id,t2.prd_name,t2.prd_img,t1.category,t2.cat_path,t1.avg_price,t1.avg_price_tran, t4.avg_price_tran as avg_price_tran_pre,t1.zk_rate,t4.zk_rate as zk_rate_pre, "
+		String searchFields = "t1.item_id,t2.prd_name,t2.prd_img,t2.cat_path,t1.avg_price,t1.avg_price_tran, t4.avg_price_tran as avg_price_tran_pre,t1.zk_rate,t4.zk_rate as zk_rate_pre, "
 				+ "t1.sales_volume, t4.sales_volume as sales_volume_pre, t1.sales_amount, t4.sales_amount as sales_amount_pre,"
 				+ "t3.hot,t3.normal,t3.tb_cu,t3.activity,t3.taobaoke,t3.ztc,t3.ju,t3.normal_cu,t3.hot_mobile,t3.tb_cu_mobile,t3.activity_mobile,t3.ztc_mobile,t3.normal_cu_mobile";
 		String pageSql = "select " + searchFields + reSql + orderSql + " limit " + pageParam.getStart() + ","
@@ -614,7 +614,7 @@ public class MarketService extends BaseService {
 		long totalRecords = StringUtils.toLong(map.get("cnt"));
 		pageParam.setTotalRecords(totalRecords);
 
-		String sql = "SELECT t1.tran_date,t2.item_id,t2.prd_img,t2.prd_name,t1.category,t2.cat_path,t1.avg_price,t1.avg_price_tran,t1.sales_volume,t1.sales_amount,t1.tran_count,"
+		String sql = "SELECT t1.tran_date,t2.item_id,t2.prd_img,t2.prd_name,t2.cat_path,t1.avg_price,t1.avg_price_tran,t1.sales_volume,t1.sales_amount,t1.tran_count,"
 				+ " (select  count(0) from tbdaily.tb_chng_name t3 where t1.shop_id = t3.shop_id and t1.item_id = t3.item_id and t3.change_date between str_to_date('"
 				+ DateUtils.getLastMonthDate()
 				+ "', '%Y-%m-%d') and str_to_date('"

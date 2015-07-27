@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import com.sanyanyu.syybi.entity.CatData;
 import com.sanyanyu.syybi.entity.HotGoods;
+import com.sanyanyu.syybi.entity.HotShop;
 import com.sanyanyu.syybi.entity.PageEntity;
 import com.sanyanyu.syybi.entity.PageParam;
 import com.sanyanyu.syybi.service.AccountSettingService;
@@ -145,7 +146,7 @@ public class IndustryAnalysisServlet extends BaseServlet {
 				
 				PageParam pageParam = PageParam.getPageParam(request);
 				
-				PageEntity<HotGoods> pageEntity = catService.getHotGoods(catNo, startMonth, endMonth, shopType, pageParam);
+				PageEntity<HotGoods> pageEntity = catService.getHotGoods(catNo, startMonth, endMonth, shopType, pageParam, "ind");
 				
 				JSONObject json =  JSONObject.fromObject(pageEntity);
 				
@@ -154,6 +155,154 @@ public class IndustryAnalysisServlet extends BaseServlet {
 			} catch (Exception e) {
 				logger.error("检索类目下的子行业的热销宝贝失败", e);
 			}
+			
+		}else if("ind_shop".equals(m)){
+			
+			String catNo = request.getParameter("catNo");
+			
+			String startMonth = request.getParameter("startMonth");
+			String endMonth = request.getParameter("endMonth");
+			String shopType = request.getParameter("shopType");
+			
+			try {
+				
+				PageParam pageParam = PageParam.getPageParam(request);
+				
+				PageEntity<HotShop> pageEntity = catService.getHotShops(catNo, startMonth, endMonth, shopType, pageParam, "ind");
+				
+				JSONObject json =  JSONObject.fromObject(pageEntity);
+				
+				response.getWriter().write(json.toString());
+				
+			} catch (Exception e) {
+				logger.error("检索类目下的子行业的热销店铺失败", e);
+			}
+			
+		}else if("brand_scale".equals(m)){
+			
+			try {
+				PageParam pageParam = PageParam.getPageParam(request);
+				String catNo = request.getParameter("catNo");
+				
+				String startMonth = request.getParameter("startMonth");
+				String endMonth = request.getParameter("endMonth");
+				String shopType = request.getParameter("shopType");
+				
+				PageEntity<CatData> pageEntity = catService.getBrandScaleByCatNo(catNo, startMonth, endMonth, shopType, pageParam);
+				
+				JSONObject json = JSONObject.fromObject(pageEntity);
+
+				response.getWriter().write(json.toString());
+				
+			} catch (Exception e) {
+				logger.error("检索行业下的行业规模失败", e);
+			}
+			
+		}else if("brand_trend".equals(m)){
+
+			String catNo = request.getParameter("catNo");
+			
+			String startMonth = request.getParameter("startMonth");
+			String endMonth = request.getParameter("endMonth");
+			String shopType = request.getParameter("shopType");
+			
+			try {
+				List<Map<String, Object>> mapList = catService.getBrandTrends(catNo, startMonth, endMonth, shopType);
+				
+				JSONArray json = JSONArray.fromObject(mapList);
+				
+				response.getWriter().write(json.toString());
+				
+			} catch (Exception e) {
+				logger.error("检索叶子类目下的品牌趋势失败", e);
+			}
+			
+			
+		}else if("brand_goods".equals(m)){
+			
+			String catNo = request.getParameter("catNo");
+			
+			String startMonth = request.getParameter("startMonth");
+			String endMonth = request.getParameter("endMonth");
+			String shopType = request.getParameter("shopType");
+			
+			try {
+				
+				PageParam pageParam = PageParam.getPageParam(request);
+				
+				PageEntity<HotGoods> pageEntity = catService.getHotGoods(catNo, startMonth, endMonth, shopType, pageParam, "brand");
+				
+				JSONObject json =  JSONObject.fromObject(pageEntity);
+				
+				response.getWriter().write(json.toString());
+				
+			} catch (Exception e) {
+				logger.error("检索类目下的子行业的热销宝贝失败", e);
+			}
+			
+		}else if("brand_shop".equals(m)){
+			
+			String catNo = request.getParameter("catNo");
+			
+			String startMonth = request.getParameter("startMonth");
+			String endMonth = request.getParameter("endMonth");
+			String shopType = request.getParameter("shopType");
+			
+			try {
+				
+				PageParam pageParam = PageParam.getPageParam(request);
+				
+				PageEntity<HotShop> pageEntity = catService.getHotShops(catNo, startMonth, endMonth, shopType, pageParam, "brand");
+				
+				JSONObject json =  JSONObject.fromObject(pageEntity);
+				
+				response.getWriter().write(json.toString());
+				
+			} catch (Exception e) {
+				logger.error("检索类目下的子行业的热销店铺失败", e);
+			}
+			
+		}else if("prop_scale".equals(m)){
+			
+			try {
+				PageParam pageParam = PageParam.getPageParam(request);
+				String catNo = request.getParameter("catNo");
+				String propName = request.getParameter("propName");
+				
+				String startMonth = request.getParameter("startMonth");
+				String endMonth = request.getParameter("endMonth");
+				String shopType = request.getParameter("shopType");
+				
+				PageEntity<CatData> pageEntity = catService.getPropScaleByCatNo(catNo, startMonth, endMonth, shopType, pageParam, propName);
+				
+				JSONObject json = JSONObject.fromObject(pageEntity);
+
+				response.getWriter().write(json.toString());
+				
+			} catch (Exception e) {
+				logger.error("检索属性规模失败", e);
+			}
+			
+		}else if("prop_trend".equals(m)){
+
+			String catNo = request.getParameter("catNo");
+			String propName = request.getParameter("propName");
+			
+			String startMonth = request.getParameter("startMonth");
+			String endMonth = request.getParameter("endMonth");
+			String shopType = request.getParameter("shopType");
+			
+			try {
+				List<Map<String, Object>> mapList = catService.getPropTrend(catNo, startMonth, endMonth, shopType, propName);
+				
+				JSONArray json = JSONArray.fromObject(mapList);
+				
+				response.getWriter().write(json.toString());
+				
+			} catch (Exception e) {
+				logger.error("检索叶子类目下的属性趋势失败", e);
+			}
+			
 			
 		}else{
 			try {

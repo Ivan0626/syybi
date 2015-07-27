@@ -1,5 +1,7 @@
 package com.sanyanyu.syybi.entity;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.sanyanyu.syybi.utils.SysUtil;
 
 /**
@@ -42,7 +44,10 @@ public class HotGoods extends AdvertBase {
 		this.rowNum = rowNum;
 	}
 	public String getShop_url() {
-		return SysUtil.getShopUrl(this.getShop_id());
+		if(StringUtils.isNotBlank(this.getShop_id())){
+			return SysUtil.getShopUrl(this.getShop_id());
+		}
+		return shop_url;
 	}
 	public void setShop_url(String shop_url) {
 		this.shop_url = shop_url;
