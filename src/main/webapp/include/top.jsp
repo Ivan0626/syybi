@@ -54,7 +54,7 @@
 
 					<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 						<li>
-							<a href="${pageContext.request.contextPath}/pages/accountSetting.jsp">
+							<a href="${pageContext.request.contextPath}/a/AccountSetting">
 								<i class="ace-icon fa fa-cog"></i>
 								账户设置
 							</a>

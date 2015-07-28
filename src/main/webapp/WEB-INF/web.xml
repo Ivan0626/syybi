@@ -101,6 +101,16 @@
   </servlet-mapping>
   <servlet>
     <description></description>
+    <display-name>ScalpAnalysisServlet</display-name>
+    <servlet-name>ScalpAnalysisServlet</servlet-name>
+    <servlet-class>com.sanyanyu.syybi.servlet.ScalpAnalysisServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ScalpAnalysisServlet</servlet-name>
+    <url-pattern>/a/ScalpAnalysis</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
     <display-name>DiamondAnalysisServlet</display-name>
     <servlet-name>DiamondAnalysisServlet</servlet-name>
     <servlet-class>com.sanyanyu.syybi.servlet.DiamondAnalysisServlet</servlet-class>

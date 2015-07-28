@@ -1,6 +1,6 @@
 function option2_2(data, chartWay, titlePrefix) {
 
-	var series_data = [], legend_data = [], total = 0, series_name = "";
+	var series_data = [], legend_data = [], total = 0, series_name = "", unit = '';
 
 	$.each(data, function(idx, d){
 		
@@ -29,16 +29,20 @@ function option2_2(data, chartWay, titlePrefix) {
 
 	if(chartWay == 'volume'){
 		series_name = "销量";
+		unit = "件";
 	}else if(chartWay == 'amount'){
 		series_name = "销售额";
 		
+		unit = "元";
 	}else if(chartWay == 'count'){
 		series_name = "成交次数";
+		
+		unit = "次";
 	}
 	
 	var option = {
 		title : {
-	        text: titlePrefix+series_name + "(共"+total+"万件)",
+	        text: titlePrefix+series_name + "(共"+total+"万"+unit+")",
 	        x:'center'
 	    },	
 		tooltip : {

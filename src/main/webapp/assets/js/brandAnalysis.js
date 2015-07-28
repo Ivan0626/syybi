@@ -598,13 +598,11 @@ jQuery(function($) {
 		
 	    curTabIdx = e.target.id.replace('tab','');
 	    
-	    $('.breadcrumb .active').remove();
+	    $('.breadcrumb .active:last').remove();
 	    
 	    if(curTabIdx == 1){
 	    	
-	    	$('.breadcrumb').append('<li class="active">'+$('div.selected').text()+'</li>');
-			
-			$('.breadcrumb').append('<li class="active">行业规模</li>');
+	    	$('.breadcrumb').append('<li class="active">各品牌规模 (子类报表)</li>');
 	    	
 	    	if($('#selected-no').val()){
 	    		$('#tableDiv2').hide();
@@ -615,9 +613,7 @@ jQuery(function($) {
 	    	
 	    }else if(curTabIdx == 2){
 	    	
-	    	$('.breadcrumb').append('<li class="active">'+$('div.selected').text()+'</li>');
-			
-			$('.breadcrumb').append('<li class="active">行业趋势</li>');
+	    	$('.breadcrumb').append('<li class="active">各品牌趋势 (子类报表)</li>');
 	    	
 	    	if($('#selected-no').val()){
 	    		
@@ -630,6 +626,8 @@ jQuery(function($) {
 	    	
 	    }else if(curTabIdx == 3){
 	    	
+	    	$('.breadcrumb').append('<li class="active">热销宝贝 (子类报表之热销宝贝)</li>');
+	    	
 	    	if($('#selected-no').val()){
 	    		if (goods_table) {
 					goods_table.fnDraw();
@@ -638,6 +636,8 @@ jQuery(function($) {
 				}
 	    	}
 	    }else if(curTabIdx == 4){
+	    	
+	    	$('.breadcrumb').append('<li class="active">热销店铺 (子类报表之热销店铺)</li>');
 	    	
 	    	if($('#selected-no').val()){
 	    		if (shop_table) {

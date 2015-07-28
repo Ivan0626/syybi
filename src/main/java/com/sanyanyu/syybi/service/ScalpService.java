@@ -23,21 +23,57 @@ import com.sanyanyu.syybi.entity.PageEntity;
 import com.sanyanyu.syybi.entity.PageParam;
 import com.sanyanyu.syybi.entity.PriceTrend;
 import com.sanyanyu.syybi.entity.SaleShop;
+import com.sanyanyu.syybi.entity.ScalpEntity;
 import com.sanyanyu.syybi.entity.ShopSearch;
 import com.sanyanyu.syybi.utils.DateUtils;
 import com.sanyanyu.syybi.utils.StringUtils;
 import com.sanyanyu.syybi.utils.SysUtil;
 
 /**
- * 运营分析Service
+ * 刷单分析Service
  * 
  * @Description: TODO
  * @author Ivan 2862099249@qq.com
  * @date 2015年7月3日 下午4:34:54
  * @version V1.0
  */
-public class MarketService extends BaseService {
+public class ScalpService extends BaseService {
 
+	
+	/**
+	 * 刷单分析的关注的店铺列表
+	 * @param pageParam
+	 * @param uid
+	 * @param shopName
+	 * @return
+	 * @throws Exception
+	 */
+	public PageEntity<ScalpEntity> getScalpList(PageParam pageParam, String uid, String shopName) throws Exception{
+		
+		List<Object> params = new ArrayList<Object>();
+		params.add(DateUtils.getCurMonth());
+		params.add(DateUtils.getOffsetMonth(-1, "yyyy-MM"));
+		params.add(DateUtils.getCurMonth());
+		params.add(uid);
+		
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT t2.shop_id,t2.shop_name,t2.shop_type,t3.rise_index,t4.sales_amount,t2.item_count,t5.shua_amount,t5.shua_volume,t5.shua_count  FROM tbweb.tb_attn_shop t1")
+		.append(" join tbbase.tb_base_shop t2 on t1.shop_id = t2.shop_id")
+		.append(" left join tbdaily.tb_tran_month_shop t3 on t1.shop_id = t3.shop_id and t3.tran_month = ?")
+		.append(" left join tbdaily.tb_tran_month_shop t4 on t1.shop_id = t4.shop_id and t4.tran_month = ?")
+		.append(" left join tbdaily.tb_shua_month_shop t5 on t1.shop_id = t5.shop_id and t5.tran_month = ?")
+		.append(" where t1.uid = ? and t1.att_type = 3");
+		
+		if(StringUtils.isNotBlank(shopName)){
+			sql.append(" and t2.shop_name = ?");
+			params.add(shopName);
+		}
+		
+		List<ScalpEntity> list = sqlUtil.searchList(ScalpEntity.class, pageParam.buildSql(sql.toString()), params.toArray());
+		
+		return PageEntity.getPageEntity(pageParam, list);
+	} 
+	
 	/**
 	 * 店铺列表
 	 * 
@@ -61,7 +97,7 @@ public class MarketService extends BaseService {
 				+ " left join tbdaily.tb_advert_total t2 on t1.shop_id = t2.shop_id"
 				+ " left join tbbase.tb_base_shop t3 on t1.shop_id = t3.shop_id"
 				+ " left join tbdaily.tb_tran_month_shop t4 on t1.shop_id = t4.shop_id and t4.tran_month = '"
-				+ preMonth + "' where t1.uid=? and t1.att_type = 2";
+				+ preMonth + "' where t1.uid=?";
 
 		List<Object> params = new ArrayList<Object>();
 		params.add(uid);
@@ -88,7 +124,7 @@ public class MarketService extends BaseService {
 	 */
 	public List<Map<String, Object>> getAttnedShop(String uid, String q) throws Exception {
 
-		String sql = "SELECT shop_id, shop_name FROM tbweb.tb_attn_shop where uid = ? and att_type = 2 and shop_name like '" + q + "%'";
+		String sql = "SELECT shop_id, shop_name FROM tbweb.tb_attn_shop where uid = ? and att_type = 3 and shop_name like '" + q + "%'";
 
 		return sqlUtil.searchList(sql, uid);
 
@@ -129,6 +165,7 @@ public class MarketService extends BaseService {
 			shop.setShopId(shopId);
 			shop.setShopName(shopName);
 			shop.setUid(uid);
+			shop.setAttType(3);
 			sqlUtil.insert(shop);
 
 			return "success";
@@ -178,7 +215,7 @@ public class MarketService extends BaseService {
 		String sql = "SELECT shop_id, shop_name FROM tbbase.tb_base_shop t1 where t1.shop_name <> '' and t1.shop_name like '"
 				+ q
 				+ "%'"
-				+ " and not exists (select 'X' from tbweb.tb_attn_shop t2 where t1.shop_id = t2.shop_id and t2.uid = ? and t2.att_type = 2 ) order by t1.shop_name limit 50";
+				+ " and not exists (select 'X' from tbweb.tb_attn_shop t2 where t1.shop_id = t2.shop_id and t2.uid = ? and t2.att_type = 3 ) order by t1.shop_name limit 50";
 
 		return sqlUtil.searchList(sql, uid);
 
@@ -195,7 +232,7 @@ public class MarketService extends BaseService {
 	public boolean enabledDel(String uid, String shopIds) throws Exception {
 
 		String sql = "select count(0) as cnt from tbweb.tb_attn_shop where shop_id in (" + StringUtils.strIn(shopIds)
-				+ ") and uid = ? and att_type = 2 and str_to_date(att_date, '%Y-%m-%d') < date_sub(curdate(), interval 1 month)";
+				+ ") and uid = ? and att_type = 3 and str_to_date(att_date, '%Y-%m-%d') < date_sub(curdate(), interval 1 month)";
 
 		Map<String, Object> map = sqlUtil.search(sql, uid);
 
@@ -213,7 +250,7 @@ public class MarketService extends BaseService {
 	 */
 	public void delAttn(String uid, String shopIds) throws Exception {
 
-		String sql = "delete FROM tbweb.tb_attn_shop where shop_id in (" + StringUtils.strIn(shopIds) + ") and uid = ? and att_type = 2";
+		String sql = "delete FROM tbweb.tb_attn_shop where shop_id in (" + StringUtils.strIn(shopIds) + ") and uid = ? and att_type = 3";
 
 		sqlUtil.delete(sql, uid);
 

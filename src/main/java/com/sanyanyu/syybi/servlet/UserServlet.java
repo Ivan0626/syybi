@@ -111,7 +111,7 @@ public class UserServlet extends BaseServlet {
 					request.setAttribute("isQianDao", isQianDao);
 
 					// 跳转到主页面
-					request.getRequestDispatcher("/a/Dashboard").forward(request, response);
+					request.getRequestDispatcher("/a/IndustryAnalysis").forward(request, response);
 
 					isLogined = true;
 

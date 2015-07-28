@@ -2,7 +2,7 @@ package com.sanyanyu.syybi.entity;
 
 
 /**
- * 店铺营销组合分析-宝贝列表
+ * 店铺运营分析-宝贝列表
  * 
  * @Description: TODO
  * @author Ivan 2862099249@qq.com
