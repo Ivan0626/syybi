@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>运营分析</title>
+<title>刷单分析</title>
 
 <link rel="stylesheet" href="../assets/css/syybi.css" />
 
@@ -37,7 +37,7 @@
 							<i class="ace-icon fa fa-home home-icon"></i>
 							<a href="${ctx }/a/Dashboard">首页</a>
 						</li>
-						<li>运营分析</li>
+						<li>刷单分析</li>
 						<li class="active">店铺列表</li>
 					</ul><!-- /.breadcrumb -->
 
@@ -104,12 +104,12 @@
 																</span>
 															</div>
 														</div>
-														<div class="col-xs-12 col-sm-3">
+														<!-- <div class="col-xs-12 col-sm-3">
 															<button type="button" class="btn btn-sm btn-success" id="shop-search">
 																<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
 																飚量店铺搜索
 															</button>
-														</div>
+														</div> -->
 													</div>
 												</form>
 											</div>
@@ -119,42 +119,25 @@
 							</div>
 							
 							<div class="row">
-								<div class="col-xs-12" style="position:relative;">
-
-									<div class="clearfix" style="position:absolute;right:12px;top:10px;">
-										
-										<button class="pull-right btn btn-xs btn-success" id="del-btn" style="margin-top:5px;margin-left:10px;">
-											<i class="ace-icon fa fa-check"></i>
-											删除所选
-										</button>
-									
-										<!-- 
-										<div class="pull-right tableTools-container"></div>
-										 -->
-									</div>
-									<!-- div.table-responsive -->
-
+								<div class="col-xs-12">
+									<button class="pull-right btn btn-xs btn-success" id="del-btn" style="margin-top:5px;margin-left:10px;">
+										<i class="ace-icon fa fa-check"></i>
+										删除所选
+									</button>
 									<!-- div.dataTables_borderWrap -->
 									<div>
-										<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+										<table id="shop-table" class="table table-striped table-bordered table-hover">
 											<thead>
 												<tr role="row">
-													
-													<th rowspan="2" colspan="1" style="text-align:center">店铺名称</th>
-													<th rowspan="2" colspan="1" style="text-align:center">飚量指数</th>
-													<th rowspan="2" colspan="1" style="text-align:center">上月销售额</th>
-													<th rowspan="2" colspan="1" style="text-align:center">宝贝数量</th>
-													<th rowspan="1" colspan="2" style="text-align:center">手机广告</th>
-
-													<th style="text-align:center">手机直通车</th>
-													<th style="text-align:center">手机商品促销</th>
-													<th rowspan="1" colspan="2" style="text-align:center">web广告</th>
-													<th rowspan="1" colspan="2" style="text-align:center">web直通车</th>
-													<th style="text-align:center">淘宝客</th>
-													<th style="text-align:center">聚划算</th>
-													<th style="text-align:center">商品促销</th>
-													<th class="sorting_disabled" rowspan="2" aria-label="" style="text-align:center">操作</th>
-													<th class="center" rowspan="2" colspan="1">
+													<th>店铺名称</th>
+													<th>飚量指数</th>
+													<th>上月销售额</th>
+													<th>宝贝数量</th>
+													<th>刷单额</th>
+													<th>刷单量</th>
+													<th>刷单次数</th>
+													<th class="sorting_disabled" aria-label="">操作</th>
+													<th>
 														<label class="pos-rel">
 															<input type="checkbox" class="ace" />
 															<span class="lbl"></span>
@@ -162,23 +145,9 @@
 														全选
 													</th>
 												</tr>
-												<tr role="row">
-													<th style="text-align:center">店铺广告数</th>
-													<th style="text-align:center">宝贝广告数</th>
-													<th style="text-align:center">宝贝广告数</th>
-													<th style="text-align:center">宝贝广告数</th>
-													<th style="text-align:center">店铺广告数</th>
-													<th style="text-align:center">宝贝广告数</th>
-													<th style="text-align:center">店铺广告数</th>
-													<th style="text-align:center">宝贝广告数</th>
-													<th style="text-align:center">宝贝数</th>
-													<th style="text-align:center">宝贝广告数</th>
-													<th style="text-align:center">宝贝广告数</th>
-												</tr>
 											</thead>
 
 											<tbody>
-												
 											</tbody>
 										</table>
 									</div>
@@ -200,15 +169,7 @@
 	<script src="../assets/js/bootbox.js"></script>
 	
 	<script src="../assets/js/common.js"></script>
-	<script src="../assets/js/marketAnalysis.js"></script>
+	<script src="../assets/js/scalpAnalysis.js"></script>
 	
-	<!-- inline scripts related to this page -->
-	<script type="text/javascript">
-	
-		var marketAnalysis = {};
-		marketAnalysis.path = "${ctx}";
-		marketAnalysis.shopName = "${param.shopName}";
-		
-	</script>	
 </body>
 </html>

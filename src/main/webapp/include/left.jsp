@@ -116,7 +116,18 @@
 		<li class="hover" id="syy-marketAnalysis">
 			<a href="${ctx }/a/MarketAnalysis">
 				<i class="menu-icon fa fa-tag"></i>
-				<span class="menu-text"> 营销组合分析 </span>
+				<span class="menu-text"> 运营分析 </span>
+
+				<b class="arrow fa fa-angle-down"></b>
+			</a>
+
+			<b class="arrow"></b>
+		</li>
+		
+		<li class="hover" id="syy-scalpAnalysis">
+			<a href="${ctx }/a/ScalpAnalysis">
+				<i class="menu-icon fa fa-cutlery"></i>
+				<span class="menu-text"> 刷单分析 </span>
 
 				<b class="arrow fa fa-angle-down"></b>
 			</a>

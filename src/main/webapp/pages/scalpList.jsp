@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>运营分析</title>
+<title>刷单分析</title>
 
 <link rel="stylesheet" href="../assets/css/syybi.css" />
 
@@ -36,9 +36,9 @@
 							<i class="ace-icon fa fa-home home-icon"></i>
 							<a href="#">首页</a>
 						</li>
-						<li>运营分析</li>
-						<li><a href="${ctx }/a/MarketAnalysis">店铺列表</a></li>
-						<li><a href="${ctx }/a/MarketAnalysis?shopName=<%=URLEncoder.encode(request.getParameter("shopName"), "utf-8") %>"><%=java.net.URLDecoder.decode(request.getParameter("shopName"), "utf-8") %></a></li>
+						<li>刷单分析</li>
+						<li><a href="${ctx }/a/ScalpAnalysis">店铺列表</a></li>
+						<li><a href="${ctx }/a/ScalpAnalysis?shopName=<%=URLEncoder.encode(request.getParameter("shopName"), "utf-8") %>"><%=java.net.URLDecoder.decode(request.getParameter("shopName"), "utf-8") %></a></li>
 						<li class="active">宝贝列表</li>
 					</ul><!-- /.breadcrumb -->
 
@@ -62,9 +62,9 @@
 									</li>
 
 									<li>
-										<a data-toggle="tab" id="tab2" href="#ad">
+										<a data-toggle="tab" id="tab2" href="#scalp">
 											<i class="green ace-icon fa fa-home bigger-120"></i>
-											广告分析
+											刷单分析
 										</a>
 									</li>
 
@@ -108,7 +108,7 @@
 																<input type="text" id="prdName" name="prdName" placeholder="请输入宝贝名称" size="50" style="margin-left: 50px;"/>
 															</div>
 															
-															<div class="widget-elem">
+															<!-- <div class="widget-elem">
 																<label for="adType">广告类别</label>
 
 																<select id="adType" name="adTpe" style="margin-left: 50px;">
@@ -127,7 +127,7 @@
 										                            <option value="14">手机直通车</option>
 										                            <option value="10">手机促销</option>
 																</select>
-															</div>
+															</div> -->
 															
 															
 															<div class="form-actions center" style="margin:0 auto;padding: 9px 10px 0;">
@@ -154,13 +154,15 @@
 																<th rowspan="2" colspan="1" style="text-align:center">商品类别</th>
 																<th rowspan="2" colspan="1" style="text-align:center">标价</th>
 																<th rowspan="1" colspan="2" style="text-align:center">成交均价</th>
-																<th rowspan="1" colspan="2" style="text-align:center">折扣率</th>
 																<th rowspan="1" colspan="2" style="text-align:center">销量</th>
 																<th rowspan="1" colspan="2" style="text-align:center">销售额</th>
-																<th rowspan="2" colspan="1" style="text-align:center">宝贝广告</th>
+																<th rowspan="1" colspan="2" style="text-align:center">刷单量</th>
+																<th rowspan="1" colspan="2" style="text-align:center">刷单额</th>
 																<th class="sorting_disabled" rowspan="2" aria-label="" style="text-align:center">操作</th>
 															</tr>
 															<tr role="row">
+																<th style="text-align:center">本月</th>
+																<th style="text-align:center">上月</th>
 																<th style="text-align:center">本月</th>
 																<th style="text-align:center">上月</th>
 																<th style="text-align:center">本月</th>
@@ -179,13 +181,15 @@
 												                <th colspan="3" style="text-align:center">合计</th>
 												                <th style="text-align:right">11</th>
 												                <th style="text-align:right">11</th>
-												                <th style="text-align:right">-</th>
-												                <th style="text-align:right">-</th>
 												                <th style="text-align:right">11</th>
 												                <th style="text-align:right">11</th>
 												                <th style="text-align:right">11</th>
 												                <th style="text-align:right">11</th>
-												                <th colspan="2"></th>
+												                <th style="text-align:right">11</th>
+												                <th style="text-align:right">11</th>
+												                <th style="text-align:right">11</th>
+												                <th style="text-align:right">11</th>
+												                <th></th>
 												            </tr>
 												        </tfoot>
 													</table>
@@ -194,7 +198,7 @@
 										</div>
 									</div>
 
-									<div id="ad" class="tab-pane fade">
+									<div id="scalp" class="tab-pane fade">
 										<div class="row">
 											<div class="col-sm-12">
 												<div class="widget-box">
@@ -259,19 +263,16 @@
 											<div class="col-xs-12">
 												<!-- div.dataTables_borderWrap -->
 												<div>
-													<table id="ad-table" class="table table-striped table-bordered table-hover">
+													<table id="scalp-table" class="table table-striped table-bordered table-hover">
 														<thead>
 															<tr role="row">
 																<th>时间</th>
 																<th>销售额</th>
 																<th>销量</th>
 																<th>成交次数</th>
-																<th>店铺广告</th>
-																<th>宝贝广告</th>
-																<th>促销活动</th>
-																<th>改名次数</th>
-																<th>调价次数</th>
-																<th>新品上架</th>
+																<th>刷单额</th>
+																<th>刷单量</th>
+																<th>刷单次数</th>
 															</tr>
 														</thead>
 			
@@ -283,7 +284,9 @@
 												                <th style="text-align:right">11</th>
 												                <th style="text-align:right">11</th>
 												                <th style="text-align:right">11</th>
-												                <th colspan="6"></th>
+												                <th style="text-align:right">11</th>
+												                <th style="text-align:right">11</th>
+												                <th style="text-align:right">11</th>
 												            </tr>
 												        </tfoot>
 													</table>
@@ -317,16 +320,15 @@
 	<script src="../assets/js/option3.js"></script>
 	
 	<script src="../assets/js/common.js"></script>
-	<script src="../assets/js/goodsList.js"></script>
+	<script src="../assets/js/scalpList.js"></script>
 
 	<!-- inline scripts related to this page -->
 	<script type="text/javascript">
 	
-		var goodsList = {};
-		goodsList.path = "${ctx}";
-		goodsList.shopId = "${param.shopId}";
-		goodsList.shopName = encodeURI("${param.shopName}");// 编码
-		goodsList.tab = "${param.tab}";
+		var scalpList = {};
+		scalpList.shopId = "${param.shopId}";
+		scalpList.shopName = encodeURI("${param.shopName}");// 编码
+		scalpList.tab = "${param.tab}";
 		
 	</script>	
 </body>

@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>营销组合分析</title>
+<title>运营分析</title>
 
 <link rel="stylesheet" href="../assets/css/syybi.css" />
 
@@ -33,7 +33,7 @@
 							<i class="ace-icon fa fa-home home-icon"></i>
 							<a href="${ctx }/a/Dashboard">首页</a>
 						</li>
-						<li>营销组合分析</li>
+						<li>运营分析</li>
 						<li><a href="${ctx }/a/MarketAnalysis">店铺列表</a></li>
 						<li class="active">飙量店铺搜索</li>
 					</ul><!-- /.breadcrumb -->

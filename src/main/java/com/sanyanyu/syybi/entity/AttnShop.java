@@ -26,7 +26,15 @@ public class AttnShop implements Serializable {
 	private String shopId;
 	private String shopName;
 	private String attDate = DateUtils.getDate();
+	private int attType;
 	
+	@Column(name="att_type")
+	public int getAttType() {
+		return attType;
+	}
+	public void setAttType(int attType) {
+		this.attType = attType;
+	}
 	@Column(name="asid")
 	public String getAsid() {
 		return asid;

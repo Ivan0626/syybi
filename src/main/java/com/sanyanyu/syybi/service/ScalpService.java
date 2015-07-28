@@ -23,21 +23,57 @@ import com.sanyanyu.syybi.entity.PageEntity;
 import com.sanyanyu.syybi.entity.PageParam;
 import com.sanyanyu.syybi.entity.PriceTrend;
 import com.sanyanyu.syybi.entity.SaleShop;
+import com.sanyanyu.syybi.entity.ScalpEntity;
 import com.sanyanyu.syybi.entity.ShopSearch;
 import com.sanyanyu.syybi.utils.DateUtils;
 import com.sanyanyu.syybi.utils.StringUtils;
 import com.sanyanyu.syybi.utils.SysUtil;
 
 /**
- * 运营分析Service
+ * 刷单分析Service
  * 
  * @Description: TODO
  * @author Ivan 2862099249@qq.com
  * @date 2015年7月3日 下午4:34:54
  * @version V1.0
  */
-public class MarketService extends BaseService {
+public class ScalpService extends BaseService {
 
+	
+	/**
+	 * 刷单分析的关注的店铺列表
+	 * @param pageParam
+	 * @param uid
+	 * @param shopName
+	 * @return
+	 * @throws Exception
+	 */
+	public PageEntity<ScalpEntity> getScalpList(PageParam pageParam, String uid, String shopName) throws Exception{
+		
+		List<Object> params = new ArrayList<Object>();
+		params.add(DateUtils.getCurMonth());
+		params.add(DateUtils.getOffsetMonth(-1, "yyyy-MM"));
+		params.add(DateUtils.getCurMonth());
+		params.add(uid);
+		
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT t2.shop_id,t2.shop_name,t2.shop_type,t3.rise_index,t4.sales_amount,t2.item_count,t5.shua_amount,t5.shua_volume,t5.shua_count  FROM tbweb.tb_attn_shop t1")
+		.append(" join tbbase.tb_base_shop t2 on t1.shop_id = t2.shop_id")
+		.append(" left join tbdaily.tb_tran_month_shop t3 on t1.shop_id = t3.shop_id and t3.tran_month = ?")
+		.append(" left join tbdaily.tb_tran_month_shop t4 on t1.shop_id = t4.shop_id and t4.tran_month = ?")
+		.append(" left join tbdaily.tb_shua_month_shop t5 on t1.shop_id = t5.shop_id and t5.tran_month = ?")
+		.append(" where t1.uid = ? and t1.att_type = 3");
+		
+		if(StringUtils.isNotBlank(shopName)){
+			sql.append(" and t2.shop_name = ?");
+			params.add(shopName);
+		}
+		
+		List<ScalpEntity> list = sqlUtil.searchList(ScalpEntity.class, pageParam.buildSql(sql.toString()), params.toArray());
+		
+		return PageEntity.getPageEntity(pageParam, list);
+	} 
+	
 	/**
 	 * 店铺列表
 	 * 
@@ -61,7 +97,7 @@ public class MarketService extends BaseService {
 				+ " left join tbdaily.tb_advert_total t2 on t1.shop_id = t2.shop_id"
 				+ " left join tbbase.tb_base_shop t3 on t1.shop_id = t3.shop_id"
 				+ " left join tbdaily.tb_tran_month_shop t4 on t1.shop_id = t4.shop_id and t4.tran_month = '"
-				+ preMonth + "' where t1.uid=? and t1.att_type = 2";
+				+ preMonth + "' where t1.uid=?";
 
 		List<Object> params = new ArrayList<Object>();
 		params.add(uid);
@@ -88,7 +124,7 @@ public class MarketService extends BaseService {
 	 */
 	public List<Map<String, Object>> getAttnedShop(String uid, String q) throws Exception {
 
-		String sql = "SELECT shop_id, shop_name FROM tbweb.tb_attn_shop where uid = ? and att_type = 2 and shop_name like '" + q + "%'";
+		String sql = "SELECT shop_id, shop_name FROM tbweb.tb_attn_shop where uid = ? and att_type = 3 and shop_name like '" + q + "%'";
 
 		return sqlUtil.searchList(sql, uid);
 
@@ -129,6 +165,7 @@ public class MarketService extends BaseService {
 			shop.setShopId(shopId);
 			shop.setShopName(shopName);
 			shop.setUid(uid);
+			shop.setAttType(3);
 			sqlUtil.insert(shop);
 
 			return "success";
@@ -178,7 +215,7 @@ public class MarketService extends BaseService {
 		String sql = "SELECT shop_id, shop_name FROM tbbase.tb_base_shop t1 where t1.shop_name <> '' and t1.shop_name like '"
 				+ q
 				+ "%'"
-				+ " and not exists (select 'X' from tbweb.tb_attn_shop t2 where t1.shop_id = t2.shop_id and t2.uid = ? and t2.att_type = 2 ) order by t1.shop_name limit 50";
+				+ " and not exists (select 'X' from tbweb.tb_attn_shop t2 where t1.shop_id = t2.shop_id and t2.uid = ? and t2.att_type = 3 ) order by t1.shop_name limit 50";
 
 		return sqlUtil.searchList(sql, uid);
 
@@ -195,7 +232,7 @@ public class MarketService extends BaseService {
 	public boolean enabledDel(String uid, String shopIds) throws Exception {
 
 		String sql = "select count(0) as cnt from tbweb.tb_attn_shop where shop_id in (" + StringUtils.strIn(shopIds)
-				+ ") and uid = ? and att_type = 2 and str_to_date(att_date, '%Y-%m-%d') < date_sub(curdate(), interval 1 month)";
+				+ ") and uid = ? and att_type = 3 and str_to_date(att_date, '%Y-%m-%d') < date_sub(curdate(), interval 1 month)";
 
 		Map<String, Object> map = sqlUtil.search(sql, uid);
 
@@ -213,7 +250,7 @@ public class MarketService extends BaseService {
 	 */
 	public void delAttn(String uid, String shopIds) throws Exception {
 
-		String sql = "delete FROM tbweb.tb_attn_shop where shop_id in (" + StringUtils.strIn(shopIds) + ") and uid = ? and att_type = 2";
+		String sql = "delete FROM tbweb.tb_attn_shop where shop_id in (" + StringUtils.strIn(shopIds) + ") and uid = ? and att_type = 3";
 
 		sqlUtil.delete(sql, uid);
 
@@ -298,29 +335,25 @@ public class MarketService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public PageEntity<GoodsList> getPageShopList(PageParam pageParam, String shopId, String category, String prdName,
-			String adType) throws Exception {
+	public PageEntity<GoodsList> getPageGoodsList(PageParam pageParam, String shopId, String category, String prdName) throws Exception {
 
 		PageEntity<GoodsList> pageEntity = new PageEntity<GoodsList>();
 
-		String reSql = " FROM tbdaily.tb_tran_month t1 "
-				+ " left join tbbase.tb_base_product t2 on t1.item_id = t2.item_id"
-				+ " left join tbdaily.tb_advert_product t3 on t1.shop_id = t3.shop_id and t1.item_id = t3.item_id"
-				+ " left join tbdaily.tb_tran_month t4 on t1.shop_id = t4.shop_id and t1.item_id = t4.item_id and t4.tran_month = '"
-				+ DateUtils.getOffsetMonth(-1, "yyyy-MM") + "'" + " where t1.shop_id = ? and t1.tran_month = '"
-				+ DateUtils.getCurMonth() + "'";
+		String reSql = " from tbbase.tb_base_product t1 "
+				+ " join tbdaily.tb_shua_month t2 on t1.shop_id = t2.shop_id and t1.item_id = t2.item_id and t2.tran_month = '"+ DateUtils.getCurMonth() +"'"
+				+ " left join tbdaily.tb_shua_month t4 on t1.shop_id = t4.shop_id and t1.item_id = t4.item_id and t4.tran_month = '"+ DateUtils.getOffsetMonth(-1, "yyyy-MM") +"'"
+				+ " left join tbdaily.tb_tran_month t3 on t1.shop_id = t3.shop_id and t1.item_id = t3.item_id and t3.tran_month = '"+ DateUtils.getCurMonth() +"'"
+				+ " left join tbdaily.tb_tran_month t5 on t1.shop_id = t5.shop_id and t1.item_id = t5.item_id and t5.tran_month = '"+ DateUtils.getOffsetMonth(-1, "yyyy-MM") +"'"
+				+ " where t1.shop_id = ?";
 
 		List<Object> params = new ArrayList<Object>();
 		params.add(shopId);
 		if (StringUtils.isNotBlank(category)) {
 			
-			reSql += " and t2.cat_path like '" + category + "%'";
+			reSql += " and t1.cat_path like '" + category + "%'";
 		}
 		if (StringUtils.isNotBlank(prdName)) {
-			reSql += " and t2.prd_name like '%" + prdName + "%'";
-		}
-		if (StringUtils.isNotBlank(adType)) {// TODO：需要根绝广告数是否为0处理
-
+			reSql += " and t1.prd_name like '%" + prdName + "%'";
 		}
 
 		String totalSql = "select count(0) as recordsTotal" + reSql;
@@ -339,9 +372,9 @@ public class MarketService extends BaseService {
 		}
 		orderSql += " " + pageParam.getOrderDir();
 
-		String searchFields = "t1.item_id,t2.prd_name,t2.prd_img,t2.cat_path,t1.avg_price,t1.avg_price_tran, t4.avg_price_tran as avg_price_tran_pre,t1.zk_rate,t4.zk_rate as zk_rate_pre, "
-				+ "t1.sales_volume, t4.sales_volume as sales_volume_pre, t1.sales_amount, t4.sales_amount as sales_amount_pre,"
-				+ "t3.hot,t3.normal,t3.tb_cu,t3.activity,t3.taobaoke,t3.ztc,t3.ju,t3.normal_cu,t3.hot_mobile,t3.tb_cu_mobile,t3.activity_mobile,t3.ztc_mobile,t3.normal_cu_mobile";
+		String searchFields = "t1.prd_img,t1.item_id,t1.cat_path,t1.prd_name,t3.avg_price,t3.avg_price_tran,t5.avg_price_tran as avg_price_tran_pre,"
+				+ "t3.sales_volume,t5.sales_volume as sales_volume_pre, t3.sales_amount, t5.sales_amount as sales_amount_pre,"
+				+ "t2.shua_volume, t4.shua_volume as shua_volume_pre,t2.shua_amount, t4.shua_amount as shua_amount_pre";
 		String pageSql = "select " + searchFields + reSql + orderSql + " limit " + pageParam.getStart() + ","
 				+ pageParam.getLength();
 
@@ -360,25 +393,17 @@ public class MarketService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public PageEntity<AdAnalysis> getPageAdList(PageParam pageParam, String shopId, String startDate, String endDate)
+	public PageEntity<ScalpEntity> getPageScalpList(PageParam pageParam, String shopId, String startDate, String endDate)
 			throws Exception {
 
-		String sql = "select * from (select t1.tran_date, t1.sales_amount, t1.sales_volume, t1.tran_count,t1.rise_index,t2.ztc as shop_ztc, t2.normal as shop_normal, t2.hot as shop_hot,"
-				+ "t2.tb_cu as shop_tb_cu, t2.activity as shop_activity, t2.taobaoke as shop_taobaoke,t2.hot_mobile as shop_hot_mobile,t2.activity_mobile as shop_activity_mobile,"
-				+ "t2.sale as shop_sale,t3.hot, t3.normal, t3.tb_cu, t3.activity,t3.taobaoke,t3.ztc,t3.ju,t3.normal_cu,t3.hot_mobile,t3.tb_cu_mobile,t3.activity_mobile,"
-				+ "t3.ztc_mobile,t3.normal_cu_mobile,"
-				+ "(select count(0) from tbdaily.tb_chng_name t4 where t1.shop_id = t4.shop_id and t1.tran_date = t4.change_date) as name_count, "
-				+ "(select count(0) from tbdaily.tb_chng_price t5 where t1.shop_id = t5.shop_id and t1.tran_date = t5.change_date) as price_count,"
-				+ "(select count(0) from tbdaily.tb_chng_add t6 where t1.shop_id = t6.shop_id and t1.tran_date = t6.change_date) as add_count"
-				+ " FROM tbdaily.tb_tran_day_shop t1 "
-				+ " left join tbdaily.tb_advert_shop t2 on t1.shop_id = t2.shop_id and t1.tran_date = t2.put_date"
-				+ " left join tbdaily.tb_advert_product t3 on t1.shop_id = t3.shop_id and t1.tran_date = t3.put_date"
-				+ " where t1.shop_id = ? and t1.tran_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d')) t";
+		String sql = "SELECT t1.tran_date,t2.sales_amount,t2.sales_volume,t2.tran_count,t1.shua_amount,t1.shua_volume,t1.shua_count,t2.rise_index FROM tbdaily.tb_shua_day_shop t1"
+				+" left join tbdaily.tb_tran_day_shop t2 on t1.shop_id = t2.shop_id and t1.tran_date = t2.tran_date"
+				+" where t1.shop_id = ? and  t1.tran_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d')";
 
 		
-		List<AdAnalysis> list = sqlUtil.searchList(AdAnalysis.class, pageParam.buildSql(sql), shopId, startDate, endDate);
+		List<ScalpEntity> list = sqlUtil.searchList(ScalpEntity.class, pageParam.buildSql(sql), shopId, startDate, endDate);
 	
-		PageEntity<AdAnalysis> pageEntity = PageEntity.getPageEntity(pageParam, list);
+		PageEntity<ScalpEntity> pageEntity = PageEntity.getPageEntity(pageParam, list);
 	
 		return pageEntity;
 		

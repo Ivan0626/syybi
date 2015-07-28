@@ -6,7 +6,7 @@ import com.sanyanyu.syybi.annotation.Column;
 import com.sanyanyu.syybi.annotation.Table;
 
 /**
- * 营销组合分析Entity
+ * 运营分析Entity
  * 
  * @Description: TODO
  * @author Ivan 2862099249@qq.com

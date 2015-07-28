@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>营销组合分析</title>
+<title>运营分析</title>
 
 <link rel="stylesheet" href="../assets/css/syybi.css" />
 
@@ -32,7 +32,7 @@
 							<i class="ace-icon fa fa-home home-icon"></i>
 							<a href="#">首页</a>
 						</li>
-						<li>营销组合分析</li>
+						<li>运营分析</li>
 						<li><a href="${ctx }/a/MarketAnalysis">店铺列表</a></li>
 						<li><a href="${ctx }/a/MarketAnalysis?shopName=<%=URLEncoder.encode(request.getParameter("shopName"), "utf-8") %>"><%=java.net.URLDecoder.decode(request.getParameter("shopName"), "utf-8") %></a></li>
 						<li><a href="${ctx }/a/MarketAnalysis?m=goods_list&shopId=${param.shopId }&shopName=<%=URLEncoder.encode(request.getParameter("shopName"), "utf-8") %>&tab=tab1">宝贝列表</a></li>

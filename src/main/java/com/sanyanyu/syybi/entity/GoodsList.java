@@ -52,6 +52,35 @@ public class GoodsList implements Serializable {
 	
 	private String cat_path;
 	
+	private String shua_volume;
+	private String shua_amount;
+	private String shua_volume_pre;
+	private String shua_amount_pre;
+	
+	public String getShua_volume() {
+		return shua_volume;
+	}
+	public void setShua_volume(String shua_volume) {
+		this.shua_volume = shua_volume;
+	}
+	public String getShua_amount() {
+		return shua_amount;
+	}
+	public void setShua_amount(String shua_amount) {
+		this.shua_amount = shua_amount;
+	}
+	public String getShua_volume_pre() {
+		return shua_volume_pre;
+	}
+	public void setShua_volume_pre(String shua_volume_pre) {
+		this.shua_volume_pre = shua_volume_pre;
+	}
+	public String getShua_amount_pre() {
+		return shua_amount_pre;
+	}
+	public void setShua_amount_pre(String shua_amount_pre) {
+		this.shua_amount_pre = shua_amount_pre;
+	}
 	public String getCat_path() {
 		return cat_path;
 	}

@@ -18,32 +18,32 @@ import org.slf4j.LoggerFactory;
 import com.sanyanyu.syybi.entity.AdAnalysis;
 import com.sanyanyu.syybi.entity.CatApi;
 import com.sanyanyu.syybi.entity.GoodsList;
-import com.sanyanyu.syybi.entity.MarketEntity;
 import com.sanyanyu.syybi.entity.PageEntity;
 import com.sanyanyu.syybi.entity.PageParam;
 import com.sanyanyu.syybi.entity.PriceTrend;
+import com.sanyanyu.syybi.entity.ScalpEntity;
 import com.sanyanyu.syybi.entity.ShopSearch;
-import com.sanyanyu.syybi.service.MarketService;
+import com.sanyanyu.syybi.service.ScalpService;
 
 /**
- * 运营分析
+ * 刷单分析
  * 
  * @Description: TODO
  * @author Ivan 2862099249@qq.com
  * @date 2015年6月8日 上午10:36:25
  * @version V1.0
  */
-public class MarketAnalysisServlet extends BaseServlet {
+public class ScalpAnalysisServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = LoggerFactory.getLogger(MarketAnalysisServlet.class);
+	private static Logger logger = LoggerFactory.getLogger(ScalpAnalysisServlet.class);
 
-	private MarketService marketService;
+	private ScalpService scalpService;
 
-	public MarketAnalysisServlet() {
+	public ScalpAnalysisServlet() {
 		super();
 
-		marketService = new MarketService();
+		scalpService = new ScalpService();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -53,7 +53,7 @@ public class MarketAnalysisServlet extends BaseServlet {
 
 			try {
 				// 获取商品类别
-				List<CatApi> catList = marketService.getCat("0", this.getUid(request));// 主营类目
+				List<CatApi> catList = scalpService.getCat("0", this.getUid(request));// 主营类目
 				request.setAttribute("catList", catList);
 			} catch (Exception e) {
 				logger.error("获取商品主类别失败", e);
@@ -67,7 +67,7 @@ public class MarketAnalysisServlet extends BaseServlet {
 
 			try {
 				// 获取商品子类目
-				List<CatApi> catList = marketService.getCat(parentNo);// 主营类目
+				List<CatApi> catList = scalpService.getCat(parentNo);// 主营类目
 
 				JSONArray json = JSONArray.fromObject(catList);
 
@@ -82,24 +82,18 @@ public class MarketAnalysisServlet extends BaseServlet {
 
 		} else if ("shop_list".equals(m)) {// ajax请求，店铺列表数据
 
-			PageParam pageParam = null;
-			try {
-				pageParam = PageParam.getPageParam(request, MarketEntity.class);
-			} catch (Exception e1) {
-				logger.error("店铺列表分页查询的请求处理失败", e1);
-			}
 			try {
 
+				PageParam pageParam = PageParam.getPageParam(request);
+				
 				String shopName = request.getParameter("shopName");
 
-				PageEntity<MarketEntity> pageEntity = marketService.getShopList(pageParam, this.getUid(request),
-						shopName);
-
+				PageEntity<ScalpEntity> pageEntity = scalpService.getScalpList(pageParam, this.getUid(request), shopName);
 				JSONObject json = JSONObject.fromObject(pageEntity);
 
 				response.getWriter().write(json.toString());
 			} catch (Exception e) {
-				logger.error("查询店铺列表失败", e);
+				logger.error("查询刷单分析的关注店铺列表失败", e);
 			}
 
 		} else if ("shop_attned".equals(m)) {// 搜索已关注的店铺
@@ -107,7 +101,7 @@ public class MarketAnalysisServlet extends BaseServlet {
 				String q = new String(request.getParameter("q").getBytes("iso8859-1"), "utf-8");// 解决ajax
 																								// get请求乱码
 				if (StringUtils.isNotBlank(q)) {
-					List<Map<String, Object>> list = marketService.getAttnedShop(this.getUid(request), q);
+					List<Map<String, Object>> list = scalpService.getAttnedShop(this.getUid(request), q);
 
 					JSONArray json = JSONArray.fromObject(list);
 
@@ -118,12 +112,12 @@ public class MarketAnalysisServlet extends BaseServlet {
 				logger.error("搜索已关注的店铺失败", e);
 			}
 
-		} else if ("attned".equals(m)) {// 搜索已关注的店铺
+		} else if ("attned".equals(m)) {// 添加关注的店铺
 			try {
 				String shopId = request.getParameter("shopId");
 				String shopName = request.getParameter("shopName");
 				if (StringUtils.isNotBlank(shopId)) {
-					String msg = marketService.attnedShop(this.getUid(request), shopId, shopName);
+					String msg = scalpService.attnedShop(this.getUid(request), shopId, shopName);
 
 					JSONObject json = new JSONObject();
 					json.put("status", msg);
@@ -140,7 +134,7 @@ public class MarketAnalysisServlet extends BaseServlet {
 				
 				if (StringUtils.isNotBlank(shopIds)) {
 					
-					marketService.attnedShop(this.getUid(request), shopIds);
+					scalpService.attnedShop(this.getUid(request), shopIds);
 
 					JSONObject json = new JSONObject();
 					json.put("status", "1");
@@ -156,7 +150,7 @@ public class MarketAnalysisServlet extends BaseServlet {
 				String q = new String(request.getParameter("q").getBytes("iso8859-1"), "utf-8");// 解决ajax
 																								// get请求乱码
 				if (StringUtils.isNotBlank(q)) {
-					List<Map<String, Object>> list = marketService.getAttnShop(this.getUid(request), q);
+					List<Map<String, Object>> list = scalpService.getAttnShop(this.getUid(request), q);
 
 					JSONArray json = JSONArray.fromObject(list);
 
@@ -172,9 +166,9 @@ public class MarketAnalysisServlet extends BaseServlet {
 			String shopIds = request.getParameter("shopIds");
 			String msg = "";
 			try {
-				if (marketService.enabledDel(this.getUid(request), shopIds)) {
+				if (scalpService.enabledDel(this.getUid(request), shopIds)) {
 
-					marketService.delAttn(this.getUid(request), shopIds);
+					scalpService.delAttn(this.getUid(request), shopIds);
 
 					msg = "delSuccess";
 				} else {
@@ -190,25 +184,23 @@ public class MarketAnalysisServlet extends BaseServlet {
 		} else if ("goods_list".equals(m)) {
 			try {
 				// 获取商品类别
-				List<CatApi> catList = marketService.getCat("0", this.getUid(request));// 主营类目
+				List<CatApi> catList = scalpService.getCat("0", this.getUid(request));// 主营类目
 				request.setAttribute("catList", catList);
 			} catch (Exception e) {
 				logger.error("获取商品主类别失败", e);
 			}
-			request.getRequestDispatcher("/pages/goodsList.jsp").forward(request, response);
+			request.getRequestDispatcher("/pages/scalpList.jsp").forward(request, response);
 
 		} else if ("ajax_goods_list".equals(m)) {// ajax获取宝贝列表
 
 			String shopId = request.getParameter("shopId");
 			String category = request.getParameter("category");
 			String prdName = request.getParameter("prdName");
-			String adType = request.getParameter("adType");
 
 			try {
 				PageParam pageParam = PageParam.getPageParam(request);
 
-				PageEntity<GoodsList> pageEntity = marketService.getPageShopList(pageParam, shopId, category, prdName,
-						adType);
+				PageEntity<GoodsList> pageEntity = scalpService.getPageGoodsList(pageParam, shopId, category, prdName);
 
 				JSONObject json = JSONObject.fromObject(pageEntity);
 				response.getWriter().print(json.toString());
@@ -216,7 +208,7 @@ public class MarketAnalysisServlet extends BaseServlet {
 			} catch (Exception e) {
 				logger.error("获取宝贝的分页列表失败", e);
 			}
-		} else if ("ajax_ad_anlysis".equals(m)) {
+		} else if ("ajax_scalp_anlysis".equals(m)) {
 
 			String shopId = request.getParameter("shopId");
 			String startDate = request.getParameter("startDate");
@@ -225,7 +217,7 @@ public class MarketAnalysisServlet extends BaseServlet {
 			try {
 				PageParam pageParam = PageParam.getPageParam(request);
 
-				PageEntity<AdAnalysis> pageEntity = marketService.getPageAdList(pageParam, shopId, startDate, endDate);
+				PageEntity<ScalpEntity> pageEntity = scalpService.getPageScalpList(pageParam, shopId, startDate, endDate);
 
 				JSONObject json = JSONObject.fromObject(pageEntity);
 				response.getWriter().print(json.toString());
@@ -241,7 +233,7 @@ public class MarketAnalysisServlet extends BaseServlet {
 			String endDate = request.getParameter("endDate");
 
 			try {
-				List<AdAnalysis> list = marketService.getChartData(shopId, startDate, endDate);
+				List<AdAnalysis> list = scalpService.getChartData(shopId, startDate, endDate);
 
 				JSONArray json = JSONArray.fromObject(list);
 				response.getWriter().print(json.toString());
@@ -263,31 +255,31 @@ public class MarketAnalysisServlet extends BaseServlet {
 				PageParam pageParam = PageParam.getPageParam(request);
 				PageEntity<?> pageEntity = null;
 				if ("1".equals(adType)) {// 热门钻展
-					pageEntity = marketService.getHots(pageParam, shopId, itemId, startDate, endDate, "热门钻展");
+					pageEntity = scalpService.getHots(pageParam, shopId, itemId, startDate, endDate, "热门钻展");
 				} else if ("2".equals(adType)) {// 普通钻展
-					pageEntity = marketService.getHots(pageParam, shopId, itemId, startDate, endDate, "普通钻展");
+					pageEntity = scalpService.getHots(pageParam, shopId, itemId, startDate, endDate, "普通钻展");
 				} else if ("3".equals(adType)) {// 淘宝促销
-					pageEntity = marketService.getTaobaoCus(pageParam, shopId, itemId, startDate, endDate);
+					pageEntity = scalpService.getTaobaoCus(pageParam, shopId, itemId, startDate, endDate);
 				} else if ("4".equals(adType)) {// 淘宝活动
-					pageEntity = marketService.getGoodsTaobaos(shopId, startDate, endDate, "0", pageParam);
+					pageEntity = scalpService.getGoodsTaobaos(shopId, startDate, endDate, "0", pageParam);
 				} else if ("5".equals(adType)) {// 淘宝客
-					pageEntity = marketService.getTaokes(pageParam, shopId, itemId, startDate, endDate);
+					pageEntity = scalpService.getTaokes(pageParam, shopId, itemId, startDate, endDate);
 				} else if ("6".equals(adType)) {// 直通车
-					pageEntity = marketService.getGoodsZTCs(shopId, startDate, endDate, pageParam);
+					pageEntity = scalpService.getGoodsZTCs(shopId, startDate, endDate, pageParam);
 				} else if ("7".equals(adType)) {// 聚划算
-					pageEntity = marketService.getGoodsJus(shopId, startDate, endDate, pageParam);
+					pageEntity = scalpService.getGoodsJus(shopId, startDate, endDate, pageParam);
 				} else if ("8".equals(adType)) {// 商品促销
-					pageEntity = marketService.getGoodsCus(shopId, startDate, endDate, pageParam);
+					pageEntity = scalpService.getGoodsCus(shopId, startDate, endDate, pageParam);
 				} else if ("10".equals(adType)) {// 手机促销
-					pageEntity = marketService.getGoodsCuMs(shopId, startDate, endDate, pageParam);
+					pageEntity = scalpService.getGoodsCuMs(shopId, startDate, endDate, pageParam);
 				} else if ("11".equals(adType)) {// 手机热门钻展
-					pageEntity = marketService.getGoodsZuans(shopId, startDate, endDate, "手机热门钻展", pageParam);
+					pageEntity = scalpService.getGoodsZuans(shopId, startDate, endDate, "手机热门钻展", pageParam);
 				} else if ("12".equals(adType)) {// 手机淘宝活动
-					pageEntity = marketService.getGoodsTaobaos(shopId, startDate, endDate, "1", pageParam);
+					pageEntity = scalpService.getGoodsTaobaos(shopId, startDate, endDate, "1", pageParam);
 				} else if ("13".equals(adType)) {// 手机淘宝促销
-					pageEntity = marketService.getGoodsTbCuMs(shopId, startDate, endDate, pageParam);
+					pageEntity = scalpService.getGoodsTbCuMs(shopId, startDate, endDate, pageParam);
 				} else if ("14".equals(adType)) {// 手机直通车
-					pageEntity = marketService.getGoodsZTCMs(shopId, startDate, endDate, pageParam);
+					pageEntity = scalpService.getGoodsZTCMs(shopId, startDate, endDate, pageParam);
 				}
 
 				JSONObject json = JSONObject.fromObject(pageEntity);
@@ -310,11 +302,11 @@ public class MarketAnalysisServlet extends BaseServlet {
 				PageEntity<?> pageEntity = null;
 
 				if ("1".equals(genType)) {// 调价跟踪
-					pageEntity = marketService.getChngPrices(pageParam, shopId, itemId, startDate, endDate);
+					pageEntity = scalpService.getChngPrices(pageParam, shopId, itemId, startDate, endDate);
 				} else if ("2".equals(genType)) {// 改名跟踪
-					pageEntity = marketService.getChngNames(pageParam, shopId, itemId, startDate, endDate);
+					pageEntity = scalpService.getChngNames(pageParam, shopId, itemId, startDate, endDate);
 				} else if ("3".equals(genType)) {// 上架跟踪
-					pageEntity = marketService.getChngAdds(pageParam, shopId, startDate, endDate);
+					pageEntity = scalpService.getChngAdds(pageParam, shopId, startDate, endDate);
 				}
 
 				JSONObject json = JSONObject.fromObject(pageEntity);
@@ -332,7 +324,7 @@ public class MarketAnalysisServlet extends BaseServlet {
 				PageParam pageParam = PageParam.getPageParam(request);
 				PageEntity<?> pageEntity = null;
 
-				pageEntity = marketService.getGoodsMarkets(pageParam, shopId, itemId, startDate, endDate);
+				pageEntity = scalpService.getGoodsMarkets(pageParam, shopId, itemId, startDate, endDate);
 
 				JSONObject json = JSONObject.fromObject(pageEntity);
 				response.getWriter().print(json.toString());
@@ -343,7 +335,7 @@ public class MarketAnalysisServlet extends BaseServlet {
 
 			try {
 				// 获取商品类别
-				List<CatApi> catList = marketService.getCat("0", this.getUid(request));// 主营类目
+				List<CatApi> catList = scalpService.getCat("0", this.getUid(request));// 主营类目
 				request.setAttribute("catList", catList);
 			} catch (Exception e) {
 				logger.error("获取商品主类别失败", e);
@@ -360,7 +352,7 @@ public class MarketAnalysisServlet extends BaseServlet {
 				PageParam pageParam = PageParam.getPageParam(request);
 				PageEntity<?> pageEntity = null;
 
-				pageEntity = marketService.getPageShopGoodList(pageParam, category, shopId, date);
+				pageEntity = scalpService.getPageShopGoodList(pageParam, category, shopId, date);
 
 				JSONObject json = JSONObject.fromObject(pageEntity);
 				response.getWriter().print(json.toString());
@@ -381,24 +373,24 @@ public class MarketAnalysisServlet extends BaseServlet {
 				PageEntity<?> pageEntity = null;
 
 				if ("ztc".equals(adType)) {
-					pageEntity = marketService.getShopZTCs(pageParam, shopId, startDate, endDate);
+					pageEntity = scalpService.getShopZTCs(pageParam, shopId, startDate, endDate);
 				} else if ("hot".equals(adType)) {
-					pageEntity = marketService.getShopZuan(pageParam, shopId, startDate, endDate, "热门钻展");
+					pageEntity = scalpService.getShopZuan(pageParam, shopId, startDate, endDate, "热门钻展");
 				} else if ("normal".equals(adType)) {
-					pageEntity = marketService.getShopZuan(pageParam, shopId, startDate, endDate, "普通钻展");
+					pageEntity = scalpService.getShopZuan(pageParam, shopId, startDate, endDate, "普通钻展");
 				} else if ("taobaoke".equals(adType)) {
-					pageEntity = marketService.getShopTaokes(pageParam, shopId, startDate, endDate);
+					pageEntity = scalpService.getShopTaokes(pageParam, shopId, startDate, endDate);
 				} else if ("hot_mobile".equals(adType)) {
-					pageEntity = marketService.getShopZuan(pageParam, shopId, startDate, endDate, "手机热门钻展");
+					pageEntity = scalpService.getShopZuan(pageParam, shopId, startDate, endDate, "手机热门钻展");
 				} else if ("sale".equals(adType)) {
 
 					String date = request.getParameter("date");
 
-					pageEntity = marketService.getSaleShops(pageParam, shopId, date);
+					pageEntity = scalpService.getSaleShops(pageParam, shopId, date);
 				} else if ("activity".equals(adType)) {// 淘宝活动
-					pageEntity = marketService.getShopTaobaos(pageParam, shopId, startDate, endDate, "0");
+					pageEntity = scalpService.getShopTaobaos(pageParam, shopId, startDate, endDate, "0");
 				} else if ("activity_mobile".equals(adType)) {// 手机淘宝活动
-					pageEntity = marketService.getShopTaobaos(pageParam, shopId, startDate, endDate, "1");
+					pageEntity = scalpService.getShopTaobaos(pageParam, shopId, startDate, endDate, "1");
 				}
 
 				JSONObject json = JSONObject.fromObject(pageEntity);
@@ -419,31 +411,31 @@ public class MarketAnalysisServlet extends BaseServlet {
 				PageParam pageParam = PageParam.getPageParam(request);
 				PageEntity<?> pageEntity = null;
 				if ("1".equals(adType)) {// 热门钻展
-					pageEntity = marketService.getGoodsZuans(pageParam, shopId, prdName, date, "热门钻展");
+					pageEntity = scalpService.getGoodsZuans(pageParam, shopId, prdName, date, "热门钻展");
 				} else if ("2".equals(adType)) {// 普通钻展
-					pageEntity = marketService.getGoodsZuans(pageParam, shopId, prdName, date, "普通钻展");
+					pageEntity = scalpService.getGoodsZuans(pageParam, shopId, prdName, date, "普通钻展");
 				} else if ("3".equals(adType)) {// 淘宝促销
-					pageEntity = marketService.getGoodsTbCus(pageParam, shopId, prdName, date);
+					pageEntity = scalpService.getGoodsTbCus(pageParam, shopId, prdName, date);
 				} else if ("4".equals(adType)) {// 淘宝活动
-					pageEntity = marketService.getGoodsTaobaos(pageParam, shopId, prdName, date, "0");
+					pageEntity = scalpService.getGoodsTaobaos(pageParam, shopId, prdName, date, "0");
 				} else if ("5".equals(adType)) {// 淘宝客
-					pageEntity = marketService.getGoodsTaokes(pageParam, shopId, prdName, date);
+					pageEntity = scalpService.getGoodsTaokes(pageParam, shopId, prdName, date);
 				} else if ("6".equals(adType)) {// 直通车
-					pageEntity = marketService.getGoodsZTCs(pageParam, shopId, prdName, date);
+					pageEntity = scalpService.getGoodsZTCs(pageParam, shopId, prdName, date);
 				} else if ("7".equals(adType)) {// 聚划算
-					pageEntity = marketService.getGoodsJus(pageParam, shopId, prdName, date);
+					pageEntity = scalpService.getGoodsJus(pageParam, shopId, prdName, date);
 				} else if ("8".equals(adType)) {// 商品促销
-					pageEntity = marketService.getGoodsCus(pageParam, shopId, prdName, date);
+					pageEntity = scalpService.getGoodsCus(pageParam, shopId, prdName, date);
 				} else if ("10".equals(adType)) {// 手机促销
-					pageEntity = marketService.getGoodsCuMs(pageParam, shopId, prdName, date);
+					pageEntity = scalpService.getGoodsCuMs(pageParam, shopId, prdName, date);
 				} else if ("11".equals(adType)) {// 手机热门钻展
-					pageEntity = marketService.getGoodsZuans(pageParam, shopId, prdName, date, "手机热门钻展");
+					pageEntity = scalpService.getGoodsZuans(pageParam, shopId, prdName, date, "手机热门钻展");
 				} else if ("12".equals(adType)) {// 手机淘宝活动
-					pageEntity = marketService.getGoodsTaobaos(pageParam, shopId, prdName, date, "1");
+					pageEntity = scalpService.getGoodsTaobaos(pageParam, shopId, prdName, date, "1");
 				} else if ("13".equals(adType)) {// 手机淘宝促销
-					pageEntity = marketService.getGoodsTbCuMs(pageParam, shopId, prdName, date);
+					pageEntity = scalpService.getGoodsTbCuMs(pageParam, shopId, prdName, date);
 				} else if ("14".equals(adType)) {// 手机直通车
-					pageEntity = marketService.getGoodsZTCMs(pageParam, shopId, prdName, date);
+					pageEntity = scalpService.getGoodsZTCMs(pageParam, shopId, prdName, date);
 				}
 
 				JSONObject json = JSONObject.fromObject(pageEntity);
@@ -461,7 +453,7 @@ public class MarketAnalysisServlet extends BaseServlet {
 
 			try {
 				PageParam pageParam = PageParam.getPageParam(request);
-				PageEntity<PriceTrend> pageEntity = marketService.getPriceTrends(shopId, startDate, endDate, itemId,
+				PageEntity<PriceTrend> pageEntity = scalpService.getPriceTrends(shopId, startDate, endDate, itemId,
 						pageParam);
 
 				JSONObject json = JSONObject.fromObject(pageEntity);
@@ -485,7 +477,7 @@ public class MarketAnalysisServlet extends BaseServlet {
 
 			try {
 				PageParam pageParam = PageParam.getPageParam(request);
-				PageEntity<ShopSearch> pageEntity = marketService.getPageShopSearch(pageParam, this.getUid(request),
+				PageEntity<ShopSearch> pageEntity = scalpService.getPageShopSearch(pageParam, this.getUid(request),
 						category, types, ntypes, startReAmount, endReAmount, shopType, startAmount, endAmount,
 						startRiseIndex, endRiseIndex);
 
@@ -496,7 +488,7 @@ public class MarketAnalysisServlet extends BaseServlet {
 			}
 
 		} else {
-			request.getRequestDispatcher("/pages/marketAnalysis.jsp").forward(request, response);
+			request.getRequestDispatcher("/pages/scalpAnalysis.jsp").forward(request, response);
 		}
 
 	}
