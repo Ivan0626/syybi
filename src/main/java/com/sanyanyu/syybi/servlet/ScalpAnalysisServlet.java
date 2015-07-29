@@ -76,9 +76,9 @@ public class ScalpAnalysisServlet extends BaseServlet {
 				logger.error("获取商品子类目失败", e);
 			}
 
-		} else if ("detail".equals(m)) {// 宝贝广告、宝贝跟踪、宝贝营销组合
+		} else if ("scalp_info".equals(m)) {// 刷单详情
 
-			request.getRequestDispatcher("/pages/goodsDetail.jsp").forward(request, response);
+			request.getRequestDispatcher("/pages/scalpInfo.jsp").forward(request, response);
 
 		} else if ("shop_list".equals(m)) {// ajax请求，店铺列表数据
 
@@ -226,20 +226,21 @@ public class ScalpAnalysisServlet extends BaseServlet {
 				logger.error("获取广告分析列表失败", e);
 			}
 
-		} else if ("ad_anlysis_chart".equals(m)) {
+		} else if ("scalp_anlysis_chart".equals(m)) {
 
 			String shopId = request.getParameter("shopId");
 			String startDate = request.getParameter("startDate");
 			String endDate = request.getParameter("endDate");
+			String itemId = request.getParameter("itemId");
 
 			try {
-				List<AdAnalysis> list = scalpService.getChartData(shopId, startDate, endDate);
+				List<ScalpEntity> list = scalpService.getChartData(shopId,itemId, startDate, endDate);
 
 				JSONArray json = JSONArray.fromObject(list);
 				response.getWriter().print(json.toString());
 
 			} catch (Exception e) {
-				logger.error("获取广告分析图表数据失败", e);
+				logger.error("获取宝贝的刷单明细图表数据失败", e);
 			}
 
 		} else if ("goods_ad".equals(m)) {
@@ -314,7 +315,7 @@ public class ScalpAnalysisServlet extends BaseServlet {
 			} catch (Exception e) {
 				logger.error("获取宝贝跟踪数据失败", e);
 			}
-		} else if ("goods_market".equals(m)) {
+		} else if ("ajax_scalp_info".equals(m)) {
 			String shopId = request.getParameter("shopId");
 			String itemId = request.getParameter("itemId");
 			String startDate = request.getParameter("startDate");
@@ -324,14 +325,14 @@ public class ScalpAnalysisServlet extends BaseServlet {
 				PageParam pageParam = PageParam.getPageParam(request);
 				PageEntity<?> pageEntity = null;
 
-				pageEntity = scalpService.getGoodsMarkets(pageParam, shopId, itemId, startDate, endDate);
+				pageEntity = scalpService.getScalpInfos(pageParam, shopId, itemId, startDate, endDate);
 
 				JSONObject json = JSONObject.fromObject(pageEntity);
 				response.getWriter().print(json.toString());
 			} catch (Exception e) {
 				logger.error("获取宝贝运营分析的数据失败", e);
 			}
-		} else if ("shop_detail".equals(m)) {
+		} else if ("scalp_detail".equals(m)) {
 
 			try {
 				// 获取商品类别
@@ -341,18 +342,20 @@ public class ScalpAnalysisServlet extends BaseServlet {
 				logger.error("获取商品主类别失败", e);
 			}
 
-			request.getRequestDispatcher("/pages/shopDetail.jsp").forward(request, response);
+			request.getRequestDispatcher("/pages/scalpDetail.jsp").forward(request, response);
 		} else if ("ajax_shop_goods_list".equals(m)) {
 
 			String shopId = request.getParameter("shopId");
 			String date = request.getParameter("date");
 			String category = request.getParameter("category");
+			
+			String detailType = request.getParameter("detailType");//sales:成交，shua:刷单
 
 			try {
 				PageParam pageParam = PageParam.getPageParam(request);
 				PageEntity<?> pageEntity = null;
 
-				pageEntity = scalpService.getPageShopGoodList(pageParam, category, shopId, date);
+				pageEntity = scalpService.getPageShopGoodList(pageParam, category, shopId, date, detailType);
 
 				JSONObject json = JSONObject.fromObject(pageEntity);
 				response.getWriter().print(json.toString());

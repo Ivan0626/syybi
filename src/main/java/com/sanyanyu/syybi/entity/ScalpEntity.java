@@ -34,6 +34,25 @@ public class ScalpEntity implements Serializable {
 	private String shua_count;
 	private String shop_url;
 	
+	private String rule;
+	private String precision;
+	
+	public String getRule() {
+		return rule;
+	}
+
+	public void setRule(String rule) {
+		this.rule = rule;
+	}
+
+	public String getPrecision() {
+		return precision + "%";
+	}
+
+	public void setPrecision(String precision) {
+		this.precision = precision;
+	}
+
 	public String getSales_volume() {
 		return sales_volume;
 	}

@@ -20,9 +20,18 @@ jQuery(function($) {
 			{
 				autoWidth : false,
 				columns : [ {
-					"data" : "shopName"
+					"data" : "shopName",
+					fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+						$(nTd).css('text-align', 'left').css('vertical-align', 'inherit');
+					}
 				}, {
-					"data" : "riseIndex"
+					"data" : "riseIndex",
+					fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+						$(nTd).css('text-align', 'right').css('vertical-align', 'inherit');
+						if(sData > 10){
+							$(nTd).css('color', 'red');
+						}
+					}
 				}, {
 					"data" : "salesAmountPre"
 				}, {
@@ -94,9 +103,9 @@ jQuery(function($) {
 								var shopName = encodeURI(encodeURI(val_obj.shopName));// 编码
 
 								var html = '<div class="hidden-sm hidden-xs action-buttons"><a href="' + marketAnalysis.path+ '/a/MarketAnalysis?m=goods_list&shopId=' + val_obj.shopId + '&shopName=' + shopName + '&tab=tab1">'
-										+ '<img alt="" src="' + marketAnalysis.path + '/assets/imagesLocal/bao.png"></a>'
+										+ '<img alt="宝贝列表" title="宝贝列表" src="' + marketAnalysis.path + '/assets/imagesLocal/bao.png"></a>'
 										+ '<a href="'+ marketAnalysis.path + '/a/MarketAnalysis?m=goods_list&shopId=' + val_obj.shopId + '&shopName=' + shopName+ '&tab=tab2">' 
-										+ '<img alt="" src="' + marketAnalysis.path + '/assets/imagesLocal/guang.png"></a></div>';
+										+ '<img alt="广告分析" title="广告分析" src="' + marketAnalysis.path + '/assets/imagesLocal/guang.png"></a></div>';
 								return html;
 							}
 						},
@@ -111,6 +120,11 @@ jQuery(function($) {
 						}, {
 							className : "datatables-body-td",
 							"targets" : [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ]
+						},{
+							fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+								$(nTd).css('text-align', 'right').css('vertical-align', 'inherit');
+							},
+							"targets" : [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ]
 						} ]
 			});
 

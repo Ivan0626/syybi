@@ -57,6 +57,21 @@ public class GoodsList implements Serializable {
 	private String shua_volume_pre;
 	private String shua_amount_pre;
 	
+	private String shua_count;
+	private String tran_count;
+	
+	public String getTran_count() {
+		return tran_count;
+	}
+	public void setTran_count(String tran_count) {
+		this.tran_count = tran_count;
+	}
+	public String getShua_count() {
+		return shua_count;
+	}
+	public void setShua_count(String shua_count) {
+		this.shua_count = shua_count;
+	}
 	public String getShua_volume() {
 		return shua_volume;
 	}

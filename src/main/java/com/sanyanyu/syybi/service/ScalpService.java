@@ -15,7 +15,6 @@ import com.sanyanyu.syybi.entity.CatApi;
 import com.sanyanyu.syybi.entity.ChngAdd;
 import com.sanyanyu.syybi.entity.ChngName;
 import com.sanyanyu.syybi.entity.ChngPrice;
-import com.sanyanyu.syybi.entity.GoodsEntity;
 import com.sanyanyu.syybi.entity.GoodsList;
 import com.sanyanyu.syybi.entity.GoodsMarket;
 import com.sanyanyu.syybi.entity.MarketEntity;
@@ -418,12 +417,14 @@ public class ScalpService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<AdAnalysis> getChartData(String shopId, String startDate, String endDate) throws Exception {
+	public List<ScalpEntity> getChartData(String shopId, String itemId, String startDate, String endDate) throws Exception {
 
-		String sql = "select tran_date, sales_volume, sales_amount / 10000, tran_count from tbdaily.tb_tran_day_shop "
-				+ "where shop_id = ? and tran_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d') order by tran_date";
+		String sql = "SELECT t1.tran_date,t2.sales_amount,t2.sales_volume,t2.tran_count,sum(t1.shua_amount) as shua_amount,sum(t1.shua_volume) as shua_volume,sum(t1.shua_count) as shua_count FROM tbdaily.tb_shua_day t1" 
+				+" left join tbdaily.tb_tran_day t2 on t1.shop_id = t2.shop_id and t1.item_id = t2.item_id and t1.tran_date = t2.tran_date"
+				+" where t1.shop_id = ? and t1.item_id = ? and t1.tran_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d')"
+				+" group by NULL";
 
-		return sqlUtil.searchList(AdAnalysis.class, sql, shopId, startDate, endDate);
+		return sqlUtil.searchList(ScalpEntity.class, sql, shopId, itemId, startDate, endDate);
 	}
 
 	/**
@@ -585,10 +586,8 @@ public class ScalpService extends BaseService {
 	}
 	
 	
-	
 	/**
-	 * 宝贝运营分析
-	 * 
+	 * 刷单分析详情
 	 * @param pageParam
 	 * @param shopId
 	 * @param itemId
@@ -597,20 +596,17 @@ public class ScalpService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public PageEntity<GoodsMarket> getGoodsMarkets(PageParam pageParam, String shopId, String itemId, String startDate,
+	public PageEntity<ScalpEntity> getScalpInfos(PageParam pageParam, String shopId, String itemId, String startDate,
 			String endDate) throws Exception {
 
-		String sql = "SELECT t1.tran_date, t1.sales_amount,t1.sales_volume,t1.tran_count,"
-				+ " t2.hot,t2.normal,t2.tb_cu,t2.activity,t2.taobaoke,t2.ztc,t2.ju,t2.normal_cu,t2.normal_cu_mobile,t2.hot_mobile,t2.tb_cu_mobile,t2.activity_mobile,t2.ztc_mobile,"
-				+ " concat_ws('=><br>',t3.prd_name_old,t3.prd_name_new) as chngName,concat_ws('=>',t4.price_old,t4.price_new) as chngPrice FROM tbdaily.tb_tran_day t1"
-				+ " left join tbdaily.tb_advert_product t2 on t1.shop_id = t2.shop_id and t1.item_id = t2.item_id and t1.tran_date = t2.put_date"
-				+ " left join tbdaily.tb_chng_name t3 on t1.shop_id = t3.shop_id and t1.item_id = t3.item_id and t1.tran_date = t3.change_date"
-				+ " left join tbdaily.tb_chng_price t4 on t1.shop_id = t4.shop_id and t1.item_id = t4.item_id and t1.tran_date = t4.change_date"
-				+ " where t1.shop_id = ? and t1.item_id = ? and t1.tran_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d')";
-		List<GoodsMarket> list = sqlUtil.searchList(GoodsMarket.class, pageParam.buildSql(sql), shopId, itemId,
+		 String sql = "SELECT t1.tran_date,t2.sales_amount,t2.sales_volume,t2.tran_count,t1.shua_amount,t1.shua_volume,t1.shua_count,t1.rule,t1.precision FROM tbdaily.tb_shua_day t1" 
+				 +" left join tbdaily.tb_tran_day t2 on t1.shop_id = t2.shop_id and t1.item_id = t2.item_id and t1.tran_date = t2.tran_date"
+				 +" where t1.shop_id = ? and t1.item_id = ? and t1.tran_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d')";
+		
+		List<ScalpEntity> list = sqlUtil.searchList(ScalpEntity.class, pageParam.buildSql(sql), shopId, itemId,
 				startDate, endDate);
 
-		PageEntity<GoodsMarket> pageEntity = PageEntity.getPageEntity(pageParam, list);
+		PageEntity<ScalpEntity> pageEntity = PageEntity.getPageEntity(pageParam, list);
 
 		return pageEntity;
 	}
@@ -623,57 +619,34 @@ public class ScalpService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public PageEntity<GoodsEntity> getPageShopGoodList(PageParam pageParam, String category, String shopId, String date)
+	public PageEntity<GoodsList> getPageShopGoodList(PageParam pageParam, String category, String shopId, String date, String detailType)
 			throws Exception {
 
-		String totalSql = "select count(0) as cnt FROM tbdaily.tb_tran_day t1 left join tbbase.tb_base_product t2 on t1.shop_id = t2.shop_id and t1.item_id = t2.item_id"
-				+ " where t1.shop_id = ? and t1.tran_date = str_to_date(?, '%Y-%m-%d')";
-
+		String coreSql = "from ("
+				+ " select t1.prd_img,t1.item_id,t1.cat_path,t1.prd_name,t3.avg_price,t3.avg_price_tran,t3.sales_volume,"
+				+ " t3.sales_amount, t3.tran_count,sum(t2.shua_amount) as shua_amount,sum(t2.shua_volume) as shua_volume,sum(t2.shua_count) as shua_count from tbbase.tb_base_product t1 "
+				+ " "+(detailType.equals("sales") ? "left" : "")+" join tbdaily.tb_shua_day t2 on t1.shop_id = t2.shop_id and t1.item_id = t2.item_id"
+				+ " left join tbdaily.tb_tran_day t3 on t1.shop_id = t3.shop_id and t1.item_id = t3.item_id"
+				+ " where t1.shop_id = ? and t2.tran_date = t3.tran_date and t2.tran_date = str_to_date(?, '%Y-%m-%d') ";
+		
 		if (StringUtils.isNotBlank(category)) {
 			
-			totalSql += " and t2.cat_path like '" + category + "%'";
+			coreSql += " and t1.cat_path like '" + category + "%'";
 		}	
+		
+		String totalSql = "select count(0) as cnt "+coreSql + " group by NULL) t";
 		
 		Map<String, Object> map = sqlUtil.search(totalSql, shopId, date);
 
 		long totalRecords = StringUtils.toLong(map.get("cnt"));
 		pageParam.setTotalRecords(totalRecords);
-
-		String sql = "SELECT t1.tran_date,t2.item_id,t2.prd_img,t2.prd_name,t2.cat_path,t1.avg_price,t1.avg_price_tran,t1.sales_volume,t1.sales_amount,t1.tran_count,"
-				+ " (select  count(0) from tbdaily.tb_chng_name t3 where t1.shop_id = t3.shop_id and t1.item_id = t3.item_id and t3.change_date between str_to_date('"
-				+ DateUtils.getLastMonthDate()
-				+ "', '%Y-%m-%d') and str_to_date('"
-				+ DateUtils.getDate()
-				+ "', '%Y-%m-%d')) as name_count,"
-				+ " (select  count(0) from tbdaily.tb_chng_price t4 where t1.shop_id = t4.shop_id and t1.item_id = t4.item_id and t4.change_date between str_to_date('"
-				+ DateUtils.getLastMonthDate()
-				+ "', '%Y-%m-%d') and str_to_date('"
-				+ DateUtils.getDate()
-				+ "', '%Y-%m-%d')) as price_count,"
-				+ " max(t5.change_date) as change_date,"
-				+ " sum(t6.hot) as hot,sum(t6.normal) as normal,sum(t6.tb_cu) as tb_cu,sum(t6.activity) as activity,sum(t6.taobaoke) as taobaoke,sum(t6.ztc) as ztc,sum(t6.ju) as ju,"
-				+ " sum(t6.normal_cu) as normal_cu,sum(t6.normal_cu_mobile) as normal_cu_mobile,sum(t6.hot_mobile) as hot_mobile,sum(t6.tb_cu_mobile) as tb_cu_mobile,sum(t6.activity_mobile) as activity_mobile,sum(t6.ztc_mobile) as ztc_mobile"
-				+ " FROM tbdaily.tb_tran_day t1"
-				+ " left join tbbase.tb_base_product t2 on t1.shop_id = t2.shop_id and t1.item_id = t2.item_id"
-				+ " left join tbdaily.tb_chng_add t5 on t1.shop_id = t5.shop_id and t1.item_id = t5.item_id and t5.change_date between str_to_date('"
-				+ DateUtils.getLastMonthDate()
-				+ "', '%Y-%m-%d') and str_to_date('"
-				+ DateUtils.getDate()
-				+ "', '%Y-%m-%d')"
-				+ " left join tbdaily.tb_advert_product t6 on t1.shop_id = t6.shop_id and t1.item_id = t6.item_id and t6.put_date between str_to_date('"
-				+ DateUtils.getLastMonthDate()
-				+ "', '%Y-%m-%d') and str_to_date('"
-				+ DateUtils.getDate()
-				+ "', '%Y-%m-%d')" + " where t1.shop_id = ? and t1.tran_date = str_to_date(?, '%Y-%m-%d')";
-
-		if (StringUtils.isNotBlank(category)) {
-			
-			sql += " and t2.cat_path like '" + category + "%'";
-		}	
 		
-		List<GoodsEntity> list = sqlUtil.searchList(GoodsEntity.class, pageParam.buildSql(sql), shopId, date);
 
-		PageEntity<GoodsEntity> pageEntity = PageEntity.getPageEntity(pageParam, list);
+		String pageSql = "select * "+coreSql+" group by NULL) t";
+
+		List<GoodsList> list = sqlUtil.searchList(GoodsList.class, pageParam.buildSql(pageSql), shopId, date);
+
+		PageEntity<GoodsList> pageEntity = PageEntity.getPageEntity(pageParam, list);
 
 		return pageEntity;
 	}

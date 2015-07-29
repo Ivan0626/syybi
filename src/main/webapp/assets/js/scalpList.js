@@ -156,16 +156,14 @@ jQuery(function($) {
 				data : 'item_id',
 				searchable: false,
 				orderable: false,
-				render : function(val, display, val_obj,prop) {
+				render : function(data, type, full, meta) {
 					
-					var prdName = encodeURI(encodeURI(val_obj.prd_name));// 编码
+					//var shopName = encodeURI(scalpList.shopName);// 编码
+					var prdName = encodeURI(encodeURI(full.prd_name));// 编码
 					
-					var html = '<div class="hidden-sm hidden-xs action-buttons">'
-							+ '<a class="blue" href="'+global.path+'/a/ScalpAnalysis?m=detail&shopId='+scalpList.shopId+'&shopName='+scalpList.shopName+'&itemId='+val+'&prdName='+prdName+'&tab=tab3">'
-							+ '<img alt="" src="'
+					var html = '<a href="'+global.path+'/a/ScalpAnalysis?m=scalp_info&shopId='+scalpList.shopId+'&shopName='+scalpList.shopName+'&itemId='+data+'&prdName='+prdName+'"><img alt="刷单详情" src="'
 							+ global.path
-							+ '/assets/imagesLocal/xiang.png">'
-							+ '</a>' + '</div>';
+							+ '/assets/imagesLocal/xiang.png" title="刷单详情"></a>';
 					return html;
 				}
 			} ];
@@ -251,7 +249,7 @@ jQuery(function($) {
 					render : function(val, display, val_obj,
 							prop) {
 						
-						var toLink = global.path + '/a/ScalpAnalysis?m=shop_detail&shopId='+scalpList.shopId+'&shopName='+scalpList.shopName+'&date='+val_obj.tran_date+'&tab=tab1';
+						var toLink = global.path + '/a/ScalpAnalysis?m=scalp_detail&detailType=sales&shopId='+scalpList.shopId+'&shopName='+scalpList.shopName+'&date='+val_obj.tran_date;
 						
 						if(val > 1.5){
 							return val + '(飙量:<a href="'+toLink+'">'+val_obj.rise_index+'<img src="'+global.path+'/assets/img/up_arrow_new.gif"></a>)';
@@ -280,7 +278,7 @@ jQuery(function($) {
 					render : function(val, display, val_obj,
 							prop) {
 						
-						var toLink = global.path + '/a/ScalpAnalysis?m=shop_detail&shopId='+scalpList.shopId+'&shopName='+scalpList.shopName+'&date='+val_obj.tran_date+'&tab=tab1';
+						var toLink = global.path + '/a/ScalpAnalysis?m=scalp_detail&detailType=shua&shopId='+scalpList.shopId+'&shopName='+scalpList.shopName+'&date='+val_obj.tran_date;
 						
 						return val + '(' + '<a href="'+toLink+'">详情</a>' + ')';
 					}
@@ -369,15 +367,15 @@ jQuery(function($) {
 				'echarts/chart/line',
 				'echarts/chart/bar'
 	        ],function (ec) {
-	        	$.get(global.path+'/a/ScalpAnalysis?m=ad_anlysis_chart', {
+	        	$.get(global.path+'/a/ScalpAnalysis?m=ajax_scalp_anlysis', {
 	        		shopId:scalpList.shopId,
 	        		startDate:startDate,
 	        		endDate:endDate
 	        	}, function(data){
 	        		
-	        		scalpChart = ec.init(document.getElementById('echarts-ad'));
+	        		scalpChart = ec.init(document.getElementById('echarts-scalp'));
 	        		
-		            scalpChart.setOption(option3(data,chartWay));
+		            scalpChart.setOption(option6(data.data,chartWay));
 	        	},"json");
 	        }
 	    );
@@ -418,7 +416,7 @@ jQuery(function($) {
 		// 初始加载
 		goods_table = loadDataTable(goods_config);
 		
-		$('.breadcrumb .active').text('刷单列表');
+		$('.breadcrumb .active').text('宝贝列表');
 	}
 	
 	//===================================切换tab===============================================

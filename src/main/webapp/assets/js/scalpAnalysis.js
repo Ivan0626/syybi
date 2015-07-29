@@ -29,6 +29,9 @@ jQuery(function($) {
 			{
 				data : 'shop_name',
 				name: 't2',
+				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+					$(nTd).css('text-align', 'center').css('vertical-align', 'inherit');
+				},
 				render : function(val, display, val_obj, prop) {
 					var html = '<a target="_blank" href="' + val_obj.shop_url + '">' + val + '</a>';
 
@@ -44,7 +47,10 @@ jQuery(function($) {
 				data : 'rise_index',
 				name : 't3',
 				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
-					$(nTd).css('text-align', 'right').css('vertical-align', 'inherit');
+					$(nTd).css('text-align', 'center').css('vertical-align', 'inherit');
+					if(sData > 10){
+						$(nTd).css('color', 'red');
+					}
 				}
 			},
 			{
@@ -86,10 +92,13 @@ jQuery(function($) {
 					var shopName = encodeURI(encodeURI(val_obj.shop_name));// 编码
 
 					var html = '<div class="hidden-sm hidden-xs action-buttons"><a href="' + global.path+ '/a/ScalpAnalysis?m=goods_list&shopId=' + val + '&shopName=' + shopName + '&tab=tab1">'
-							+ '<img alt="" src="' + global.path + '/assets/imagesLocal/bao.png"></a>'
+							+ '<img alt="宝贝列表" title="宝贝列表" src="' + global.path + '/assets/imagesLocal/bao.png"></a>'
 							+ '<a href="'+ global.path + '/a/ScalpAnalysis?m=goods_list&shopId=' + val + '&shopName=' + shopName+ '&tab=tab2">' 
-							+ '<img alt="" src="' + global.path + '/assets/imagesLocal/shua.png"></a></div>';
+							+ '<img alt="刷单分析" title="刷单分析" src="' + global.path + '/assets/imagesLocal/shua.png"></a></div>';
 					return html;
+				},
+				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+					$(nTd).css('text-align', 'center').css('vertical-align', 'inherit');
 				}
 			}, {
 				data : 'shop_id',
@@ -100,6 +109,9 @@ jQuery(function($) {
 					var html = '<label class="pos-rel">' + '<input type="checkbox" name="shopIds" value="' + val
 							+ '" class="ace" />' + '<span class="lbl"></span>' + '</label>';
 					return html;
+				},
+				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+					$(nTd).css('text-align', 'center').css('vertical-align', 'inherit');
 				}
 			} ];
 	

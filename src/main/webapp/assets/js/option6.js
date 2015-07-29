@@ -1,15 +1,16 @@
-function option3(data, chartWay){
-	var legend = "", xAxisData = [], seriesData = [], unit = "";
+function option6(data, chartWay){
+	var legend = "", xAxisData = [], seriesData = [], unit = "", legend2 = '', seriesData2 = [];
 	if(chartWay == 'volume'){
 		legend = "销量";
+		legend2 = "刷单量";
 		unit = "件";
 	}else if(chartWay == 'amount'){
 		legend = "销售额";
-		
+		legend2 = "刷单额";
 		unit = "万元";
 	}else if(chartWay == 'count'){
 		legend = "成交次数";
-		
+		legend2 = "刷单次数";
 		unit = "次";
 	}
 	
@@ -17,10 +18,13 @@ function option3(data, chartWay){
 		xAxisData.push(d.tran_date);
 		if(chartWay == 'volume'){
 			seriesData.push(d.sales_volume);
+			seriesData2.push(d.shua_volume);
 		}else if(chartWay == 'amount'){
 			seriesData.push(d.sales_amount);
+			seriesData2.push(d.shua_amount);
 		}else if(chartWay == 'count'){
 			seriesData.push(d.tran_count);
+			seriesData2.push(d.shua_count);
 		}
 	});
 	
@@ -34,7 +38,7 @@ function option3(data, chartWay){
 		        trigger: 'axis'
 		    },
 		    legend:{
-		    	data:[legend],
+		    	data:[legend, legend2],
 		    	x : 'center',
 		        y : 'bottom'
 		    },
@@ -70,9 +74,20 @@ function option3(data, chartWay){
 		            type:'bar',
 		            data:seriesData,
 		            barMaxWidth: 30
+//		            itemStyle: {
+//		                normal: {
+//		                    label : {
+//		                        show: true, position: 'insideTop'
+//		                    }
+//		                }
+//		            }
+		        },
+		        {
+		        	name:legend2,
+		            type:'bar',
+		            data:seriesData2,
+		            barMaxWidth: 30
 		        }
 		    ]
 		};
 }
-
-                    

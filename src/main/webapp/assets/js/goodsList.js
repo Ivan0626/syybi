@@ -162,13 +162,13 @@ jQuery(function($) {
 					
 					var html = '<div class="hidden-sm hidden-xs action-buttons">'
 							+ '<a class="blue" href="'+goodsList.path+'/a/MarketAnalysis?m=detail&shopId='+goodsList.shopId+'&shopName='+goodsList.shopName+'&itemId='+val+'&prdName='+prdName+'&tab=tab3">'
-							+ '<img alt="" src="'
+							+ '<img alt="宝贝营销组合" title="宝贝营销组合" src="'
 							+ goodsList.path
 							+ '/assets/imagesLocal/ying.png">'
 							+ '</a>'
 
 							+ '<a class="green" href="'+goodsList.path+'/a/MarketAnalysis?m=detail&shopId='+goodsList.shopId+'&shopName='+goodsList.shopName+'&itemId='+val+'&prdName='+prdName+'&tab=tab2">'
-							+ '<img alt="" src="'
+							+ '<img alt="宝贝跟踪" title="宝贝跟踪" src="'
 							+ goodsList.path
 							+ '/assets/imagesLocal/gen.png">'
 							+ '</a>' + '</div>';

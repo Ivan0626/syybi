@@ -51,17 +51,19 @@ public class MarketService extends BaseService {
 		// 总记录数
 		String recordsTotalSql = "SELECT count(0) as recordsTotal FROM tbweb.tb_attn_shop t1 left join tbbase.tb_base_shop t2 on t1.shop_id = t2.shop_id where uid=?";
 
-		String preMonth = DateUtils.getOffsetMonth(-1);
+		String preMonth = DateUtils.getOffsetMonth(-1, "yyyy-MM");
 
 		// 查询列表sql
-		String listSql = "select t3.shop_name as shopName, t4.rise_index as riseIndex, t4.sales_amount as salesAmountPre, t3.item_count as itemCount, t2.phone_shop_adv as phoneShopAdv,"
+		String listSql = "select t3.shop_name as shopName, t5.rise_index as riseIndex, t4.sales_amount as salesAmountPre, t3.item_count as itemCount, t2.phone_shop_adv as phoneShopAdv,"
 				+ " t2.phone_item_adv as phoneItemAdv, t2.phone_item_train as phoneItemTrain, t2.phone_item_promotion as phoneItemPromotion,t2.web_shop_adv as webShopAdv,"
 				+ " t2.web_item_adv as webItemAdv, t2.web_shop_train as webShopTrain, t2.web_item_train as webItemTrain, t2.taoke_item as taokeItem, t2.ju_item as juItem, "
 				+ " t2.cu_item as cuItem,t1.shop_id as shopId, t1.asid, t3.shop_url as shopUrl, t3.shop_type as shopType from tbweb.tb_attn_shop t1"
 				+ " left join tbdaily.tb_advert_total t2 on t1.shop_id = t2.shop_id"
 				+ " left join tbbase.tb_base_shop t3 on t1.shop_id = t3.shop_id"
 				+ " left join tbdaily.tb_tran_month_shop t4 on t1.shop_id = t4.shop_id and t4.tran_month = '"
-				+ preMonth + "' where t1.uid=? and t1.att_type = 2";
+				+ preMonth + "'"
+				+ " left join tbdaily.tb_tran_month_shop t5 on t1.shop_id = t5.shop_id and t5.tran_month = '"
+				+ DateUtils.getCurMonth() + "' where t1.uid=? and t1.att_type = 2";
 
 		List<Object> params = new ArrayList<Object>();
 		params.add(uid);
@@ -395,7 +397,7 @@ public class MarketService extends BaseService {
 	 */
 	public List<AdAnalysis> getChartData(String shopId, String startDate, String endDate) throws Exception {
 
-		String sql = "select tran_date, sales_volume, sales_amount / 10000, tran_count from tbdaily.tb_tran_day_shop "
+		String sql = "select tran_date, sales_volume, sales_amount, tran_count from tbdaily.tb_tran_day_shop "
 				+ "where shop_id = ? and tran_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d') order by tran_date";
 
 		return sqlUtil.searchList(AdAnalysis.class, sql, shopId, startDate, endDate);
@@ -1223,16 +1225,16 @@ public class MarketService extends BaseService {
 				+" left join tbbase.tb_base_shop t2 on t1.shop_id = t2.shop_id"
 				+" left join tbdaily.tb_tran_month_shop t3 on t1.shop_id = t3.shop_id and t3.tran_month = '"+preMonth+"'"
 				+" left join tbdaily.tb_advert_product t4 on t1.shop_id = t4.shop_id and  date_format(t4.put_date, '%Y-%m') = t1.tran_month"
-				+" left join tbdaily.tb_tran_month t5 on t1.shop_id = t5.shop_id and t5.tran_month = '"+preMonth+"'"
+				+" left join tbdaily.tb_tran_month t5 on t1.shop_id = t5.shop_id and t5.tran_month = '"+preMonth+"' and t5.cat_path like '"+category+"%'"
 				+" where t1.tran_month = '"+curMonth+"'";
 		
 		StringBuffer totalSql = new StringBuffer();
 		totalSql.append("select count(0) as recordsTotal from (")
-		.append(coreSql).append(") t where t.cat_path like '"+category+"%' ");
+		.append(coreSql).append(") t where 1=1 ");
 		
 		StringBuffer pageSql = new StringBuffer();
 		pageSql.append("select t.*,t6.asid from (")
-		.append(coreSql).append(") t left join tbweb.tb_attn_shop t6 on t.shop_id = t6.shop_id and t6.uid = '"+uid+"' where t.cat_path like '"+category+"%' ");
+		.append(coreSql).append(") t left join tbweb.tb_attn_shop t6 on t.shop_id = t6.shop_id and t6.uid = '"+uid+"' and t6.att_type = 2 where 1=1 ");
 		
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer whereSql = new StringBuffer();

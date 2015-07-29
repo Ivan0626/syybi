@@ -252,7 +252,7 @@
 												<input name="chartWay" value="amount" type="radio" class="ace" /><span class="lbl"> 销售额</span>
 												<input name="chartWay" value="count" type="radio" class="ace" /><span class="lbl"> 成交次数</span>
 											</div>
-							          		<div class="col-md-12" id="echarts-scale" style="height:500px;"></div>
+							          		<div class="col-md-12" id="echarts-ad" style="height:500px;"></div>
 								        </div>
 										
 										<div class="row" id="tableDiv">
