@@ -341,7 +341,7 @@ function renderGoodsAd(toLink, path, full, onlyDisplay){
 }	
 
 //渲染店铺的广告图片	
-function renderShopAd(toLink, path, full){
+function renderShopAd(toLink, path, full, onlyDisplay){
 	var html = '';
 	if(full.shop_hot > 0){
 		
@@ -349,12 +349,16 @@ function renderShopAd(toLink, path, full){
 			full.shop_hot = 99;
 		}
 		
-		html += '<i class="ads_icon">'
-			+'<a href="'+toLink+'&ad=hot">'
-			+'<img alt="热门钻展" title="热门钻展" src="'+ path+ '/assets/imagesLocal/hot.png">'
-			+'<b class="color-taobaoke-'+full.shop_hot+'"></b>'
-			+'</a>'
-			+'</i>';
+		if(onlyDisplay){
+			html += '<img alt="热门钻展" title="热门钻展" src="'+ path+ '/assets/imagesLocal/hot.png">';
+		}else{
+			html += '<i class="ads_icon">'
+				+'<a href="'+toLink+'&ad=hot">'
+				+'<img alt="热门钻展" title="热门钻展" src="'+ path+ '/assets/imagesLocal/hot.png">'
+				+'<b class="color-taobaoke-'+full.shop_hot+'"></b>'
+				+'</a>'
+				+'</i>';
+		}
 	}
 	if(full.shop_normal > 0){
 		
@@ -362,12 +366,16 @@ function renderShopAd(toLink, path, full){
 			full.shop_normal = 99;
 		}
 		
-		html += '<i class="ads_icon">'
-		+'<a href="'+toLink+'&ad=normal">'
-		+'<img alt="普通钻展" title="普通钻展" src="'+ path+ '/assets/imagesLocal/normal.png">'
-		+'<b class="color-taobaoke-'+full.shop_normal+'"></b>'
-		+'</a>'
-		+'</i>';
+		if(onlyDisplay){
+			html += '<img alt="普通钻展" title="普通钻展" src="'+ path+ '/assets/imagesLocal/normal.png">';
+		}else{
+			html += '<i class="ads_icon">'
+			+'<a href="'+toLink+'&ad=normal">'
+			+'<img alt="普通钻展" title="普通钻展" src="'+ path+ '/assets/imagesLocal/normal.png">'
+			+'<b class="color-taobaoke-'+full.shop_normal+'"></b>'
+			+'</a>'
+			+'</i>';
+		}
 	}
 	/*if(full.shop_tb_cu > 0){
 
@@ -388,12 +396,17 @@ function renderShopAd(toLink, path, full){
 			full.shop_activity = 99;
 		}
 		
-		html += '<i class="ads_icon">'
-		+'<a href="'+toLink+'&ad=activity">'
-		+'<img alt="淘宝活动（类似双11、双12、原超级卖霸等）" title="淘宝活动（类似双11、双12、原超级卖霸等）" src="'+ path+ '/assets/imagesLocal/activity.png">'
-		+'<b class="color-taobaoke-'+full.shop_activity+'"></b>'
-		+'</a>'
-		+'</i>';
+		if(onlyDisplay){
+			html += '<img alt="淘宝活动（类似双11、双12、原超级卖霸等）" title="淘宝活动（类似双11、双12、原超级卖霸等）" src="'+ path+ '/assets/imagesLocal/activity.png">';
+		}else{
+			html += '<i class="ads_icon">'
+				+'<a href="'+toLink+'&ad=activity">'
+				+'<img alt="淘宝活动（类似双11、双12、原超级卖霸等）" title="淘宝活动（类似双11、双12、原超级卖霸等）" src="'+ path+ '/assets/imagesLocal/activity.png">'
+				+'<b class="color-taobaoke-'+full.shop_activity+'"></b>'
+				+'</a>'
+				+'</i>';
+		}
+		
 	}
 	if(full.shop_taobaoke > 0){
 
@@ -401,12 +414,17 @@ function renderShopAd(toLink, path, full){
 			full.shop_taobaoke = 99;
 		}
 		
-		html += '<i class="ads_icon">'
-		+'<a href="'+toLink+'&ad=taobaoke">'
-		+'<img class="" alt="淘宝客" title="淘宝客" src="'+ path+ '/assets/imagesLocal/taobaoke.png">'
-		+'<b class="color-taobaoke-'+full.shop_taobaoke+'"></b>'
-		+'</a>'
-		+'</i>';
+		if(onlyDisplay){
+			html += '<img class="" alt="淘宝客" title="淘宝客" src="'+ path+ '/assets/imagesLocal/taobaoke.png">';
+		}else{
+			html += '<i class="ads_icon">'
+				+'<a href="'+toLink+'&ad=taobaoke">'
+				+'<img class="" alt="淘宝客" title="淘宝客" src="'+ path+ '/assets/imagesLocal/taobaoke.png">'
+				+'<b class="color-taobaoke-'+full.shop_taobaoke+'"></b>'
+				+'</a>'
+				+'</i>';
+		}
+		
 	}
 	if(full.shop_ztc > 0){
 		
@@ -414,12 +432,17 @@ function renderShopAd(toLink, path, full){
 			full.shop_ztc = 99;
 		}
 		
-		html += '<i class="ads_icon">'
-		+'<a href="'+toLink+'&ad=ztc">'
-		+'<img alt="直通车" title="直通车" src="'+ path+ '/assets/imagesLocal/zhitongche.png">'
-		+'<b class="color-taobaoke-'+full.shop_ztc+'"></b>'
-		+'</a>'
-		+'</i>';
+		if(onlyDisplay){
+			html += '<img alt="直通车" title="直通车" src="'+ path+ '/assets/imagesLocal/zhitongche.png">';
+		}else{
+			html += '<i class="ads_icon">'
+				+'<a href="'+toLink+'&ad=ztc">'
+				+'<img alt="直通车" title="直通车" src="'+ path+ '/assets/imagesLocal/zhitongche.png">'
+				+'<b class="color-taobaoke-'+full.shop_ztc+'"></b>'
+				+'</a>'
+				+'</i>';
+		}
+		
 	}
 	if(full.shop_hot_mobile > 0){
 
@@ -427,12 +450,17 @@ function renderShopAd(toLink, path, full){
 			full.shop_hot_mobile = 99;
 		}
 		
-		html += '<i class="ads_icon">'
-		+'<a href="'+toLink+'&ad=hot_mobile">'
-		+'<img alt="手机热门钻展" title="手机热门钻展" src="'+ path+ '/assets/imagesLocal/hot_mobile.png">'
-		+'<b class="color-taobaoke-'+full.shop_hot_mobile+'"></b>'
-		+'</a>'
-		+'</i>';
+		if(onlyDisplay){
+			html += '<img alt="手机热门钻展" title="手机热门钻展" src="'+ path+ '/assets/imagesLocal/hot_mobile.png">';
+		}else{
+			html += '<i class="ads_icon">'
+				+'<a href="'+toLink+'&ad=hot_mobile">'
+				+'<img alt="手机热门钻展" title="手机热门钻展" src="'+ path+ '/assets/imagesLocal/hot_mobile.png">'
+				+'<b class="color-taobaoke-'+full.shop_hot_mobile+'"></b>'
+				+'</a>'
+				+'</i>';
+		}
+		
 	}
 	if(full.shop_activity_mobile > 0){
 
@@ -440,12 +468,17 @@ function renderShopAd(toLink, path, full){
 			full.shop_activity_mobile = 99;
 		}
 		
-		html += '<i class="ads_icon">'
-		+'<a href="'+toLink+'&ad=activity_mobile">'
-		+'<img alt="手机淘宝活动" title="手机淘宝活动" src="'+ path+ '/assets/imagesLocal/activity_mobile.png">'
-		+'<b class="color-taobaoke-'+full.shop_activity_mobile+'"></b>'
-		+'</a>'
-		+'</i>';
+		if(onlyDisplay){
+			html += '<img alt="手机淘宝活动" title="手机淘宝活动" src="'+ path+ '/assets/imagesLocal/activity_mobile.png">';
+		}else{
+			html += '<i class="ads_icon">'
+				+'<a href="'+toLink+'&ad=activity_mobile">'
+				+'<img alt="手机淘宝活动" title="手机淘宝活动" src="'+ path+ '/assets/imagesLocal/activity_mobile.png">'
+				+'<b class="color-taobaoke-'+full.shop_activity_mobile+'"></b>'
+				+'</a>'
+				+'</i>';
+		}
+		
 	}
 	
 	if(full.shop_sale > 0){
@@ -454,12 +487,17 @@ function renderShopAd(toLink, path, full){
 			full.shop_sale = 99;
 		}
 		
-		html += '<i class="ads_icon">'
-		+'<a href="'+toLink+'&ad=sale">'
-		+'<img alt="搭配减价" title="搭配减价" src="'+ path+ '/assets/imagesLocal/meal.png">'
-		+'<b class="color-taobaoke-'+full.shop_sale+'"></b>'
-		+'</a>'
-		+'</i>';
+		if(onlyDisplay){
+			html += '<img alt="搭配减价" title="搭配减价" src="'+ path+ '/assets/imagesLocal/meal.png">';
+		}else{
+			html += '<i class="ads_icon">'
+				+'<a href="'+toLink+'&ad=sale">'
+				+'<img alt="搭配减价" title="搭配减价" src="'+ path+ '/assets/imagesLocal/meal.png">'
+				+'<b class="color-taobaoke-'+full.shop_sale+'"></b>'
+				+'</a>'
+				+'</i>';
+		}
+		
 	}
 	
 	return html;
@@ -542,7 +580,6 @@ function loadSelectCat(sId, path) {
 							+ d.hasChild + '" data-category="'+d.category+'">' + d.catName + '</option>';
 				});
 				html += '</select>';
-
 				$('#cat-append').append(html);
 			}
 		}, 'json');

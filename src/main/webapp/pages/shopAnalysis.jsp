@@ -1,2012 +1,442 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="com.sanyanyu.syybi.utils.DateUtils"%>
+<%@ include file="/include/taglib.jsp"%>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>店铺分析</title>
+
+<link rel="stylesheet" href="../assets/css/syybi.css" />
+
+
 </head>
 <body>
+	
+	<input type="hidden" id="shopId">
+	<input type="hidden" id="shopName">
+	<input type="hidden" id="searchType">
+	
+	<input type="hidden" id="curMonth" value="<%=DateUtils.getCurMonth() %>">
+	
+	<!-- /section:basics/navbar.layout -->
+	<div class="main-container" id="main-container">
+		<script type="text/javascript">
+			try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+		</script>
 
-						<div class="row">
-							<div class="col-xs-12">
-								<!-- PAGE CONTENT BEGINS -->
+		<!-- /section:basics/syy-sidebar -->
+		<div class="main-content">
+			<div class="main-content-inner">
+				<!-- #section:basics/content.breadcrumbs -->
+				<div class="breadcrumbs" id="breadcrumbs">
+					<script type="text/javascript">
+						try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+					</script>
 
-								<div class="row">
-									<div class="col-xs-12">
-										<h3 class="header smaller lighter blue">jQuery dataTables</h3>
+					<ul class="breadcrumb">
+						<li>
+							<i class="ace-icon fa fa-home home-icon"></i>
+							<a href="${ctx }/a/Dashboard">首页</a>
+						</li>
+						<li>店铺分析</li>
+						<li class="active">店铺列表</li>
+					</ul><!-- /.breadcrumb -->
 
-										<div class="clearfix">
-											<div class="pull-right tableTools-container"></div>
-										</div>
-										<div class="table-header">
-											Results for "Latest Registered Domains"
-										</div>
+				</div>
 
-										<!-- div.table-responsive -->
+				<!-- /section:basics/content.breadcrumbs -->
+				<div class="page-content">
+					<%@ include file="/pages/aceSettings.jsp"%>
 
-										<!-- div.dataTables_borderWrap -->
-										<div>
-											<table id="dynamic-table" class="table table-striped table-bordered table-hover">
-												<thead>
-													<tr>
-														<th class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</th>
-														<th>Domain</th>
-														<th>Price</th>
-														<th class="hidden-480">Clicks</th>
+					<div class="row">
+					
+						<div class="col-sm-12">
 
-														<th>
-															<i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
-															Update
-														</th>
-														<th class="hidden-480">Status</th>
+							<div class="tabbable">
+								
+								<ul class="nav nav-tabs" id="myTab">
+									<li class="active">
+										<a data-toggle="tab" id="tab1" href="#shopList">
+											<i class="green ace-icon fa fa-home bigger-120"></i>
+											店铺列表
+										</a>
+									</li>
 
-														<th></th>
-													</tr>
-												</thead>
+									<li>
+										<a data-toggle="tab" id="tab2" href="#shopCompare">
+											<i class="green ace-icon fa fa-home bigger-120"></i>
+											店铺对比
+										</a>
+									</li>
+									
+									<li>
+										<a data-toggle="tab" id="tab2" href="#hotGoods">
+											<i class="green ace-icon fa fa-home bigger-120"></i>
+											热销宝贝
+										</a>
+									</li>
 
-												<tbody>
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">app.com</a>
-														</td>
-														<td>$45</td>
-														<td class="hidden-480">3,330</td>
-														<td>Feb 12</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-warning">Expiring</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+								</ul>
+								
+							</div>
+							
+							<div class="tab-content">
+							
+								<div id="shopList" class="tab-pane fade in active">
+								
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="widget-box">
+												<div class="widget-header">
+													<h4 class="widget-title">检索条件</h4>
+													<div class="widget-toolbar">
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
+														</a>
+				
+														<a href="#" data-action="close">
+															<i class="ace-icon fa fa-times"></i>
+														</a>
+													</div>
+												</div>
+				
+												<div class="widget-body">
+													<div class="widget-main">
+														<form class="form-search">
+															<div class="row">
+																<div class="col-xs-12 col-sm-4">
+																	<div class="input-group">
+																		<span class="input-group-addon">
+																			搜索已关注的店铺
+																		</span>
+																		<div class="pos-rel">
+																			<input id="shop-attned" class="typeahead scrollable" style="font-size:14px;line-height:1.42857143;" size="54" type="text" placeholder="请输入店铺名称" />
+																		</div>
+																		<span class="input-group-btn">
+																			<button type="button" id="search-btn" class="btn btn-purple btn-sm">
+																				<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
+																				搜索
+																			</button>
+																		</span>
+																	</div>
+																</div>
+																<div class="col-xs-12 col-sm-4 " style="margin-left:25px;">
+																	<div class="input-group">
+																		<span class="input-group-addon">
+																			添加店铺
+																		</span>
+																		
+																		<div class="pos-rel">
+																			<input id="shop-attn" class="typeahead scrollable" style="font-size:14px;line-height:1.42857143;" size="54" type="text" placeholder="请输入店铺名称" />
+																		</div>
+																		<span class="input-group-btn" style="left:-50px;">
+																			<button type="button" id="attn-btn" class="btn btn-purple btn-sm">
+																				<span class="ace-icon fa fa-check icon-on-right bigger-110"></span>
+																				关注
+																			</button>
+																		</span>
+																	</div>
+																</div>
+																<div class="col-xs-12 col-sm-3">
+																	<button type="button" class="btn btn-sm btn-success" id="shop-search">
+																		<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
+																		店铺搜索
 																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
 																</div>
 															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">base.com</a>
-														</td>
-														<td>$35</td>
-														<td class="hidden-480">2,595</td>
-														<td>Feb 18</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-success">Registered</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">max.com</a>
-														</td>
-														<td>$60</td>
-														<td class="hidden-480">4,400</td>
-														<td>Mar 11</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-warning">Expiring</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">best.com</a>
-														</td>
-														<td>$75</td>
-														<td class="hidden-480">6,500</td>
-														<td>Apr 03</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-inverse arrowed-in">Flagged</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">pro.com</a>
-														</td>
-														<td>$55</td>
-														<td class="hidden-480">4,250</td>
-														<td>Jan 21</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-success">Registered</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">team.com</a>
-														</td>
-														<td>$40</td>
-														<td class="hidden-480">3,200</td>
-														<td>Feb 09</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-inverse arrowed-in">Flagged</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">up.com</a>
-														</td>
-														<td>$95</td>
-														<td class="hidden-480">8,520</td>
-														<td>Feb 22</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-info arrowed arrowed-righ">Sold</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">view.com</a>
-														</td>
-														<td>$45</td>
-														<td class="hidden-480">4,100</td>
-														<td>Mar 12</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-success">Registered</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">nice.com</a>
-														</td>
-														<td>$38</td>
-														<td class="hidden-480">3,940</td>
-														<td>Feb 12</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-info arrowed arrowed-righ">Sold</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">fine.com</a>
-														</td>
-														<td>$25</td>
-														<td class="hidden-480">2,983</td>
-														<td>Apr 01</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-warning">Expiring</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">good.com</a>
-														</td>
-														<td>$50</td>
-														<td class="hidden-480">6,500</td>
-														<td>Feb 02</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-inverse arrowed-in">Flagged</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">great.com</a>
-														</td>
-														<td>$55</td>
-														<td class="hidden-480">6,400</td>
-														<td>Feb 24</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-success">Registered</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">shine.com</a>
-														</td>
-														<td>$25</td>
-														<td class="hidden-480">2,200</td>
-														<td>Apr 01</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-inverse arrowed-in">Flagged</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">rise.com</a>
-														</td>
-														<td>$42</td>
-														<td class="hidden-480">3,900</td>
-														<td>Feb 01</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-info arrowed arrowed-righ">Sold</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">above.com</a>
-														</td>
-														<td>$35</td>
-														<td class="hidden-480">3,420</td>
-														<td>Mar 12</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-warning">Expiring</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">share.com</a>
-														</td>
-														<td>$30</td>
-														<td class="hidden-480">3,200</td>
-														<td>Feb 11</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-info arrowed arrowed-righ">Sold</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">fair.com</a>
-														</td>
-														<td>$35</td>
-														<td class="hidden-480">3,900</td>
-														<td>Mar 26</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-inverse arrowed-in">Flagged</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">year.com</a>
-														</td>
-														<td>$48</td>
-														<td class="hidden-480">3,990</td>
-														<td>Feb 15</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-warning">Expiring</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">day.com</a>
-														</td>
-														<td>$55</td>
-														<td class="hidden-480">5,600</td>
-														<td>Jan 29</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-info arrowed arrowed-righ">Sold</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">light.com</a>
-														</td>
-														<td>$40</td>
-														<td class="hidden-480">3,100</td>
-														<td>Feb 17</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-success">Registered</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">sight.com</a>
-														</td>
-														<td>$58</td>
-														<td class="hidden-480">6,100</td>
-														<td>Feb 19</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-inverse arrowed-in">Flagged</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">right.com</a>
-														</td>
-														<td>$50</td>
-														<td class="hidden-480">4,400</td>
-														<td>Apr 01</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-warning">Expiring</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-
-													<tr>
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-
-														<td>
-															<a href="#">once.com</a>
-														</td>
-														<td>$20</td>
-														<td class="hidden-480">1,400</td>
-														<td>Apr 04</td>
-
-														<td class="hidden-480">
-															<span class="label label-sm label-info arrowed arrowed-righ">Sold</span>
-														</td>
-
-														<td>
-															<div class="hidden-sm hidden-xs action-buttons">
-																<a class="blue" href="#">
-																	<i class="ace-icon fa fa-search-plus bigger-130"></i>
-																</a>
-
-																<a class="green" href="#">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-
-																<a class="red" href="#">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-															</div>
-
-															<div class="hidden-md hidden-lg">
-																<div class="inline pos-rel">
-																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-																		<i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-																	</button>
-
-																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-																		<li>
-																			<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																				<span class="blue">
-																					<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																				<span class="green">
-																					<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-
-																		<li>
-																			<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																				<span class="red">
-																					<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																				</span>
-																			</a>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</div>
-
-								<div id="modal-table" class="modal fade" tabindex="-1">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-header no-padding">
-												<div class="table-header">
-													<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-														<span class="white">&times;</span>
-													</button>
-													Results for "Latest Registered Domains
+														</form>
+													</div>
 												</div>
 											</div>
-
-											<div class="modal-body no-padding">
-												<table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+										</div>
+									</div>
+									
+									<div class="row">
+										<div class="col-xs-12">
+											<button class="pull-right btn btn-xs btn-success" id="del-btn" style="margin-top:5px;margin-left:10px;">
+												<i class="ace-icon fa fa-check"></i>
+												删除所选
+											</button>
+											<!-- div.dataTables_borderWrap -->
+											<div>
+												<table id="shop-table" class="table table-striped table-bordered table-hover">
 													<thead>
-														<tr>
-															<th>Domain</th>
-															<th>Price</th>
-															<th>Clicks</th>
-
+														<tr role="row">
+															<th>店铺名称</th>
+															<th>标签</th>
+															<th>飚量指数</th>
+															<th>宝贝数量</th>
+															<th>地域</th>
+															<th>本月销量</th>
+															<th>上月销量</th>
+															<th>本月销售额</th>
+															<th>上月销售额</th>
+															<th>关注时间</th>
+															<th class="sorting_disabled" aria-label="">操作</th>
 															<th>
-																<i class="ace-icon fa fa-clock-o bigger-110"></i>
-																Update
+																<label class="pos-rel">
+																	<input type="checkbox" class="ace" />
+																	<span class="lbl"></span>
+																</label>
+																全选
 															</th>
 														</tr>
 													</thead>
-
+		
 													<tbody>
-														<tr>
-															<td>
-																<a href="#">ace.com</a>
-															</td>
-															<td>$45</td>
-															<td>3,330</td>
-															<td>Feb 12</td>
-														</tr>
-
-														<tr>
-															<td>
-																<a href="#">base.com</a>
-															</td>
-															<td>$35</td>
-															<td>2,595</td>
-															<td>Feb 18</td>
-														</tr>
-
-														<tr>
-															<td>
-																<a href="#">max.com</a>
-															</td>
-															<td>$60</td>
-															<td>4,400</td>
-															<td>Mar 11</td>
-														</tr>
-
-														<tr>
-															<td>
-																<a href="#">best.com</a>
-															</td>
-															<td>$75</td>
-															<td>6,500</td>
-															<td>Apr 03</td>
-														</tr>
-
-														<tr>
-															<td>
-																<a href="#">pro.com</a>
-															</td>
-															<td>$55</td>
-															<td>4,250</td>
-															<td>Jan 21</td>
-														</tr>
 													</tbody>
 												</table>
 											</div>
-
-											<div class="modal-footer no-margin-top">
-												<button class="btn btn-sm btn-danger pull-left" data-dismiss="modal">
-													<i class="ace-icon fa fa-times"></i>
-													Close
-												</button>
-
-												<ul class="pagination pull-right no-margin">
-													<li class="prev disabled">
-														<a href="#">
-															<i class="ace-icon fa fa-angle-double-left"></i>
+										</div>
+									</div>
+								</div>
+								
+								<div id="shopCompare" class="tab-pane fade">
+									
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="widget-box">
+												<div class="widget-header">
+													<h4 class="widget-title">检索条件</h4>
+													<div class="widget-toolbar">
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
 														</a>
-													</li>
-
-													<li class="active">
-														<a href="#">1</a>
-													</li>
-
-													<li>
-														<a href="#">2</a>
-													</li>
-
-													<li>
-														<a href="#">3</a>
-													</li>
-
-													<li class="next">
-														<a href="#">
-															<i class="ace-icon fa fa-angle-double-right"></i>
+				
+														<a href="#" data-action="close">
+															<i class="ace-icon fa fa-times"></i>
 														</a>
-													</li>
-												</ul>
-											</div>
-										</div><!-- /.modal-content -->
-									</div><!-- /.modal-dialog -->
-								</div><!-- PAGE CONTENT ENDS -->
-							</div><!-- /.col -->
-						</div><!-- /.row -->
-			<!-- basic scripts -->
-
+													</div>
+												</div>
+				
+												<div class="widget-body">
+												
+													<div class="widget-main">
+														<div class="widget-elem">
+															<label for="chartType">查看方式</label>
+																
+															<label style="margin-left: 58px;">
+																<input name="chartType" value="shopBar" type="radio" class="ace" checked />
+																<span class="lbl"> 店铺走势图</span>
+															</label>
+															<label>
+																<input name="chartType" value="catBar" type="radio" class="ace" />
+																<span class="lbl"> 类目条形图</span>
+															</label>
+															<label>
+																<input name="chartType" value="data" type="radio" class="ace" />
+																<span class="lbl"> 数据报表</span>
+															</label>
+														</div>
+														
+														<div class="widget-elem">
+															<label for="shop1">选择对比店铺一</label>
 		
-		<!-- page specific plugin scripts -->
-		<script src="../assets/js/dataTables/jquery.dataTables.js"></script>
-		<script src="../assets/js/dataTables/jquery.dataTables.bootstrap.js"></script>
-		<script src="../assets/js/dataTables/extensions/TableTools/js/dataTables.tableTools.js"></script>
-		<script src="../assets/js/dataTables/extensions/ColVis/js/dataTables.colVis.js"></script>
+															<select name="shop1"  style="margin-left: 18px;width:200px;">
+																<option value="">请选择</option>
+																<c:forEach items="${attedList }" var="atted">
+																	<option value="${atted.shop_id }">${atted.shop_name }</option>
+																</c:forEach>
+															</select>
+															
+															<label for="shop2">选择对比店铺二</label>
+		
+															<select name="shop2" style="margin-left: 10px;width:200px;">
+																<option value="">请选择</option>
+																<c:forEach items="${attedList }" var="atted">
+																	<option value="${atted.shop_id }">${atted.shop_name }</option>
+																</c:forEach>
+															</select>
+															
+															<label for="shop3">选择对比店铺三</label>
+		
+															<select name="shop3" style="margin-left: 10px;width:200px;">
+																<option value="">请选择</option>
+																<c:forEach items="${attedList }" var="atted">
+																	<option value="${atted.shop_id }">${atted.shop_name }</option>
+																</c:forEach>
+															</select>
+															
+															<label for="shop4">选择对比店铺四</label>
+		
+															<select name="shop4" style="margin-left: 10px;width:200px;">
+																<option value="">请选择</option>
+																<c:forEach items="${attedList }" var="atted">
+																	<option value="${atted.shop_id }">${atted.shop_name }</option>
+																</c:forEach>
+															</select>
+														</div>
+														
+														
+														
+														<div class="form-actions center" style="margin:0 auto;padding: 9px 10px 0;">
+															<button type="button" id="compare-shop-btn" class="btn btn-sm btn-success">
+																对比
+																<i class="ace-icon fa fa-arrow-right icon-on-right bigger-110"></i>
+															</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row placeholders" id="chartDiv" style="display:none;">
+						          		<div class="col-md-12" id="echarts-compare" style="height:500px;"></div>
+							        </div>
+									<div class="row" id="tableDiv" style="display:none;">
+										<div class="col-xs-12">
+											<!-- div.dataTables_borderWrap -->
+											<div>
+												<table id="compare-table" class="table table-striped table-bordered table-hover">
+													
+												</table>
+											</div>
+										</div>
+									</div>
+									
+								</div>
+								
+								<div id="hotGoods" class="tab-pane fade">
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="widget-box">
+												<div class="widget-header">
+													<h4 class="widget-title">检索条件</h4>
+													<div class="widget-toolbar" style="padding-right: 25px;">
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
+														</a>
+				
+														<a href="#" data-action="close">
+															<i class="ace-icon fa fa-times"></i>
+														</a>
+													</div>
+												</div>
+				
+												<div class="widget-body">
+												
+													<div class="widget-main">
+														
+														<div class="widget-elem" id="cat-append">
+															<label for="cat">商品类别</label>
+	
+															<select id="s0" name="cat"  style="margin-left: 100px;" onchange="addCat(0)">
+																<option value="">请选择</option>
+																<c:forEach items="${catList }" var="catVar">
+																	<option value="${catVar.catNo }" data-category="${catVar.category }" data-hasChild="${catVar.hasChild }">${catVar.catName }</option>
+																</c:forEach>
+															</select>
+														</div>
+														
+														<div class="widget-elem">
+															<label for="shopType">查看范围</label>
+															<label style="margin-left: 100px;">
+																<input name="shopType" value="TMALL" type="radio" class="ace" checked />
+																<span class="lbl"> 天猫</span>
+															</label>
+															<label>
+																<input name="shopType" value="TAOBAO" type="radio" class="ace" />
+																<span class="lbl"> 淘宝</span>
+															</label>
+														</div>
+														
+														<div class="widget-elem" >
+															<label for="shopName">宝贝名称</label>
+				
+															<input type="text" id="prdName" name="prdName" placeholder="请输入宝贝名称" size="50" style="margin-left: 100px;"/>
+														</div>
+														
+														<div class="widget-elem" >
+															<label for="volumeTotal">最近2个月销量下限</label>
+				
+															<input type="text" id="volumeTotal" name="volumeTotal" value="2000" placeholder="请输入宝贝名称" size="50" style="margin-left: 36px;"/>
+														</div>
+														
+														<div class="widget-elem" >
+															<label for="amountTotal">最近2个月销售额下限</label>
+				
+															<input type="text" id="amountTotal" name="amountTotal" value="2000" placeholder="请输入宝贝名称" size="50" style="margin-left: 22px;"/>
+														</div>
+														
+														<div class="form-actions center" style="margin:0 auto;padding: 9px 10px 0;">
+															<button type="button" id="search-goods-btn" class="btn btn-sm btn-success">
+																检索
+																<i class="ace-icon fa fa-arrow-right icon-on-right bigger-110"></i>
+															</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									<div class="row" id="tableDiv3">
+										<div class="col-xs-12">
+											
+											<button class="pull-right btn btn-xs btn-success" id="batch-attn-btn" style="margin-top:5px;margin-left:10px;">
+												<i class="ace-icon fa fa-check"></i>
+												批量关注
+											</button>
+										
+											<!-- div.dataTables_borderWrap -->
+											<div>
+												<table id="goods-table" class="table table-striped table-bordered table-hover">
+													
+													<thead>
+														<tr role="row">
+															<th>宝贝名称</th>
+															<th>店铺名称</th>
+															<th>商品类别</th>
+															<th>标价</th>
+															<th>上月成交均价</th>
+															<th>本月销量</th>
+															<th>上月销量</th>
+															<th>本月销售额</th>
+															<th>上月销售额</th>
+															<th class="center">
+																<label class="pos-rel">
+																	<input type="checkbox" class="ace" />
+																	<span class="lbl"></span>
+																</label>
+																全选
+															</th>
+														</tr>
+													</thead>
+				
+													<tbody>
+													</tbody>
+													
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+							</div>
 
-		<!-- inline scripts related to this page -->
-		<script type="text/javascript">
-			jQuery(function($) {
-				//initiate dataTables plugin
-				var oTable1 = 
-				$('#dynamic-table')
-				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
-				.dataTable( {
-					bAutoWidth: false,
-					"aoColumns": [
-					  { "bSortable": false },
-					  null, null,null, null, null,
-					  { "bSortable": false }
-					],
-					"aaSorting": [],
-			
-					//,
-					//"sScrollY": "200px",
-					//"bPaginate": false,
-			
-					//"sScrollX": "100%",
-					//"sScrollXInner": "120%",
-					//"bScrollCollapse": true,
-					//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
-					//you may want to wrap the table inside a "div.dataTables_borderWrap" element
-			
-					//"iDisplayLength": 50
-			    } );
-				//oTable1.fnAdjustColumnSizing();
-			
-			
-				//TableTools settings
-				TableTools.classes.container = "btn-group btn-overlap";
-				TableTools.classes.print = {
-					"body": "DTTT_Print",
-					"info": "tableTools-alert gritter-item-wrapper gritter-info gritter-center white",
-					"message": "tableTools-print-navbar"
-				}
-			
-				//initiate TableTools extension
-				var tableTools_obj = new $.fn.dataTable.TableTools( oTable1, {
-					"sSwfPath": "../assets/js/dataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf", //in Ace demo ../assets will be replaced by correct assets path
-					
-					"sRowSelector": "td:not(:last-child)",
-					"sRowSelect": "multi",
-					"fnRowSelected": function(row) {
-						//check checkbox when row is selected
-						try { $(row).find('input[type=checkbox]').get(0).checked = true }
-						catch(e) {}
-					},
-					"fnRowDeselected": function(row) {
-						//uncheck checkbox
-						try { $(row).find('input[type=checkbox]').get(0).checked = false }
-						catch(e) {}
-					},
-			
-					"sSelectedClass": "success",
-			        "aButtons": [
-						{
-							"sExtends": "copy",
-							"sToolTip": "Copy to clipboard",
-							"sButtonClass": "btn btn-white btn-primary btn-bold",
-							"sButtonText": "<i class='fa fa-copy bigger-110 pink'></i>",
-							"fnComplete": function() {
-								this.fnInfo( '<h3 class="no-margin-top smaller">Table copied</h3>\
-									<p>Copied '+(oTable1.fnSettings().fnRecordsTotal())+' row(s) to the clipboard.</p>',
-									1500
-								);
-							}
-						},
-						
-						{
-							"sExtends": "csv",
-							"sToolTip": "Export to CSV",
-							"sButtonClass": "btn btn-white btn-primary  btn-bold",
-							"sButtonText": "<i class='fa fa-file-excel-o bigger-110 green'></i>"
-						},
-						
-						{
-							"sExtends": "pdf",
-							"sToolTip": "Export to PDF",
-							"sButtonClass": "btn btn-white btn-primary  btn-bold",
-							"sButtonText": "<i class='fa fa-file-pdf-o bigger-110 red'></i>"
-						},
-						
-						{
-							"sExtends": "print",
-							"sToolTip": "Print view",
-							"sButtonClass": "btn btn-white btn-primary  btn-bold",
-							"sButtonText": "<i class='fa fa-print bigger-110 grey'></i>",
 							
-							"sMessage": "<div class='navbar navbar-default'><div class='navbar-header pull-left'><a class='navbar-brand' href='#'><small>Optional Navbar &amp; Text</small></a></div></div>",
-							
-							"sInfo": "<h3 class='no-margin-top'>Print view</h3>\
-									  <p>Please use your browser's print function to\
-									  print this table.\
-									  <br />Press <b>escape</b> when finished.</p>",
-						}
-			        ]
-			    } );
-				//we put a container before our table and append TableTools element to it
-			    $(tableTools_obj.fnContainer()).appendTo($('.tableTools-container'));
-				
-				//also add tooltips to table tools buttons
-				//addding tooltips directly to "A" buttons results in buttons disappearing (weired! don't know why!)
-				//so we add tooltips to the "DIV" child after it becomes inserted
-				//flash objects inside table tools buttons are inserted with some delay (100ms) (for some reason)
-				setTimeout(function() {
-					$(tableTools_obj.fnContainer()).find('a.DTTT_button').each(function() {
-						var div = $(this).find('> div');
-						if(div.length > 0) div.tooltip({container: 'body'});
-						else $(this).tooltip({container: 'body'});
-					});
-				}, 200);
-				
-				
-				
-				//ColVis extension
-				var colvis = new $.fn.dataTable.ColVis( oTable1, {
-					"buttonText": "<i class='fa fa-search'></i>",
-					"aiExclude": [0, 6],
-					"bShowAll": true,
-					//"bRestore": true,
-					"sAlign": "right",
-					"fnLabel": function(i, title, th) {
-						return $(th).text();//remove icons, etc
-					}
+						</div><!-- /.col -->
 					
-				}); 
-				
-				//style it
-				$(colvis.button()).addClass('btn-group').find('button').addClass('btn btn-white btn-info btn-bold')
-				
-				//and append it to our table tools btn-group, also add tooltip
-				$(colvis.button())
-				.prependTo('.tableTools-container .btn-group')
-				.attr('title', 'Show/hide columns').tooltip({container: 'body'});
-				
-				//and make the list, buttons and checkboxed Ace-like
-				$(colvis.dom.collection)
-				.addClass('dropdown-menu dropdown-light dropdown-caret dropdown-caret-right')
-				.find('li').wrapInner('<a href="javascript:void(0)" />') //'A' tag is required for better styling
-				.find('input[type=checkbox]').addClass('ace').next().addClass('lbl padding-8');
-			
-			
-				
-				/////////////////////////////////
-				//table checkboxes
-				$('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
-				
-				//select/deselect all rows according to table header checkbox
-				$('#dynamic-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){
-					var th_checked = this.checked;//checkbox inside "TH" table header
-					
-					$(this).closest('table').find('tbody > tr').each(function(){
-						var row = this;
-						if(th_checked) tableTools_obj.fnSelect(row);
-						else tableTools_obj.fnDeselect(row);
-					});
-				});
-				
-				//select/deselect a row when the checkbox is checked/unchecked
-				$('#dynamic-table').on('click', 'td input[type=checkbox]' , function(){
-					var row = $(this).closest('tr').get(0);
-					if(!this.checked) tableTools_obj.fnSelect(row);
-					else tableTools_obj.fnDeselect($(this).closest('tr').get(0));
-				});
-				
-			
-				
-				
-					$(document).on('click', '#dynamic-table .dropdown-toggle', function(e) {
-					e.stopImmediatePropagation();
-					e.stopPropagation();
-					e.preventDefault();
-				});
-				
-				
-				//And for the first simple table, which doesn't have TableTools or dataTables
-				//select/deselect all rows according to table header checkbox
-				var active_class = 'active';
-				$('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){
-					var th_checked = this.checked;//checkbox inside "TH" table header
-					
-					$(this).closest('table').find('tbody > tr').each(function(){
-						var row = this;
-						if(th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
-						else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
-					});
-				});
-				
-				//select/deselect a row when the checkbox is checked/unchecked
-				$('#simple-table').on('click', 'td input[type=checkbox]' , function(){
-					var $row = $(this).closest('tr');
-					if(this.checked) $row.addClass(active_class);
-					else $row.removeClass(active_class);
-				});
-			
-				
-			
-				/********************************/
-				//add tooltip for small view action buttons in dropdown menu
-				$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
-				
-				//tooltip placement on right or left
-				function tooltip_placement(context, source) {
-					var $source = $(source);
-					var $parent = $source.closest('table')
-					var off1 = $parent.offset();
-					var w1 = $parent.width();
-			
-					var off2 = $source.offset();
-					//var w2 = $source.width();
-			
-					if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
-					return 'left';
-				}
-			
-			})
-		</script>
+					</div>
+				</div><!-- /.page-content -->
+			</div>
+		</div><!-- /.main-content -->
+	</div>
+	
+	<!-- page specific plugin scripts -->
+	<script src="../assets/js/dataTables/jquery.dataTables.js"></script>
+	<script src="../assets/js/dataTables/jquery.dataTables.bootstrap.js"></script>
+	<script src="../assets/js/typeahead.bundle.js"></script>
+	
+	<script src="../assets/js/bootbox.js"></script>
+	
+	<script src="../assets/js/echarts/source/echarts.js"></script>
+	<script src="../assets/js/option7.js"></script>
+	
+	<script src="../assets/js/common.js"></script>
+	<script src="../assets/js/shopAnalysis.js"></script>
+	
 </body>
 </html>

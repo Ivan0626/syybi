@@ -52,7 +52,7 @@
 
 		<li class="hover" id="syy-industryAnalysis">
 			<a href="${ctx }/a/IndustryAnalysis">
-				<i class="menu-icon fa fa-desktop"></i>
+				<i class="menu-icon fa fa-industry"></i>
 				<span class="menu-text">
 					行业分析
 				</span>
@@ -62,9 +62,9 @@
 			<b class="arrow"></b>
 		</li>
 
-		<li class="hover">
-			<a href="#">
-				<i class="menu-icon fa fa-list"></i>
+		<li class="hover" id="syy-shopAnalysis">
+			<a href="${ctx }/a/ShopAnalysis">
+				<i class="menu-icon fa fa-home" style="font-size: 1.8em"></i>
 				<span class="menu-text"> 店铺分析 </span>
 
 				<b class="arrow fa fa-angle-down"></b>
@@ -74,7 +74,7 @@
 
 		<li class="hover">
 			<a href="#">
-				<i class="menu-icon fa fa-file-o"></i>
+				<i class="menu-icon fa fa-heart-o"></i>
 				<span class="menu-text"> 宝贝分析 </span>
 
 				<b class="arrow fa fa-angle-down"></b>
@@ -85,7 +85,7 @@
 		</li>
 		<li class="hover">
 			<a href="#">
-				<i class="menu-icon fa fa-list-alt"></i>
+				<i class="menu-icon fa fa-registered"></i>
 				<span class="menu-text"> 品牌分析 </span>
 			</a>
 			
@@ -94,7 +94,7 @@
 
 		<li class="hover">
 			<a href="#">
-				<i class="menu-icon fa fa-calendar"></i>
+				<i class="menu-icon fa fa-balance-scale"></i>
 
 				<span class="menu-text">
 					数据对比
@@ -106,7 +106,7 @@
 
 		<li class="hover" id="syy-diamondAnalysis">
 			<a href="${ctx }/a/DiamondAnalysis">
-				<i class="menu-icon fa fa-picture-o"></i>
+				<i class="menu-icon fa fa-diamond"></i>
 				<span class="menu-text"> 钻展透视 </span>
 			</a>
 
@@ -115,7 +115,7 @@
 
 		<li class="hover" id="syy-marketAnalysis">
 			<a href="${ctx }/a/MarketAnalysis">
-				<i class="menu-icon fa fa-tag"></i>
+				<i class="menu-icon fa fa-cube"></i>
 				<span class="menu-text"> 运营分析 </span>
 
 				<b class="arrow fa fa-angle-down"></b>
@@ -134,10 +134,21 @@
 
 			<b class="arrow"></b>
 		</li>
+		
+		<li class="hover" id="syy-scalpAnalysis">
+			<a href="#">
+				<i class="menu-icon fa fa-search"></i>
+				<span class="menu-text"> 热词分析 </span>
+
+				<b class="arrow fa fa-angle-down"></b>
+			</a>
+
+			<b class="arrow"></b>
+		</li>
 
 		<li class="hover" id="syy-accountSetting">
 			<a href="${ctx }/a/AccountSetting">
-				<i class="menu-icon fa fa-pencil-square-o "></i>
+				<i class="menu-icon fa fa-user " style="font-size: 1.8em"></i>
 
 				<span class="menu-text">
 					账户设置

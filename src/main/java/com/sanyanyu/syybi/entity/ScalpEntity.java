@@ -37,6 +37,53 @@ public class ScalpEntity implements Serializable {
 	private String rule;
 	private String precision;
 	
+	/**店铺分析使用**/
+	private String tag;
+	private String region;
+	private String sales_volume_pre;
+	private String sales_amount_pre;
+	private String att_date;
+	
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	public String getSales_volume_pre() {
+		return sales_volume_pre;
+	}
+
+	public void setSales_volume_pre(String sales_volume_pre) {
+		this.sales_volume_pre = sales_volume_pre;
+	}
+
+	public String getSales_amount_pre() {
+		return sales_amount_pre;
+	}
+
+	public void setSales_amount_pre(String sales_amount_pre) {
+		this.sales_amount_pre = sales_amount_pre;
+	}
+
+	public String getAtt_date() {
+		return att_date;
+	}
+
+	public void setAtt_date(String att_date) {
+		this.att_date = att_date;
+	}
+
 	public String getRule() {
 		return rule;
 	}

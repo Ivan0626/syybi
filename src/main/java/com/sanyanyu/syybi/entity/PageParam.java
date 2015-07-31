@@ -46,7 +46,7 @@ public class PageParam implements Serializable {
 	private String[] oArr;//排序字段
 	private String searchSql;//检索的sql部分
 	private String defaultOrderColumn;//默认排序的类
-	private String oTag;
+	private String oTag = "t";
 	private boolean orderEnabled = true;
 	
 	private long totalRecords = -1;//-1表示不分页
@@ -285,12 +285,13 @@ public class PageParam implements Serializable {
 		StringBuffer sb = new StringBuffer(sql);
 		
 		//排序
-		if(StringUtils.isNotBlank(this.getOrderColumn())){
+		String orderColumn = this.getOrderColumn();
+		if(StringUtils.isNotBlank(orderColumn)){
 			
 			if(StringUtils.isNotBlank(this.getoTag())){
-				sb.append(" order by ").append(this.getoTag()).append(".").append(this.getOrderColumn());
+				sb.append(" order by ").append(this.getoTag()).append(".").append(orderColumn.indexOf("_pre") > -1 ? orderColumn.replace("_pre", "") : orderColumn);
 			}else{
-				sb.append(" order by ").append(this.getOrderColumn());
+				sb.append(" order by ").append(orderColumn);
 			}
 			
 			sb.append(" ").append(this.getOrderDir());

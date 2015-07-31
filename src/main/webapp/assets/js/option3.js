@@ -6,7 +6,7 @@ function option3(data, chartWay){
 	}else if(chartWay == 'amount'){
 		legend = "销售额";
 		
-		unit = "万元";
+		unit = "元";
 	}else if(chartWay == 'count'){
 		legend = "成交次数";
 		

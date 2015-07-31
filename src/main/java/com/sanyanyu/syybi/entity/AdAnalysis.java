@@ -52,6 +52,50 @@ public class AdAnalysis implements Serializable {
 	
 	private String rise_index;
 	
+	/**以下属性店铺分析-店铺对比用**/
+	private String sales_amount_pre;
+	private String sales_volume_pre;
+	private String tran_count_pre;
+	private String shop_name;
+	private String region;
+	private String item_count;
+	
+	public String getShop_name() {
+		return shop_name;
+	}
+	public void setShop_name(String shop_name) {
+		this.shop_name = shop_name;
+	}
+	public String getRegion() {
+		return region;
+	}
+	public void setRegion(String region) {
+		this.region = region;
+	}
+	public String getItem_count() {
+		return item_count;
+	}
+	public void setItem_count(String item_count) {
+		this.item_count = item_count;
+	}
+	public String getSales_amount_pre() {
+		return sales_amount_pre;
+	}
+	public void setSales_amount_pre(String sales_amount_pre) {
+		this.sales_amount_pre = sales_amount_pre;
+	}
+	public String getSales_volume_pre() {
+		return sales_volume_pre;
+	}
+	public void setSales_volume_pre(String sales_volume_pre) {
+		this.sales_volume_pre = sales_volume_pre;
+	}
+	public String getTran_count_pre() {
+		return tran_count_pre;
+	}
+	public void setTran_count_pre(String tran_count_pre) {
+		this.tran_count_pre = tran_count_pre;
+	}
 	public String getRise_index() {
 		return rise_index;
 	}

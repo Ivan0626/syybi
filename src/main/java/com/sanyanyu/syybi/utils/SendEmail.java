@@ -25,7 +25,7 @@ public class SendEmail {
 	public static final String HOST = "smtp.mxhichina.com";
 	public static final String PROTOCOL = "smtp";
 	public static final int PORT = 25;
-	public static final String FROM = "service@huoradar.com";// 发件人的email
+	public static final String FROM = "service@ebindex.com";// 发件人的email
 	public static final String PWD = "Sanyanyu.2015";// 发件人密码
 
 	/**

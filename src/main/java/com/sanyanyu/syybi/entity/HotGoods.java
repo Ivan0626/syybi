@@ -30,6 +30,43 @@ public class HotGoods extends AdvertBase {
 	
 	private int rowNum;
 	
+	/** 以下字段在店铺分析-热销宝贝使用 **/
+	private String cat_path;
+	private String avg_price_tran_pre;
+	private String sales_volume_pre;
+	private String sales_amount_pre;
+	private String sales_total;
+	
+	public String getCat_path() {
+		return cat_path;
+	}
+	public void setCat_path(String cat_path) {
+		this.cat_path = cat_path;
+	}
+	public String getAvg_price_tran_pre() {
+		return avg_price_tran_pre;
+	}
+	public void setAvg_price_tran_pre(String avg_price_tran_pre) {
+		this.avg_price_tran_pre = avg_price_tran_pre;
+	}
+	public String getSales_volume_pre() {
+		return sales_volume_pre;
+	}
+	public void setSales_volume_pre(String sales_volume_pre) {
+		this.sales_volume_pre = sales_volume_pre;
+	}
+	public String getSales_amount_pre() {
+		return sales_amount_pre;
+	}
+	public void setSales_amount_pre(String sales_amount_pre) {
+		this.sales_amount_pre = sales_amount_pre;
+	}
+	public String getSales_total() {
+		return sales_total;
+	}
+	public void setSales_total(String sales_total) {
+		this.sales_total = sales_total;
+	}
 	public String getShop_type() {
 		return shop_type;
 	}
