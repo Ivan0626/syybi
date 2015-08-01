@@ -375,7 +375,11 @@ public class MarketService extends BaseService {
 				+ "(select count(0) from tbdaily.tb_chng_add t6 where t1.shop_id = t6.shop_id and t1.tran_date = t6.change_date) as add_count"
 				+ " FROM tbdaily.tb_tran_day_shop t1 "
 				+ " left join tbdaily.tb_advert_shop t2 on t1.shop_id = t2.shop_id and t1.tran_date = t2.put_date"
-				+ " left join tbdaily.tb_advert_product t3 on t1.shop_id = t3.shop_id and t1.tran_date = t3.put_date"
+				+ " left join (select t4.shop_id, t4.put_date, sum(t4.hot) as hot, sum(t4.normal) as normal, sum(t4.tb_cu) as tb_cu, sum(t4.activity) as activity,sum(t4.taobaoke) as taobaoke,"
+				+ " sum(t4.ztc) as ztc,sum(t4.ju) as ju,sum(t4.normal_cu) as normal_cu,sum(t4.hot_mobile) as hot_mobile,sum(t4.tb_cu_mobile) as tb_cu_mobile,sum(t4.activity_mobile) as activity_mobile,"
+				+ " sum(t4.ztc_mobile) as ztc_mobile,sum(t4.normal_cu_mobile) as normal_cu_mobile "
+				+ " from tbdaily.tb_advert_product t4 group by t4.shop_id, t4.put_date ) t3 "
+				+ " on t1.shop_id = t3.shop_id and t1.tran_date = t3.put_date"
 				+ " where t1.shop_id = ? and t1.tran_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d')) t";
 
 		

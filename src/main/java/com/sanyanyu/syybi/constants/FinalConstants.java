@@ -12,5 +12,7 @@ public class FinalConstants {
 	public static final String  DEMO_PASSWORD = "123!@#456^%$789";
 	
 	public static final String DEFAULT_SHOP_TYPE = "TMALL";//默认查询的网站
+	public static final int DEFAULT_QUERY_VOLUME = 2000;//最近2个月销量下限
+	public static final int DEFAULT_QUERY_AMOUNT = 2000;//最近2个月销售额下限
 	
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.sanyanyu.syybi.constants.FinalConstants;
 import com.sanyanyu.syybi.entity.AdAnalysis;
 import com.sanyanyu.syybi.entity.AdvertCu;
 import com.sanyanyu.syybi.entity.AdvertHot;
@@ -1423,7 +1424,17 @@ public class ShopService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public PageEntity<HotGoods> getHotGoods(String uid, PageParam pageParam) throws Exception{
+	public PageEntity<HotGoods> getHotGoods(String uid, String category, String shopType, String prdName, String volumeTotal, String amountTotal, PageParam pageParam) throws Exception{
+		
+		int volumeTotalInt = StringUtils.toInteger(volumeTotal);
+		if(volumeTotalInt == 0){
+			volumeTotalInt = FinalConstants.DEFAULT_QUERY_VOLUME;
+		}
+		
+		int amountTotalInt = StringUtils.toInteger(amountTotal);
+		if(amountTotalInt == 0){
+			amountTotalInt = FinalConstants.DEFAULT_QUERY_AMOUNT;
+		}
 		
 		String coreSql = " from ("
 					+" select t1.item_id,t1.prd_img,t1.prd_name,t1.shop_id,t2.shop_type,t2.shop_name,t1.cat_path,t3.avg_price,t4.avg_price_tran as avg_price_tran_pre,"
@@ -1432,7 +1443,16 @@ public class ShopService extends BaseService {
 					+" join tbbase.tb_base_shop t2 on t1.shop_id = t2.shop_id"
 					+" left join tbdaily.tb_tran_month t3 on t1.shop_id = t3.shop_id and t1.item_id = t3.item_id and t3.tran_month = '"+DateUtils.getCurMonth()+"'"
 					+" left join tbdaily.tb_tran_month t4 on t1.shop_id = t4.shop_id and t1.item_id = t4.item_id and t4.tran_month = '"+DateUtils.getOffsetMonth(-1, "yyyy-MM")+"'"
-					+" where exists (select 'X' from tbweb.tb_attn_shop t5 where t5.uid = '"+uid+"' and t5.shop_id = t1.shop_id) group by t1.item_id) t";
+					+" where exists (select 'X' from tbweb.tb_attn_shop t5 where t5.uid = '"+uid+"' and t5.shop_id = t1.shop_id) group by t1.item_id) t"
+					+" where shop_type = '"+shopType+"' and volume_total > "+volumeTotalInt+" and amount_total > "+amountTotalInt+"";
+		
+		if(StringUtils.isNotBlank(category)){
+			coreSql += " and cat_path like '"+category+"%'";
+		}
+		
+		if(StringUtils.isNotBlank(prdName)){
+			coreSql += " and prd_name like '%"+prdName+"%'";
+		}
 		
 		String totalSql = "select count(0) as cnt "+ coreSql;
 		
@@ -1464,6 +1484,64 @@ public class ShopService extends BaseService {
 		
 		pageEntity.setData(list);
 		
+		return pageEntity;
+	}
+	
+	/**
+	 * 店铺分析-宝贝列表
+	 * @param shopId
+	 * @param category
+	 * @param prdName
+	 * @return
+	 * @throws Exception
+	 */
+	public PageEntity<GoodsList> getShopGoodsList(String shopId, String category, String prdName, PageParam pageParam) throws Exception{
+		
+		PageEntity<GoodsList> pageEntity = new PageEntity<GoodsList>();
+
+		String reSql = " from tbbase.tb_base_product t1 "
+				+ " left join tbdaily.tb_tran_month t2 on t1.shop_id = t2.shop_id and t1.item_id = t2.item_id and t2.tran_month = ?"
+				+ " left join tbdaily.tb_tran_month t3 on t1.shop_id = t3.shop_id and t1.item_id = t3.item_id and t3.tran_month = ?"
+				+ " where t1.shop_id = ?";
+
+		List<Object> params = new ArrayList<Object>();
+		params.add(DateUtils.getCurMonth());
+		params.add(DateUtils.getOffsetMonth(-1, "yyyy-MM"));
+		params.add(shopId);
+		if (StringUtils.isNotBlank(category)) {
+			
+			reSql += " and t1.cat_path like '" + category + "%'";
+		}
+		if (StringUtils.isNotBlank(prdName)) {
+			reSql += " and t1.prd_name like '%" + prdName + "%'";
+		}
+
+		String totalSql = "select count(0) as recordsTotal" + reSql;
+		Map<String, Object> totalMap = sqlUtil.search(totalSql, params.toArray());
+
+		long recordsTotal = StringUtils.toLong(totalMap.get("recordsTotal"));
+		pageEntity.setRecordsFiltered(recordsTotal);
+		pageEntity.setRecordsTotal(recordsTotal);
+
+		// 排序
+		String orderSql = " order by " + pageParam.getoTag() + ".";
+		if (StringUtils.isNotBlank(pageParam.getOrderColumn()) && pageParam.getOrderColumn().indexOf("pre") > -1) {// 特殊处理
+			orderSql += pageParam.getOrderColumn().replace("_pre", "");
+		} else {
+			orderSql += pageParam.getOrderColumn();
+		}
+		orderSql += " " + pageParam.getOrderDir();
+
+		String searchFields = "t1.prd_img,t1.prd_name,t1.item_id,t1.cat_path,t2.avg_price,t2.avg_price_tran,t3.avg_price_tran as avg_price_tran_pre,"
+		 +" t2.zk_rate, t3.zk_rate as zk_rate_pre,t2.sales_volume, t3.sales_volume as sales_volume_pre,t2.sales_amount, t3.sales_amount as sales_amount_pre, date_format(t2.createtime, '%Y-%m-%d') as createtime";
+		String pageSql = "select " + searchFields + reSql + orderSql + " limit " + pageParam.getStart() + ","
+				+ pageParam.getLength();
+
+		List<GoodsList> pageList = sqlUtil.searchList(GoodsList.class, pageSql, params.toArray());
+
+		pageEntity.setData(pageList);
+
+		pageEntity.setDraw(pageParam.getDraw());
 		return pageEntity;
 	}
 	

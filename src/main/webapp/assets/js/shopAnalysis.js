@@ -1,3 +1,5 @@
+var goods_table = null;
+
 jQuery(function($) {
 
 	// 选中navbar
@@ -102,8 +104,8 @@ jQuery(function($) {
 					var shopName = encodeURI(encodeURI(val_obj.shop_name));// 编码
 
 					var html = '<div class="hidden-sm hidden-xs action-buttons">'
-						+'<a href="#"><img title="宝贝列表" src="' + global.path + '/assets/imagesLocal/bao.png" alt="宝贝列表"></a>'
-						+'<a href="#"><img title="店铺跟踪" src="' + global.path + '/assets/imagesLocal/gen.png" alt="店铺跟踪"></a>'
+						+'<a href="'+global.path+'/a/ShopAnalysis?m=goods_list&shopId=' + val + '&shopName=' + shopName + '&tab=tab1"><img title="宝贝列表" src="' + global.path + '/assets/imagesLocal/bao.png" alt="宝贝列表"></a>'
+						+'<a href="'+global.path+'/a/ShopAnalysis?m=goods_list&shopId=' + val + '&shopName=' + shopName + '&tab=tab2"><img title="店铺跟踪" src="' + global.path + '/assets/imagesLocal/gen.png" alt="店铺跟踪"></a>'
 						+'<a href="#"><img title="销售趋势" src="' + global.path + '/assets/imagesLocal/shi.png" alt="销售趋势"></a>'
 						+'<a href="#"><img title="类别分析" src="' + global.path + '/assets/imagesLocal/lei.png" alt="类别分析"></a>'
 						+'<a href="#"><img title="店铺详情" src="' + global.path + '/assets/imagesLocal/xiang.png" alt="店铺详情"></a>'
@@ -552,11 +554,13 @@ jQuery(function($) {
 			} ];
 
 	// 初始加载
-	var goods_table = loadDataTable(goods_config);
+	goods_table = loadDataTable(goods_config);
 
 	// 检索
 	$('#search-goods-btn').click(function() {
-
+		
+		$('#searchType').val('search');
+		
 		if (goods_table) {
 			goods_table.fnDraw();
 		} else {
@@ -565,6 +569,20 @@ jQuery(function($) {
 	});
 
 });
+
+//按类目检索
+function toCat(catObj){
+	
+	$('#searchType').val('href');
+	
+	var cat = $(catObj).attr('data-category');
+	
+	$('#toCat').val(cat);
+	
+	if (goods_table) {
+		goods_table.fnDraw();
+	}
+}
 
 //获取子类目，主营类目的sId默认为0
 function addCat(sId) {

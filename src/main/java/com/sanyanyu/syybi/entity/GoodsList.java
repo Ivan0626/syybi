@@ -60,6 +60,15 @@ public class GoodsList implements Serializable {
 	private String shua_count;
 	private String tran_count;
 	
+	/**以下属性店铺分析-宝贝列表用**/
+	private String createtime;
+	
+	public String getCreatetime() {
+		return createtime;
+	}
+	public void setCreatetime(String createtime) {
+		this.createtime = createtime;
+	}
 	public String getTran_count() {
 		return tran_count;
 	}

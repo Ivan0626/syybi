@@ -16,7 +16,8 @@
 	
 	<input type="hidden" id="shopId">
 	<input type="hidden" id="shopName">
-	<input type="hidden" id="searchType">
+	<input type="hidden" id="searchType" value="search">
+	<input type="hidden" id="toCat">
 	
 	<input type="hidden" id="curMonth" value="<%=DateUtils.getCurMonth() %>">
 	

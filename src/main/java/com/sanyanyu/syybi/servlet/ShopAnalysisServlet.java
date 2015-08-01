@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import com.sanyanyu.syybi.entity.AdAnalysis;
 import com.sanyanyu.syybi.entity.CatApi;
+import com.sanyanyu.syybi.entity.GoodsList;
 import com.sanyanyu.syybi.entity.HotGoods;
 import com.sanyanyu.syybi.entity.PageEntity;
 import com.sanyanyu.syybi.entity.PageParam;
@@ -159,10 +160,16 @@ public class ShopAnalysisServlet extends BaseServlet {
 			
 		}else if("hot_goods".equals(m)){
 			
+			String category = request.getParameter("category");
+			String shopType = request.getParameter("shopType");
+			String prdName = request.getParameter("prdName");
+			String volumeTotal = request.getParameter("volumeTotal");
+			String amountTotal = request.getParameter("amountTotal");
+			
 			try {
 				PageParam pageParam = PageParam.getPageParam(request);
 				
-				PageEntity<HotGoods> pageEntity = shopService.getHotGoods(this.getUid(request), pageParam);
+				PageEntity<HotGoods> pageEntity = shopService.getHotGoods(this.getUid(request), category, shopType, prdName, volumeTotal, amountTotal, pageParam);
 				
 				JSONObject json = JSONObject.fromObject(pageEntity);
 				
@@ -172,6 +179,36 @@ public class ShopAnalysisServlet extends BaseServlet {
 				logger.error("获取店铺分析-热销宝贝数据失败", e);
 			}
 			
+		}else if("goods_list".equals(m)){
+			
+			// 获取商品类别
+			try {
+				List<CatApi> catList = shopService.getCat("0", this.getUid(request));
+				
+				request.setAttribute("catList", catList);
+			} catch (Exception e) {
+				logger.error("获取商品类别失败", e);
+			}
+			
+			request.getRequestDispatcher("/pages/shopGoodsList.jsp").forward(request, response);
+			
+		}else if ("ajax_goods_list".equals(m)) {// ajax获取宝贝列表
+
+			String shopId = request.getParameter("shopId");
+			String category = request.getParameter("category");
+			String prdName = request.getParameter("prdName");
+
+			try {
+				PageParam pageParam = PageParam.getPageParam(request);
+
+				PageEntity<GoodsList> pageEntity = shopService.getShopGoodsList(shopId, category, prdName,pageParam);
+
+				JSONObject json = JSONObject.fromObject(pageEntity);
+				response.getWriter().print(json.toString());
+
+			} catch (Exception e) {
+				logger.error("获取店铺分析-宝贝列数据表失败", e);
+			}
 		}else{
 			
 			try {
