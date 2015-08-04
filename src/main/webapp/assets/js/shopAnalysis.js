@@ -12,6 +12,13 @@ jQuery(function($) {
 	});
 	$('#syy-shopAnalysis').addClass('active open');
 
+	$('#shop-search').click(function() {
+
+		window.location.href = global.path + "/a/ShopAnalysis?m=searchB";
+
+	});
+	
+	
 	var shopTable = null;
 	//===================================================店铺列表==========================================================
 	
@@ -106,10 +113,10 @@ jQuery(function($) {
 					var html = '<div class="hidden-sm hidden-xs action-buttons">'
 						+'<a href="'+global.path+'/a/ShopAnalysis?m=goods_list&shopId=' + val + '&shopName=' + shopName + '&tab=tab1"><img title="宝贝列表" src="' + global.path + '/assets/imagesLocal/bao.png" alt="宝贝列表"></a>'
 						+'<a href="'+global.path+'/a/ShopAnalysis?m=goods_list&shopId=' + val + '&shopName=' + shopName + '&tab=tab2"><img title="店铺跟踪" src="' + global.path + '/assets/imagesLocal/gen.png" alt="店铺跟踪"></a>'
-						+'<a href="#"><img title="销售趋势" src="' + global.path + '/assets/imagesLocal/shi.png" alt="销售趋势"></a>'
-						+'<a href="#"><img title="类别分析" src="' + global.path + '/assets/imagesLocal/lei.png" alt="类别分析"></a>'
-						+'<a href="#"><img title="店铺详情" src="' + global.path + '/assets/imagesLocal/xiang.png" alt="店铺详情"></a>'
-						+'<a href="#"><img title="动态评分" src="' + global.path + '/assets/imagesLocal/bao.png" alt="动态评分"></a>'
+						+'<a href="'+global.path+'/a/ShopAnalysis?m=goods_list&shopId=' + val + '&shopName=' + shopName + '&tab=tab3"><img title="销售趋势" src="' + global.path + '/assets/imagesLocal/shi.png" alt="销售趋势"></a>'
+						+'<a href="'+global.path+'/a/ShopAnalysis?m=goods_list&shopId=' + val + '&shopName=' + shopName + '&tab=tab4"><img title="类别分析" src="' + global.path + '/assets/imagesLocal/lei.png" alt="类别分析"></a>'
+						+'<a href="'+global.path+'/a/ShopAnalysis?m=goods_list&shopId=' + val + '&shopName=' + shopName + '&tab=tab5"><img title="店铺详情" src="' + global.path + '/assets/imagesLocal/xiang.png" alt="店铺详情"></a>'
+						+'<a href="'+global.path+'/a/ShopAnalysis?m=goods_list&shopId=' + val + '&shopName=' + shopName + '&tab=tab6"><img title="动态评分" src="' + global.path + '/assets/imagesLocal/ping.png" alt="动态评分"></a>'
 						+'</div>';
 					return html;
 				}
@@ -390,7 +397,30 @@ jQuery(function($) {
 	    		
 	    		var startMonth = addMonth($('#curMonth').val(), -(ms - 1));
 	    		
+	    		$('#echarts-compare').css('height', '500px');
+	    		
 	    		renderChart(option7(data, startMonth, ms),'echarts-compare');
+	    		
+	    	},'json');
+			
+		}else if(chartType == 'catBar'){//类目
+			
+			$('#chartDiv').show();
+			$('#tableDiv').hide();
+			
+			$.get(global.path+'/a/ShopAnalysis',{
+				'm': 'cat_analysis',
+				'shopIds': shopIds.join(',')
+	    	},function(data){
+	    		
+	    		if(data.catList && data.catList.length > 0
+	    			&& data.catData && data.catData.length > 0){
+	    			
+	    			$('#echarts-compare').css('height', '2000px');
+	    			
+	    			renderChart(option8(data),'echarts-compare');
+	    			
+	    		}
 	    		
 	    	},'json');
 			

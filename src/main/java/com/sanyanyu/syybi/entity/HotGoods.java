@@ -34,9 +34,45 @@ public class HotGoods extends AdvertBase {
 	private String cat_path;
 	private String avg_price_tran_pre;
 	private String sales_volume_pre;
+	private String sales_volume;
 	private String sales_amount_pre;
+	private String sales_amount;
 	private String sales_total;
 	
+	private String createtime;
+	private String tran_count;
+	private String tran_count_pre;
+	
+	public String getSales_volume() {
+		return sales_volume;
+	}
+	public void setSales_volume(String sales_volume) {
+		this.sales_volume = sales_volume;
+	}
+	public String getSales_amount() {
+		return sales_amount;
+	}
+	public void setSales_amount(String sales_amount) {
+		this.sales_amount = sales_amount;
+	}
+	public String getCreatetime() {
+		return createtime;
+	}
+	public void setCreatetime(String createtime) {
+		this.createtime = createtime;
+	}
+	public String getTran_count() {
+		return tran_count;
+	}
+	public void setTran_count(String tran_count) {
+		this.tran_count = tran_count;
+	}
+	public String getTran_count_pre() {
+		return tran_count_pre;
+	}
+	public void setTran_count_pre(String tran_count_pre) {
+		this.tran_count_pre = tran_count_pre;
+	}
 	public String getCat_path() {
 		return cat_path;
 	}

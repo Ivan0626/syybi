@@ -435,6 +435,7 @@
 	
 	<script src="../assets/js/echarts/source/echarts.js"></script>
 	<script src="../assets/js/option7.js"></script>
+	<script src="../assets/js/option8.js"></script>
 	
 	<script src="../assets/js/common.js"></script>
 	<script src="../assets/js/shopAnalysis.js"></script>

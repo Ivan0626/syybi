@@ -10,6 +10,8 @@
 <title>宝贝列表</title>
 
 <link rel="stylesheet" href="../assets/css/syybi.css" />
+<link rel="stylesheet" href="../assets/css/common-min.css" />
+<link rel="stylesheet" href="../assets/css/index-min.css" />
 
 </head>
 <body>
@@ -342,16 +344,16 @@
 											</div>
 										</div>
 										
-										<div class="row placeholders" id="chartDiv" style="display:none;">
+										<div class="row placeholders" id="chartDiv">
 											<div class="col-md-12">
 												<input name="chartWay" value="volume" type="radio" class="ace" checked /><span class="lbl"> 销量</span>
 												<input name="chartWay" value="amount" type="radio" class="ace" /><span class="lbl"> 销售额</span>
 												<input name="chartWay" value="count" type="radio" class="ace" /><span class="lbl"> 成交次数</span>
 											</div>
-							          		<div class="col-md-12" id="echarts-ad" style="height:500px;"></div>
+							          		<div class="col-md-12" id="echarts-sales" style="height:500px;"></div>
 								        </div>
 										
-										<div class="row" id="tableDiv">
+										<div class="row" id="tableDiv" style="display:none;">
 											<div class="col-xs-12">
 			
 												<!-- div.dataTables_borderWrap -->
@@ -381,6 +383,332 @@
 											</div>
 										</div>
 									</div>
+									
+									<div id="catAnalysis" class="tab-pane fade">
+										<div class="row">
+											<div class="col-sm-12">
+												<div class="widget-box">
+													<div class="widget-header">
+														<h4 class="widget-title">检索条件</h4>
+														<div class="widget-toolbar">
+															<a href="#" data-action="collapse">
+																<i class="ace-icon fa fa-chevron-up"></i>
+															</a>
+					
+															<a href="#" data-action="close">
+																<i class="ace-icon fa fa-times"></i>
+															</a>
+														</div>
+													</div>
+					
+													<div class="widget-body">
+													
+														<div class="widget-main">
+															
+															<div class="widget-elem">
+																<label for="cat-d4321">请选择月份</label>
+					
+																<input style="margin-left: 38px;padding: 0 0;height:auto;" size="15" value="<%=DateUtils.getCurMonth() %>" type="text" class="Wdate" id="cat-d4321" onFocus="WdatePicker({dateFmt:'yyyy-MM',minDate:'%y-{%M-2}',maxDate:'#F{$dp.$D(\'cat-d4322\')||\'%y-%M\'}'})"/>
+																到
+																<input style="padding: 0 0;height:auto;" size="15" type="text"  value="<%=DateUtils.getCurMonth() %>" class="Wdate" id="cat-d4322" onFocus="WdatePicker({dateFmt:'yyyy-MM',minDate:'#F{$dp.$D(\'cat-d4321\')||\'%y-{%M-2}\';}',maxDate:'%y-%M'})"/>
+					
+															</div>
+															
+															<div class="widget-elem">
+																<label for="chartType2">图表类型</label>
+																	
+																<label style="margin-left: 50px;">
+																	<input name="chartType2" value="bar" type="radio" class="ace" checked />
+																	<span class="lbl"> 条形图</span>
+																</label>
+																<label>
+																	<input name="chartType2" value="pie" type="radio" class="ace" />
+																	<span class="lbl"> 饼图</span>
+																</label>
+																<label>
+																	<input name="chartType2" value="data" type="radio" class="ace" />
+																	<span class="lbl"> 数据表</span>
+																</label>
+															</div>
+															
+															<div class="widget-elem">
+																<label for="orderWay">排序方式</label>
+																	
+																<label style="margin-left: 50px;">
+																	<input name="orderWay" value="volume" type="radio" class="ace" checked />
+																	<span class="lbl"> 销量</span>
+																</label>
+																<label>
+																	<input name="orderWay" value="amount" type="radio" class="ace" />
+																	<span class="lbl"> 销售额</span>
+																</label>
+																<label>
+																	<input name="orderWay" value="count" type="radio" class="ace" />
+																	<span class="lbl"> 成交次数</span>
+																</label>
+															</div>
+															
+															<div class="form-actions center" style="margin:0 auto;padding: 9px 10px 0;">
+																<button type="button" id="search-cat-btn" class="btn btn-sm btn-success">
+																	检索
+																	<i class="ace-icon fa fa-arrow-right icon-on-right bigger-110"></i>
+																</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										
+										<div class="row placeholders" id="chartDiv2">
+											<div class="col-md-12">
+												<input name="chartWay2" value="volume" type="radio" class="ace" checked /><span class="lbl"> 销量</span>
+												<input name="chartWay2" value="amount" type="radio" class="ace" /><span class="lbl"> 销售额</span>
+												<input name="chartWay2" value="count" type="radio" class="ace" /><span class="lbl"> 成交次数</span>
+											</div>
+							          		<div class="col-md-12" id="echarts-cat" style="height:500px;"></div>
+								        </div>
+										<div class="row" id="tableDiv2" style="display:none;">
+											<div class="col-xs-12">
+												<!-- div.dataTables_borderWrap -->
+												<div>
+													<table id="cat-table" class="table table-striped table-bordered table-hover">
+														<thead>
+															<tr role="row">
+																<th>类别名称</th>
+																<th>销量</th>
+																<th>销售额</th>
+																<th>成交次数</th>
+															</tr>
+														</thead>
+					
+														<tbody>
+														</tbody>
+														<tfoot>
+												            <tr>
+												                <th style="text-align:center">合计</th>
+												                <th style="text-align:right">11</th>
+												                <th style="text-align:right">11</th>
+												                <th style="text-align:right">11</th>
+												            </tr>
+												        </tfoot>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									<div id="shopDetail" class="tab-pane fade">
+										<div class="shop-detail">
+										    <div class="shop-summary clearfix">
+										        <div class="shop-head">
+										            <ul>
+										                <li><label>店铺名称：</label><span><a target="_blank" href="#" id="shop_url">韩都衣舍旗舰店</a></span><span> <img src="${ctx }/assets/imagesLocal/bc_shop_icon.png" alt=""></span></li>
+										            </ul>
+										        </div>
+										        <div class="shop-inner">
+													<table cellpadding="0" cellspacing="0" width="100%" class="my_competitor_brief_table">
+														<tbody>
+															<tr>
+																<td valign="top">
+											                    	<img width="80" height="80" id="shop_img" alt="商品图片">                                            					</td>
+																<td valign="top">
+																	<table cellpadding="0" cellspacing="0" width="100%">
+																		<tbody>
+																			<tr>
+																				<td><label>架上宝贝数量：</label></td>
+											                                     <td id="item_count"></td>
+																			</tr>
+																			<tr>
+																				<td><label>创店时间：</label></td>
+																				<td>未公开</td>
+																			</tr>
+																			<tr>
+																				<td><label>地址：</label></td>
+																				<td id="region"></td>
+																			</tr>
+																			<tr>
+																				<td><label>上月销量：</label></td>
+																				<td id="pre_sales_volume"></td>
+																			</tr>
+																			<tr>
+																				<td><label>本月销量：</label></td>
+																				<td id="sales_volume"></td>
+																			</tr>
+																		</tbody>
+																	</table>
+																</td>
+																<td valign="top">
+																	<table cellpadding="0" cellspacing="0" width="100%">
+																		<tbody>
+																			<tr>
+																				<td><label>店铺名称：</label></td>
+																				<td id="shop_name"></td>
+																			</tr>
+																			<tr>
+																				<td><label>掌柜名称：</label></td>
+																				<td id="seller"></td>
+																			</tr>
+																			<tr>
+																				<td><label>旺旺：</label></td>
+																				<td id="wangwang">
+																				</td>
+																			</tr>
+																			<tr>
+																				<td><label>上月销售额：</label></td>
+																				<td id="pre_sales_amount"></td>
+																			</tr>
+																			<tr>
+																				<td><label>本月销售额：</label></td>
+																				<td id="sales_amount"></td>
+																			</tr>
+																		</tbody>
+																	</table>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+										        </div>
+										    </div>
+										
+										
+											<div id="dynamic-rate">
+												
+											</div>
+											<!-- 
+											<div id="dynamic-rate" class="rate-box box-shadow">
+												<div class="hd">
+													<h4 class="tb-rate-ico-bg ico-shop">店铺半年内动态评分</h4>
+												</div>
+												<div class="bd bd-v3">
+													<ul class="dsr-info" id="dsr">
+														
+													</ul>
+												</div>
+											</div>
+											 -->
+										</div>
+									</div>
+									
+									<div id="dynamicRate" class="tab-pane fade">
+										
+										<div class="row">
+											<div class="col-sm-12">
+												<div class="widget-box">
+													<div class="widget-header">
+														<h4 class="widget-title">检索条件</h4>
+														<div class="widget-toolbar" style="padding-right: 25px;">
+															<a href="#" data-action="collapse">
+																<i class="ace-icon fa fa-chevron-up"></i>
+															</a>
+					
+															<a href="#" data-action="close">
+																<i class="ace-icon fa fa-times"></i>
+															</a>
+														</div>
+													</div>
+					
+													<div class="widget-body">
+													
+														<div class="widget-main">
+															
+															<div class="widget-elem">
+																<label for="rate-d4321">时间</label>
+																<input style="margin-left: 80px;padding: 0 0;height:auto;" size="15" type="text" value="<%=DateUtils.getLastMonthDate() %>" class="Wdate" id="rate-d4321" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'%y-%M-{%d-60}',maxDate:'#F{$dp.$D(\'rate-d4322\')||\'%y-%M-%d\'}'})"/>
+																到
+																<input style="padding: 0 0;height:auto;" size="15" type="text" class="Wdate" value="<%=DateUtils.getDate() %>" id="rate-d4322" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'rate-d4321\')||\'%y-%M-{%d-60}\';}',maxDate:'%y-%M-%d'})"/>
+															</div>
+															
+															<div class="widget-elem">
+																<label>查看方式</label>
+																	
+																<label style="margin-left: 50px;">
+																	<input name="rateChartType" type="radio" value="1" class="ace" checked />
+																	<span class="lbl"> 图表</span>
+																</label>
+																<label>
+																	<input name="rateChartType" type="radio" value="2" class="ace"/>
+																	<span class="lbl"> 数据表</span>
+																</label>
+															</div>
+															
+															
+															<div class="form-actions center" style="margin:0 auto;padding: 9px 10px 0;">
+																<button type="button" id="rate-search-btn" class="btn btn-sm btn-success">
+																	检索
+																	<i class="ace-icon fa fa-arrow-right icon-on-right bigger-110"></i>
+																</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										
+										<div class="row placeholders" id="rateChartDiv">
+											<div class="col-md-12">
+												<input name="rateChartWay" value="describe" type="radio" class="ace" checked /><span class="lbl"> 描述相符</span>
+												<input name="rateChartWay" value="service" type="radio" class="ace" /><span class="lbl"> 服务态度</span>
+												<input name="rateChartWay" value="delivery" type="radio" class="ace" /><span class="lbl"> 发货速度</span>
+											</div>
+							          		<div class="col-md-12" id="echarts-rate" style="height:500px;"></div>
+								        </div>
+										
+										<div class="row" id="rateTableDiv" style="display:none;">
+											<div class="col-xs-12">
+			
+												<!-- div.dataTables_borderWrap -->
+												<div>
+													<table id="rate-table" class="table table-striped table-bordered table-hover">
+														<thead>
+															<tr role="row">
+																<th rowspan="2">时间</th>
+																<th colspan="6" style="text-align:center">描述相符</th>
+																<th colspan="6" style="text-align:center">服务态度</th>
+																<th colspan="6" style="text-align:center">发货速度</th>
+															</tr>
+															<tr role="row">
+																<th>日描述分</th>
+																<th>5分</th>
+																<th>4分</th>
+																<th>3分</th>
+																<th>2分</th>
+																<th>1分</th>
+																<th>日服务分</th>
+																<th>5分</th>
+																<th>4分</th>
+																<th>3分</th>
+																<th>2分</th>
+																<th>1分</th>
+																<th>日发货分</th>
+																<th>5分</th>
+																<th>4分</th>
+																<th>3分</th>
+																<th>2分</th>
+																<th>1分</th>
+															</tr>
+														</thead>
+			
+														<tbody>
+														</tbody>
+														<tfoot>
+												            <tr>
+												                <th style="text-align:center">行业平均分</th>
+												                <th style="text-align:right">4.85707</th>
+												                <th colspan="5"></th>
+												                <th style="text-align:right">4.85707</th>
+												                <th colspan="5"></th>
+												                <th style="text-align:right">4.85707</th>
+												                <th colspan="5"></th>
+												            </tr>
+												        </tfoot>
+													</table>
+												</div>
+											</div>
+										</div>
+									
+									</div>
+									
 								</div>
 							</div>
 
@@ -404,7 +732,10 @@
 	
 	<!-- echarts库必须在bootbox之后加载 -->
 	<script src="../assets/js/echarts/source/echarts.js"></script>
+	<script src="../assets/js/option1.js"></script>
+	<script src="../assets/js/option2_2.js"></script>
 	<script src="../assets/js/option3.js"></script>
+	<script src="../assets/js/option3_3.js"></script>
 	
 	<script src="../assets/js/common.js"></script>
 	<script src="../assets/js/columns.js"></script>

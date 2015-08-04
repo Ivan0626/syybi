@@ -163,6 +163,7 @@ public class MarketService extends BaseService {
 			shop.setShopId(sArr[0]);
 			shop.setShopName(sArr[1]);
 			shop.setUid(uid);
+			shop.setAttType(2);
 			list.add(shop);
 		}
 		sqlUtil.batchInsert(AttnShop.class, list);
@@ -306,12 +307,14 @@ public class MarketService extends BaseService {
 
 		PageEntity<GoodsList> pageEntity = new PageEntity<GoodsList>();
 
-		String reSql = " FROM tbdaily.tb_tran_month t1 "
-				+ " left join tbbase.tb_base_product t2 on t1.item_id = t2.item_id"
-				+ " left join tbdaily.tb_advert_product t3 on t1.shop_id = t3.shop_id and t1.item_id = t3.item_id"
-				+ " left join tbdaily.tb_tran_month t4 on t1.shop_id = t4.shop_id and t1.item_id = t4.item_id and t4.tran_month = '"
-				+ DateUtils.getOffsetMonth(-1, "yyyy-MM") + "'" + " where t1.shop_id = ? and t1.tran_month = '"
-				+ DateUtils.getCurMonth() + "'";
+		String reSql = " FROM tbbase.tb_base_product t2  "
+				+ " left join tbdaily.tb_tran_month t1 on t2.shop_id = t1.shop_id and t1.item_id = t2.item_id and t1.tran_month = '"+ DateUtils.getCurMonth() + "'"
+				+ " left join (select shop_id, item_id,"
+				+ " sum(hot) as hot,sum(normal) as normal,sum(tb_cu) as tb_cu,sum(activity) as activity,sum(taobaoke) as taobaoke,sum(ztc) as ztc,sum(ju) as ju,"
+				+ " sum(normal_cu) as normal_cu,sum(hot_mobile) as hot_mobile,sum(tb_cu_mobile) as tb_cu_mobile,sum(activity_mobile) as activity_mobile,sum(ztc_mobile) as ztc_mobile,sum(normal_cu_mobile) as normal_cu_mobile"
+				+ " from tbdaily.tb_advert_product where date_format(put_date,'%Y-%m') = '2015-07' group by shop_id, item_id) t3 on t2.shop_id = t3.shop_id and t2.item_id = t3.item_id "
+				+ " left join tbdaily.tb_tran_month t4 on t2.shop_id = t4.shop_id and t2.item_id = t4.item_id and t4.tran_month = '"+DateUtils.getOffsetMonth(-1, "yyyy-MM")+"' "
+				+ " where t2.shop_id = ? ";
 
 		List<Object> params = new ArrayList<Object>();
 		params.add(shopId);
@@ -322,8 +325,8 @@ public class MarketService extends BaseService {
 		if (StringUtils.isNotBlank(prdName)) {
 			reSql += " and t2.prd_name like '%" + prdName + "%'";
 		}
-		if (StringUtils.isNotBlank(adType)) {// TODO：需要根绝广告数是否为0处理
-
+		if (StringUtils.isNotBlank(adType) && !"0".equals(adType)) {
+			reSql += typeToSql(adType, ">", "t3");
 		}
 
 		String totalSql = "select count(0) as recordsTotal" + reSql;
@@ -342,7 +345,7 @@ public class MarketService extends BaseService {
 		}
 		orderSql += " " + pageParam.getOrderDir();
 
-		String searchFields = "t1.item_id,t2.prd_name,t2.prd_img,t2.cat_path,t1.avg_price,t1.avg_price_tran, t4.avg_price_tran as avg_price_tran_pre,t1.zk_rate,t4.zk_rate as zk_rate_pre, "
+		String searchFields = "t2.item_id,t2.prd_name,t2.prd_img,t2.cat_path,t1.avg_price,t1.avg_price_tran, t4.avg_price_tran as avg_price_tran_pre,t1.zk_rate,t4.zk_rate as zk_rate_pre, "
 				+ "t1.sales_volume, t4.sales_volume as sales_volume_pre, t1.sales_amount, t4.sales_amount as sales_amount_pre,"
 				+ "t3.hot,t3.normal,t3.tb_cu,t3.activity,t3.taobaoke,t3.ztc,t3.ju,t3.normal_cu,t3.hot_mobile,t3.tb_cu_mobile,t3.activity_mobile,t3.ztc_mobile,t3.normal_cu_mobile";
 		String pageSql = "select " + searchFields + reSql + orderSql + " limit " + pageParam.getStart() + ","
@@ -1223,15 +1226,20 @@ public class MarketService extends BaseService {
 		
 		String preMonth = DateUtils.getOffsetMonth(-1, "yyyy-MM");
 		
-		String coreSql = "SELECT t1.shop_id,t2.rate_link,t2.shop_name,t2.shop_img,t2.shop_url,t2.shop_type,t2.region,t1.sales_volume,t1.sales_amount,t1.tran_count,t3.sales_volume as pre_sales_volume,t3.sales_amount as pre_sales_amount,"
+		String mainCat = category;
+		if(category.indexOf("»") > -1){
+			mainCat = category.substring(0, category.indexOf("»")).trim();
+		}
+		
+		String coreSql = "SELECT t2.shop_id,t2.rate_link,t2.shop_name,t2.shop_img,t2.shop_url,t2.shop_type,t2.region,t1.sales_volume,t1.sales_amount,t1.tran_count,t3.sales_volume as pre_sales_volume,t3.sales_amount as pre_sales_amount,"
 				+" t3.tran_count as pre_tran_count,sum(t5.sales_amount) as re_sales_amount,t1.rise_index,"
 				+" sum(t4.hot) as hot,sum(t4.normal) as normal,sum(t4.tb_cu) as tb_cu,sum(t4.activity) as activity,sum(t4.taobaoke) as taobaoke,sum(t4.ztc) as ztc,sum(t4.ju) as ju,"
-				+" sum(t4.normal_cu) as normal_cu,sum(t4.normal_cu_mobile) as normal_cu_mobile,sum(t4.hot_mobile) as hot_mobile,sum(t4.tb_cu_mobile) as tb_cu_mobile,sum(t4.activity_mobile) as activity_mobile,sum(t4.ztc_mobile) as ztc_mobile,t5.cat_path FROM tbdaily.tb_tran_month_shop t1"
-				+" left join tbbase.tb_base_shop t2 on t1.shop_id = t2.shop_id"
-				+" left join tbdaily.tb_tran_month_shop t3 on t1.shop_id = t3.shop_id and t3.tran_month = '"+preMonth+"'"
-				+" left join tbdaily.tb_advert_product t4 on t1.shop_id = t4.shop_id and  date_format(t4.put_date, '%Y-%m') = t1.tran_month"
-				+" left join tbdaily.tb_tran_month t5 on t1.shop_id = t5.shop_id and t5.tran_month = '"+preMonth+"' and t5.cat_path like '"+category+"%'"
-				+" where t1.tran_month = '"+curMonth+"'";
+				+" sum(t4.normal_cu) as normal_cu,sum(t4.normal_cu_mobile) as normal_cu_mobile,sum(t4.hot_mobile) as hot_mobile,sum(t4.tb_cu_mobile) as tb_cu_mobile,sum(t4.activity_mobile) as activity_mobile,sum(t4.ztc_mobile) as ztc_mobile,t5.cat_path FROM tbbase.tb_base_shop t2"
+				+" left join tbdaily.tb_tran_month_shop t1 on t1.shop_id = t2.shop_id and t1.tran_month = '"+curMonth+"'"
+				+" left join tbdaily.tb_tran_month_shop t3 on t2.shop_id = t3.shop_id and t3.tran_month = '"+preMonth+"'"
+				+" left join tbdaily.tb_advert_product t4 on t2.shop_id = t4.shop_id and  date_format(t4.put_date, '%Y-%m') = '"+curMonth+"'"
+				+" left join tbdaily.tb_tran_month t5 on t2.shop_id = t5.shop_id and t5.tran_month = '"+preMonth+"' and t5.cat_path like '"+category+"%'"
+				+" where t2.category = '"+mainCat+"' group by t2.shop_id order by t1.rise_index desc limit 1, 100";
 		
 		StringBuffer totalSql = new StringBuffer();
 		totalSql.append("select count(0) as recordsTotal from (")
@@ -1245,13 +1253,13 @@ public class MarketService extends BaseService {
 		StringBuffer whereSql = new StringBuffer();
 		if(StringUtils.isNotBlank(types)){
 			
-			typeToSql(types, whereSql, ">");
+			whereSql.append(typeToSql(types, ">"));
 			
 		}
 		
 		if(StringUtils.isNotBlank(ntypes)){
 			
-			typeToSql(ntypes, whereSql, "<");
+			whereSql.append(typeToSql(types, "<"));
 			
 		}
 		
@@ -1322,38 +1330,45 @@ public class MarketService extends BaseService {
 		return pageEntity;
 	}
 
-	private void typeToSql(String types, StringBuffer whereSql, String gl) {
+	private String typeToSql(String types, String gl) {
+		return typeToSql(types, gl, "t");
+	}
+	
+	private String typeToSql(String types, String gl, String tableTag) {
+		StringBuffer whereSql = new StringBuffer();
+		
 		String[] typeArr = types.split(",");
 		for(String type : typeArr){
 			
 			if("1".equals(type)){
-				whereSql.append(" and t.hot "+gl+" 0");
+				whereSql.append(" and "+tableTag+".hot "+gl+" 0");
 			}else if("2".equals(type)){
-				whereSql.append(" and t.normal "+gl+" 0");
+				whereSql.append(" and "+tableTag+".normal "+gl+" 0");
 			}else if("3".equals(type)){
-				whereSql.append(" and t.tb_cu "+gl+" 0");
+				whereSql.append(" and "+tableTag+".tb_cu "+gl+" 0");
 			}else if("4".equals(type)){
-				whereSql.append(" and t.activity "+gl+" 0");
+				whereSql.append(" and "+tableTag+".activity "+gl+" 0");
 			}else if("5".equals(type)){
-				whereSql.append(" and t.taobaoke "+gl+" 0");
+				whereSql.append(" and "+tableTag+".taobaoke "+gl+" 0");
 			}else if("6".equals(type)){
-				whereSql.append(" and t.ztc "+gl+" 0");
+				whereSql.append(" and "+tableTag+".ztc "+gl+" 0");
 			}else if("7".equals(type)){
-				whereSql.append(" and t.ju "+gl+" 0");
+				whereSql.append(" and "+tableTag+".ju "+gl+" 0");
 			}else if("8".equals(type)){
-				whereSql.append(" and t.normal_cu "+gl+" 0");
+				whereSql.append(" and "+tableTag+".normal_cu "+gl+" 0");
 			}else if("11".equals(type)){
-				whereSql.append(" and t.hot_mobile "+gl+" 0");
+				whereSql.append(" and "+tableTag+".hot_mobile "+gl+" 0");
 			}else if("13".equals(type)){
-				whereSql.append(" and t.tb_cu_mobile "+gl+" 0");
+				whereSql.append(" and "+tableTag+".tb_cu_mobile "+gl+" 0");
 			}else if("12".equals(type)){
-				whereSql.append(" and t.activity_mobile "+gl+" 0");
+				whereSql.append(" and "+tableTag+".activity_mobile "+gl+" 0");
 			}else if("14".equals(type)){
-				whereSql.append(" and t.ztc_mobile "+gl+" 0");
+				whereSql.append(" and "+tableTag+".ztc_mobile "+gl+" 0");
 			}else if("10".equals(type)){
-				whereSql.append(" and t.normal_cu_mobile "+gl+" 0");
+				whereSql.append(" and "+tableTag+".normal_cu_mobile "+gl+" 0");
 			}
 		}
+		return whereSql.toString();
 	}
 	
 }

@@ -47,6 +47,19 @@ public class SysUtil {
 	}
 	
 	public static void main(String[] args) {
+		
+		double a = 97.99;
+		double b = 496.01;
+		
+		double diff = (b - a) * 1.0 / 5;
+		
+		for(int i = 0; i < 5; i++){
+			System.out.println(StringUtils.formatDecimal(a+(i*diff), "#####0.00") +"-" + StringUtils.formatDecimal((a + (i+1)*diff), "#####0.00"));
+		}
+		
+		
+		
+		
 		System.out.println(props.getProperty("imagePath"));
 	}
 	
@@ -77,5 +90,6 @@ public class SysUtil {
 	public static String getPrdUrl(String itemId){
 		return getValue("product.url").replace("{0}", itemId);
 	}
+	
 	
 }

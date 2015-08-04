@@ -72,8 +72,8 @@
 			<b class="arrow"></b>
 		</li>
 
-		<li class="hover">
-			<a href="#">
+		<li class="hover" id="syy-goodsAnalysis">
+			<a href="${ctx }/a/GoodsAnalysis">
 				<i class="menu-icon fa fa-heart-o"></i>
 				<span class="menu-text"> 宝贝分析 </span>
 

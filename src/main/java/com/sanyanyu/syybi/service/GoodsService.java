@@ -1,8 +1,13 @@
 package com.sanyanyu.syybi.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.commons.collections.map.HashedMap;
 
 import com.sanyanyu.syybi.constants.FinalConstants;
 import com.sanyanyu.syybi.entity.AdAnalysis;
@@ -12,12 +17,14 @@ import com.sanyanyu.syybi.entity.AdvertHot;
 import com.sanyanyu.syybi.entity.AdvertJu;
 import com.sanyanyu.syybi.entity.AdvertTaoke;
 import com.sanyanyu.syybi.entity.AdvertZTC;
+import com.sanyanyu.syybi.entity.AttDir;
+import com.sanyanyu.syybi.entity.AttDirDetail;
 import com.sanyanyu.syybi.entity.AttnShop;
 import com.sanyanyu.syybi.entity.CatApi;
 import com.sanyanyu.syybi.entity.CatData;
-import com.sanyanyu.syybi.entity.ChngAdd;
 import com.sanyanyu.syybi.entity.ChngName;
 import com.sanyanyu.syybi.entity.ChngPrice;
+import com.sanyanyu.syybi.entity.DirEntity;
 import com.sanyanyu.syybi.entity.GoodsList;
 import com.sanyanyu.syybi.entity.HotGoods;
 import com.sanyanyu.syybi.entity.PageEntity;
@@ -32,14 +39,14 @@ import com.sanyanyu.syybi.utils.StringUtils;
 import com.sanyanyu.syybi.utils.SysUtil;
 
 /**
- * 店铺分析Service
+ * 宝贝分析Service
  * 
  * @Description: TODO
  * @author Ivan 2862099249@qq.com
  * @date 2015年7月3日 下午4:34:54
  * @version V1.0
  */
-public class ShopService extends BaseService {
+public class GoodsService extends BaseService {
 
 	
 	/**
@@ -83,11 +90,13 @@ public class ShopService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Map<String, Object>> getAttnedShop(String uid, String q) throws Exception {
+	public List<Map<String, Object>> getAttnedGoods( String adid, String q) throws Exception {
 
-		String sql = "SELECT shop_id, shop_name FROM tbweb.tb_attn_shop where uid = ? and att_type = 1 and shop_name like '" + q + "%'";
-
-		return sqlUtil.searchList(sql, uid);
+		String sql = "select t2.prd_name from tbweb.tb_attn_dir_detail t1"
+				+" join tbbase.tb_base_product t2 on t1.shop_id = t2.shop_id and t1.item_id = t2.item_id"
+				+" where t1.adid = ? and t2.prd_name like '" + q + "%'";
+		
+		return sqlUtil.searchList(sql, adid);
 
 	}
 	
@@ -98,50 +107,111 @@ public class ShopService extends BaseService {
 		return sqlUtil.searchList(sql, uid);
 
 	}
+	
+	public void updateDetail(String adid, String itemIds, String toAdid) throws Exception{
+		
+		String sql = "update tbweb.tb_attn_dir_detail set adid = ? where adid = ? and concat_ws('_', shop_id, item_id) in ("+StringUtils.strIn(itemIds)+")";
+		
+		sqlUtil.update(sql, toAdid, adid);
+		
+	}
 
+	public Map<String, Object> getShopIdByItemId(String itemId) throws Exception{
+		
+		String sql = "select shop_id from tbbase.tb_base_product where item_id = ?";
+		
+		return sqlUtil.search(sql, itemId);
+	}
+	
+	
+	public boolean getGoodsExist(String adid, String shopId, String itemId) throws Exception{
+		
+		String sql = "select count(0) as cnt from tbweb.tb_attn_dir_detail where adid = ? and shop_id = ? and item_id = ?";
+		
+		Map<String, Object> map = sqlUtil.search(sql, adid, shopId, itemId);
+		
+		int cnt = StringUtils.toInteger(map.get("cnt"));
+		
+		return cnt > 0;
+	}
+	
+	public void saveGoods(AttDirDetail detail) throws Exception{
+		
+		sqlUtil.insert(detail);
+		
+	}
+	
 	/**
-	 * 判断该用户是否已经关注了该店铺
-	 * 
+	 * 判断目录是否存在
 	 * @param uid
-	 * @param shopId
+	 * @param dirName
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean getAttnedExist(String uid, String shopId, String shopName) throws Exception {
+	public boolean getAttnedExist(String uid, String dirName) throws Exception {
 
-		String sql = "select count(0) as cnt from tbbase.tb_base_shop where shop_id = ? and shop_name = ?";
+		String sql = "SELECT count(0) as cnt FROM tbweb.tb_attn_dir where uid = ? and dir_name = ?";
 
-		Map<String, Object> baseMap = sqlUtil.search(sql, shopId, shopName);
+		Map<String, Object> baseMap = sqlUtil.search(sql, uid, dirName);
 		int baseCount = StringUtils.toInteger(baseMap.get("cnt"));
 		return baseCount > 0;
 	}
 
 	/**
-	 * 关注店铺
-	 * 
+	 * 新增关注目录
 	 * @param uid
-	 * @param shopId
+	 * @param dirName
 	 * @return
 	 * @throws Exception
 	 */
-	public String attnedShop(String uid, String shopId, String shopName) throws Exception {
+	public String attnedDir(String uid, String dirName) throws Exception {
 
-		boolean exist = getAttnedExist(uid, shopId, shopName);
-		if (exist) {// 存在则添加到关注列表
-
-			AttnShop shop = new AttnShop();
-			shop.setAsid(SysUtil.getUUID());
-			shop.setShopId(shopId);
-			shop.setShopName(shopName);
-			shop.setUid(uid);
-			shop.setAttType(1);
-			sqlUtil.insert(shop);
+		boolean exist = getAttnedExist(uid, dirName);
+		if (exist) {
+			return "exist";
+		} else {// 存在才能新增
+			
+			AttDir dir = new AttDir();
+			dir.setAdid(SysUtil.getUUID());
+			dir.setDir_name(dirName);
+			dir.setUid(uid);
+			sqlUtil.insert(dir);
 
 			return "success";
-		} else {
-			return "notexist";
 		}
 
+	}
+	
+	/**
+	 * 宝贝分析-目录一览
+	 * @param uid
+	 * @param pageParam
+	 * @return
+	 * @throws Exception
+	 */
+	public PageEntity<DirEntity> getDirList(String uid, PageParam pageParam, String dirName) throws Exception{
+		
+		String curMonth = DateUtils.getCurMonth();
+		String preMonth = DateUtils.getOffsetMonth(-1, "yyyy-MM");
+		
+		String sql = "select * from ("
+				 +" select dir_name, adid, count(t3.item_id) as item_count, round(avg(t4.avg_price),2) as avg_price, round(avg(t4.avg_price_tran),2) as avg_price_tran, round(avg(t5.avg_price_tran),2) as avg_price_tran_pre,"
+				 +" sum(t4.sales_volume) as sales_volume, sum(t5.sales_volume) as sales_volume_pre, sum(t5.sales_amount) as sales_amount_pre from ("
+				 +" select t1.dir_name, t1.adid, t2.shop_id, t2.item_id from tbweb.tb_attn_dir t1 "
+				 +" left join tbweb.tb_attn_dir_detail t2 on t1.adid = t2.adid"
+				 +" where t1.uid = ?) t3"
+				 +" left join tbdaily.tb_tran_month t4 on t3.shop_id = t4.shop_id and t3.item_id = t4.item_id and t4.tran_month = ?"
+				 +" left join tbdaily.tb_tran_month t5 on t3.shop_id = t5.shop_id and t3.item_id = t5.item_id and t5.tran_month = ?"
+				 +" group by dir_name, adid) t";
+		
+		if(StringUtils.isNotBlank(dirName)){
+			sql += " where dir_name = '"+dirName+"'";
+		}
+		
+		List<DirEntity> list = sqlUtil.searchList(DirEntity.class, pageParam.buildSql(sql), uid, curMonth, preMonth);
+		
+		return PageEntity.getPageEntity(pageParam, list);
+		
 	}
 	
 	/**
@@ -199,33 +269,225 @@ public class ShopService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean enabledDel(String uid, String shopIds) throws Exception {
+	public boolean enabledDel(String adid, String itemIds) throws Exception {
 
-		String sql = "select count(0) as cnt from tbweb.tb_attn_shop where shop_id in (" + StringUtils.strIn(shopIds)
-				+ ") and uid = ? and att_type = 1 and str_to_date(att_date, '%Y-%m-%d') < date_sub(curdate(), interval 1 month)";
+		String sql = "select count(0) as cnt from tbweb.tb_attn_dir_detail where adid = ? and concat_ws('_', shop_id, item_id) in (" + StringUtils.strIn(itemIds)
+				+ ") and str_to_date(att_date, '%Y-%m-%d') > date_sub(curdate(), interval 1 month)";
 
-		Map<String, Object> map = sqlUtil.search(sql, uid);
+		Map<String, Object> map = sqlUtil.search(sql, adid);
 
 		int cnt = StringUtils.toInteger(map.get("cnt"));
 
-		return cnt > 0;
+		return cnt == 0;
 	}
 
 	/**
-	 * 删除关注的店铺
-	 * 
+	 * 删除关注目录
 	 * @param uid
-	 * @param shopIds
+	 * @param dirIds
 	 * @throws Exception
 	 */
-	public void delAttn(String uid, String shopIds) throws Exception {
+	public void delAttn(String uid, String dirIds) throws Exception {
 
-		String sql = "delete FROM tbweb.tb_attn_shop where shop_id in (" + StringUtils.strIn(shopIds) + ") and uid = ? and att_type = 1";
+		String sql = "delete FROM tbweb.tb_attn_dir where adid in (" + StringUtils.strIn(dirIds) + ") and uid = ?";
 
 		sqlUtil.delete(sql, uid);
 
 	}
+	
+	public void delAttnGoods(String adid, String itemIds) throws Exception {
 
+		String sql = "delete FROM tbweb.tb_attn_dir_detail where concat_ws('_', shop_id, item_id) in (" + StringUtils.strIn(itemIds) + ") and adid = ?";
+
+		sqlUtil.delete(sql, adid);
+
+	}
+
+	/**
+	 * 用户的关注目录
+	 * @param uid
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Map<String, Object>> getAttnedDirs(String uid) throws Exception{
+		
+		String sql = "SELECT adid, dir_name FROM tbweb.tb_attn_dir where uid = ?";
+		
+		return sqlUtil.searchList(sql, uid);
+		
+	}
+	
+	public List<Map<String, Object>> getAttnedDirs(String uid, String adid) throws Exception{
+		
+		String sql = "SELECT adid, dir_name FROM tbweb.tb_attn_dir where uid = ? and adid <> ?";
+		
+		return sqlUtil.searchList(sql, uid, adid);
+		
+	}
+	
+	public Map<String, Object> getPriceMinMax(String adid) throws Exception{
+		
+		String curDate = DateUtils.getDate();
+		String preDate = DateUtils.getLastMonthDate();
+		
+		String sql = "select min(t1.avg_price) as avg_price_min, max(t1.avg_price) as avg_price_max from tbdaily.tb_tran_day t1" 
+				+" where exists (select 'X' from tbweb.tb_attn_dir_detail t2 where t2.adid = ? and t1.shop_id = t2.shop_id and t1.item_id = t2.item_id)"
+				+" and t1.tran_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d')";
+		
+		return sqlUtil.search(sql, adid, preDate, curDate);
+		
+	}
+	
+	/**
+	 * 宝贝分析-价格段分析
+	 * @param adid
+	 * @param startDate
+	 * @param endDate
+	 * @param shopType
+	 * @param startAvgPrice
+	 * @param endAvgPrice
+	 * @param priceMap
+	 * @return
+	 * @throws Exception
+	 */
+	public Map<String, Object> getPriceAnalysis(String adid, String startDate, String endDate, String shopType, String startAvgPrice, String endAvgPrice, List<Map<String, String>> priceList) throws  Exception{
+		
+		StringBuffer cols1 = new StringBuffer();
+		StringBuffer cols2 = new StringBuffer();
+		StringBuffer cols3 = new StringBuffer();
+		
+		for(int i = 0; i < priceList.size(); i++){
+			
+			Map<String, String> map = priceList.get(i);
+			
+			String start = map.get("start").toString();
+			String end = map.get("end").toString();
+			
+			String priceSeg = "p" + start + "-" + end;
+			
+			cols1.append("sum(`").append(priceSeg).append("`)").append(" as `").append(priceSeg).append("`");
+			
+			cols2.append("if(t.price_count = '").append(priceSeg).append("', sum(t.sales_amount), 0) as `").append(priceSeg).append("`");
+			
+			cols3.append("when (t2.avg_price >=" ).append(start).append(" and t2.avg_price <= ").append(end).append(") then '").append(priceSeg).append("'");
+			
+			if(i != priceList.size() - 1){
+				
+				cols1.append(",");
+				cols2.append(",");
+				cols3.append(" ");
+			}
+			
+		}
+		
+		StringBuffer sql = new StringBuffer();
+		
+		List<Object> params = new ArrayList<Object>();
+		params.add(adid);
+		params.add(startDate);
+		params.add(endDate);
+		params.add(startAvgPrice);
+		params.add(endAvgPrice);
+		
+		sql.append("select ").append(cols1).append(" from (")
+		.append("select ").append(cols2).append(" from (")
+		.append("select case ")
+		.append(cols3)
+		.append(" end as price_count, t2.sales_amount from tbweb.tb_attn_dir_detail t1")
+		.append(" left join tbdaily.tb_tran_day t2 on t1.shop_id = t2.shop_id and t1.item_id = t2.item_id ")
+		.append(" join tbbase.tb_base_shop t3 on t1.shop_id = t3.shop_id")
+		.append(" where t1.adid = ? and t2.tran_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d') and t2.avg_price >= ? and t2.avg_price <= ?");
+		
+		if(!"ALL".equals(shopType)){
+			sql.append(" and t3.shop_type = ?");
+			params.add(shopType);
+		}
+		
+		sql.append(" ) t group by t.price_count) tt");
+		
+		return sqlUtil.search(sql.toString(), params.toArray());
+		
+	}
+	
+	/**
+	 * 计算价格段
+	 * @param startAvgPrice
+	 * @param endAvgPrice
+	 * @param priceSize
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Map<String, String>> getPriceCount(String startAvgPrice, String endAvgPrice, int priceSize) throws Exception{
+		
+		double avgPrice1 = StringUtils.toDouble(startAvgPrice);
+		double avgPrice2 = StringUtils.toDouble(endAvgPrice);
+		
+		if(avgPrice2 <= avgPrice1 || priceSize < 0 || priceSize > 10){
+			return null;
+		}
+		
+		double diff = (avgPrice2 - avgPrice1) * 1.0 / priceSize;
+		
+		List<Map<String, String>> mapList = new ArrayList<Map<String, String>>();
+		
+		for(int i = 0; i < priceSize; i++){
+			
+			Map<String, String> map = new HashMap<String, String>();
+			
+			map.put("start", StringUtils.formatDecimal(avgPrice1+(i*diff), "#####0.00"));
+			
+			map.put("end", StringUtils.formatDecimal((avgPrice1 + (i+1)*diff), "#####0.00"));
+			
+			mapList.add(map);
+			
+		}
+		return mapList;
+	}
+	
+	/**
+	 * 获取目录下的宝贝列表
+	 * @param adid
+	 * @param prdName
+	 * @param pageParam
+	 * @return
+	 * @throws Exception
+	 */
+	public PageEntity<GoodsList> getDirGoodsList(String adid, String prdName, String categoty, PageParam pageParam) throws Exception{
+		
+		String curMonth = DateUtils.getCurMonth();
+		String preMonth = DateUtils.getOffsetMonth(-1, "yyyy-MM");
+		
+		String sql = "select t4.prd_name, t4.item_id,t4.prd_img,t4.cat_path,t5.shop_name,t5.shop_id,t5.shop_type,"
+		  +" t2.avg_price,t2.avg_price_tran,t2.sales_volume,t3.sales_volume as sales_volume_pre,t2.sales_amount, t3.sales_amount as sales_amount_pre,"
+		  +" date_format(t2.createtime,'%Y-%m-%d') as createtime"
+		  +" from tbweb.tb_attn_dir_detail t1 "
+		  
+		  +" left join tbdaily.tb_tran_month t2 on t1.shop_id = t2.shop_id and t1.item_id = t2.item_id and t2.tran_month = ?"
+		  +" left join tbdaily.tb_tran_month t3 on t1.shop_id = t3.shop_id and t1.item_id = t3.item_id and t3.tran_month = ?"
+		  
+		  +" join tbbase.tb_base_product t4 on t1.shop_id = t4.shop_id and t1.item_id = t4.item_id"
+		  +" join tbbase.tb_base_shop t5 on t1.shop_id = t5.shop_id"
+		  +" where t1.adid = ? ";
+		
+		List<Object> params = new ArrayList<Object>();
+		params.add(curMonth);
+		params.add(preMonth);
+		params.add(adid);
+		
+		if(StringUtils.isNotBlank(prdName)){
+			sql += " and t4.prd_name = ?";
+			params.add(prdName);
+		}
+		
+		if(StringUtils.isNotBlank(categoty)){
+			sql += " and t4.cat_path like '"+categoty+"%' ";
+		}
+		
+		List<GoodsList> list = sqlUtil.searchList(GoodsList.class, pageParam.buildSql(sql), params.toArray());
+		
+		return PageEntity.getPageEntity(pageParam, list);
+	}
+	
 	/**
 	 * 获取商品类别
 	 * 
@@ -488,18 +750,16 @@ public class ShopService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public PageEntity<ChngName> getChngNames(PageParam pageParam, String shopId, String itemId, String startDate,
-			String endDate) throws Exception {
+	public PageEntity<ChngName> getChngNames(PageParam pageParam, String startDate,
+			String endDate, String adid) throws Exception {
 
-		String sql = "SELECT cnid, item_id, prd_name_old,prd_name_new,category,price,prd_img,change_date FROM tbdaily.tb_chng_name where shop_id = ? ";
+		String sql = "select * from tbdaily.tb_chng_name t1 where"
 
-		if(StringUtils.isNotBlank(itemId)){
-			sql += " and item_id = '"+itemId+"'";
-		}
+				+" t1.change_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d')"
+
+				+" and exists (select 'X' from tbweb.tb_attn_dir_detail t2 where t2.adid = ? and t1.shop_id = t2.shop_id and t1.item_id = t2.item_id)";
 		
-		sql += " and change_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d')";
-		
-		List<ChngName> list = sqlUtil.searchList(ChngName.class, pageParam.buildSql(sql), shopId, startDate, endDate);
+		List<ChngName> list = sqlUtil.searchList(ChngName.class, pageParam.buildSql(sql), startDate, endDate, adid);
 
 		PageEntity<ChngName> pageEntity = PageEntity.getPageEntity(pageParam, list);
 
@@ -517,43 +777,22 @@ public class ShopService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public PageEntity<ChngPrice> getChngPrices(PageParam pageParam, String shopId, String itemId, String startDate,
-			String endDate) throws Exception {
+	public PageEntity<ChngPrice> getChngPrices(PageParam pageParam, String startDate,
+			String endDate, String adid) throws Exception {
 
-		String sql = "SELECT cpid, item_id, prd_name, category,price_old, price_new,prd_img,change_date FROM tbdaily.tb_chng_price where shop_id = ?";
+		String sql = "select * from tbdaily.tb_chng_price t1 where"
 
-		if(StringUtils.isNotBlank(itemId)){
-			sql += " and item_id = '"+itemId+"'";
-		}
+				+" t1.change_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d')"
+
+				+" and exists (select 'X' from tbweb.tb_attn_dir_detail t2 where t2.adid = ? and t1.shop_id = t2.shop_id and t1.item_id = t2.item_id)";
 		
-		sql += " and change_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d')";
-		
-		List<ChngPrice> list = sqlUtil.searchList(ChngPrice.class, pageParam.buildSql(sql), shopId, startDate, endDate);
+		List<ChngPrice> list = sqlUtil.searchList(ChngPrice.class, pageParam.buildSql(sql), startDate, endDate, adid);
 
 		PageEntity<ChngPrice> pageEntity = PageEntity.getPageEntity(pageParam, list);
 
 		return pageEntity;
-	}
-
-	/**
-	 * 上架跟踪
-	 * @param pageParam
-	 * @param shopId
-	 * @param startDate
-	 * @param endDate
-	 * @return
-	 * @throws Exception
-	 */
-	public PageEntity<ChngAdd> getChngAdds(PageParam pageParam, String shopId, String startDate, String endDate) throws Exception {
-
-		String sql = "SELECT caid, prd_name, category, price,prd_img,change_date, item_id FROM tbdaily.tb_chng_add"
-				+" where shop_id = ? and change_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d')";
-
-		List<ChngAdd> list = sqlUtil.searchList(ChngAdd.class, pageParam.buildSql(sql), shopId, startDate, endDate);
-
-		PageEntity<ChngAdd> pageEntity = PageEntity.getPageEntity(pageParam, list);
-
-		return pageEntity;
+		
+		
 	}
 	
 	
@@ -1634,7 +1873,7 @@ public class ShopService extends BaseService {
 	}
 	
 	/**
-	 * 店铺分析-销售趋势
+	 * 宝贝分析-销售趋势
 	 * @param showType
 	 * @param startDate
 	 * @param endDate
@@ -1642,16 +1881,18 @@ public class ShopService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public PageEntity<AdvertBase> getSalesTrend(String shopId, String showType, String startDate, String endDate, PageParam pageParam) throws Exception{
+	public PageEntity<AdvertBase> getSalesTrend(String adid, String showType, String startDate, String endDate, PageParam pageParam) throws Exception{
 		
 		String sql = "";
 		if("day".equals(showType)){
-			sql = " select t.tran_date,t.sales_amount,t.sales_volume,t.tran_count from tbdaily.tb_tran_day_shop t "
-					+" where t.shop_id = ? and t.tran_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d')";
+			sql = " select t.tran_date,sum(t.sales_amount) as sales_amount, sum(t.sales_volume) as sales_volume, sum(t.tran_count) as tran_count from tbdaily.tb_tran_day t "
+					+" where exists (select 'X' from tbweb.tb_attn_dir_detail t2 where t2.adid = ? and t.shop_id = t2.shop_id and t.item_id = t2.item_id)"
+					+" and t.tran_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d') group by t.tran_date";
 			
 		}else if("month".equals(showType)){
-			sql = "select * from (select t.tran_month as tran_date,t.sales_amount,t.sales_volume,t.tran_count from tbdaily.tb_tran_month_shop t "
-				 +" where t.shop_id = ? and str_to_date(t.tran_month,'%Y-%m') between str_to_date(?, '%Y-%m') and str_to_date(?, '%Y-%m')) tt";
+			sql = " select * from (select t.tran_month as tran_date,sum(t.sales_amount) as sales_amount, sum(t.sales_volume) as sales_volume, sum(t.tran_count) as tran_count from tbdaily.tb_tran_month t "
+				 +" where exists (select 'X' from tbweb.tb_attn_dir_detail t2 where t2.adid = ? and t.shop_id = t2.shop_id and t.item_id = t2.item_id)"
+				 +" and str_to_date(t.tran_month,'%Y-%m') between str_to_date(?, '%Y-%m') and str_to_date(?, '%Y-%m') group by t.tran_month) tt";
 		}
 		
 		String pageSql = "";
@@ -1667,7 +1908,7 @@ public class ShopService extends BaseService {
 			pageSql = sql;
 		}
 		
-		List<AdvertBase> list = sqlUtil.searchList(AdvertBase.class, pageSql, shopId, startDate, endDate);
+		List<AdvertBase> list = sqlUtil.searchList(AdvertBase.class, pageSql, adid, startDate, endDate);
 		
 		return PageEntity.getPageEntity(pageParam, list);
 		
@@ -1741,81 +1982,121 @@ public class ShopService extends BaseService {
 	}
 	
 	/**
-	 * 店铺搜索
+	 * 宝贝搜索
 	 * @param category
+	 * @param shopName
+	 * @param region
+	 * @param shopType
 	 * @param prdName
 	 * @param notPrdName
 	 * @param startAvgPrice
 	 * @param endAvgPrice
-	 * @param monthType
-	 * @param startAvgPriceTran
-	 * @param endAvgPriceTran
-	 * @param shopType
-	 * @param region
+	 * @param startAvgPriceTranPre
+	 * @param endAvgPriceTranPre
+	 * @param startVolumePre
+	 * @param endVolumePre
+	 * @param startVolume
+	 * @param endVolume
+	 * @param startAmountPre
+	 * @param endAmountPre
+	 * @param startAmount
+	 * @param endAmount
 	 * @param pageParam
 	 * @return
 	 * @throws Exception
 	 */
-	public PageEntity<HotGoods> getShopSearchList(String category, String prdName, String notPrdName,
-			String startAvgPrice, String endAvgPrice, String monthType, String startAvgPriceTran, String endAvgPriceTran,
-			String shopType, String region, PageParam pageParam) throws Exception{
+	public PageEntity<HotGoods> getGoodsSearchList(String category, String shopName, String region, String shopType, String prdName, String notPrdName, String startAvgPrice, String endAvgPrice,
+		String startAvgPriceTranPre, String endAvgPriceTranPre, String startVolumePre, String endVolumePre, String startVolume, String endVolume, String startAmountPre, String endAmountPre,
+		String startAmount, String endAmount, PageParam pageParam) throws Exception{
 		
 		PageEntity<HotGoods> pageEntity = new PageEntity<HotGoods>();
-
-		String reSql = " select * from ("
-				+ " select t2.*, t1.shop_name,t1.region, t1.shop_type from tbbase.tb_base_shop t1 "
-				+ " join "
-				+ " (select t3.shop_id, t3.cat_path, t3.prd_img,t3.item_id,t3.prd_name,t4.avg_price, t4.avg_price_tran,t5.avg_price_tran as avg_price_tran_pre,"
-				+ " t4.sales_volume,t5.sales_volume as sales_volume_pre from tbbase.tb_base_product t3 "
-				+ " left join tbdaily.tb_tran_month t4 on t3.shop_id = t4.shop_id and t3.item_id = t4.item_id and t4.tran_month = ?"
-				+ " left join tbdaily.tb_tran_month t5 on t3.shop_id = t5.shop_id and t3.item_id = t5.item_id and t5.tran_month = ?"
-				+ " ) t2 on t1.shop_id = t2.shop_id"
-				+ " where t1.shop_type = ? ";
+		
+		String reSql = " from tbbase.tb_base_product t1"
+				+ " join tbbase.tb_base_shop t2 on t1.shop_id = t2.shop_id"
+				+ " left join tbdaily.tb_tran_month t3 on t1.shop_id = t3.shop_id and t1.item_id = t3.item_id and t3.tran_month = ?"
+				+ " left join tbdaily.tb_tran_month t4 on t1.shop_id = t4.shop_id and t1.item_id = t4.item_id and t4.tran_month = ?"
+				+ " where 1= 1 ";
 
 		List<Object> params = new ArrayList<Object>();
 		params.add(DateUtils.getCurMonth());
 		params.add(DateUtils.getOffsetMonth(-1, "yyyy-MM"));
-		params.add(shopType);
+		
+		
 		if (StringUtils.isNotBlank(category)) {
 			
-			reSql += " and t2.cat_path like '" + category + "%'";
+			reSql += " and t1.cat_path like '" + category + "%'";
 		}
-		if (StringUtils.isNotBlank(prdName)) {
-			reSql += " and t2.prd_name like '%" + prdName + "%'";
-		}
-		if (StringUtils.isNotBlank(notPrdName)) {
-			reSql += " and t2.prd_name not like '%" + notPrdName + "%'";
+		if (StringUtils.isNotBlank(shopName)) {
+			reSql += " and t2.shop_name like '%" + shopName + "%'";
 		}
 		if (StringUtils.isNotBlank(region)) {
 			reSql += " and t1.region like '%" + region + "%'";
 		}
+		if(!"ALL".equals(shopType)){
+			reSql += " and t2.shop_type = ?";
+			params.add(shopType);
+		}
+		if (StringUtils.isNotBlank(prdName)) {
+			reSql += " and t1.prd_name like '%" + prdName + "%'";
+		}
+		if (StringUtils.isNotBlank(notPrdName)) {
+			reSql += " and t1.prd_name not like '%" + notPrdName + "%'";
+		}
+		
 		if (StringUtils.isNotBlank(startAvgPrice)) {
-			reSql += " and t2.avg_price >= ?";
+			reSql += " and t3.avg_price >= ?";
+			params.add(startAvgPrice);
 		}
 		if (StringUtils.isNotBlank(endAvgPrice)) {
-			reSql += " and t2.avg_price <= ?";
+			reSql += " and t3.avg_price <= ?";
+			params.add(endAvgPrice);
 		}
-		if("cur".equals(monthType)){
-			
-			if (StringUtils.isNotBlank(startAvgPriceTran)) {
-				reSql += " and t2.avg_price_tran >= ?";
-			}
-			if (StringUtils.isNotBlank(endAvgPriceTran)) {
-				reSql += " and t2.avg_price_tran <= ?";
-			}
-			
-		}else if("pre".equals(monthType)){
-			
-			if (StringUtils.isNotBlank(startAvgPriceTran)) {
-				reSql += " and t2.avg_price_tran_pre >= ?";
-			}
-			if (StringUtils.isNotBlank(endAvgPriceTran)) {
-				reSql += " and t2.avg_price_tran_pre <= ?";
-			}
-			
+		if (StringUtils.isNotBlank(startAvgPriceTranPre)) {
+			reSql += " and t4.avg_price_tran >= ?";
+			params.add(startAvgPriceTranPre);
 		}
-
-		String totalSql = "select count(0) as recordsTotal from (" + reSql + " order by t2.sales_volume_pre desc) t6 group by t6.shop_id) t7";
+		if (StringUtils.isNotBlank(endAvgPriceTranPre)) {
+			reSql += " and t4.avg_price_tran <= ?";
+			params.add(endAvgPriceTranPre);
+		}
+		
+		if (StringUtils.isNotBlank(startVolumePre)) {
+			reSql += " and t4.sales_volume >= ?";
+			params.add(startVolumePre);
+		}
+		if (StringUtils.isNotBlank(endVolumePre)) {
+			reSql += " and t4.sales_volume <= ?";
+			params.add(endVolumePre);
+		}
+		
+		if (StringUtils.isNotBlank(startVolume)) {
+			reSql += " and t3.sales_volume >= ?";
+			params.add(startVolume);
+		}
+		if (StringUtils.isNotBlank(endVolume)) {
+			reSql += " and t3.sales_volume <= ?";
+			params.add(endVolume);
+		}
+		
+		if (StringUtils.isNotBlank(startAmountPre)) {
+			reSql += " and t4.sales_amount >= ?";
+			params.add(startAmountPre);
+		}
+		if (StringUtils.isNotBlank(endAmountPre)) {
+			reSql += " and t4.sales_amount <= ?";
+			params.add(endAmountPre);
+		}
+		
+		if (StringUtils.isNotBlank(startAmount)) {
+			reSql += " and t3.sales_amount >= ?";
+			params.add(startAmount);
+		}
+		if (StringUtils.isNotBlank(startAmount)) {
+			reSql += " and t3.sales_amount <= ?";
+			params.add(startAmount);
+		}
+		
+		String totalSql = "select count(0) as recordsTotal "+  reSql;
 		Map<String, Object> totalMap = sqlUtil.search(totalSql, params.toArray());
 
 		long recordsTotal = StringUtils.toLong(totalMap.get("recordsTotal"));
@@ -1827,12 +2108,18 @@ public class ShopService extends BaseService {
 		if(StringUtils.isNotBlank(pageParam.getoTag())){
 			orderSql = " order by " + pageParam.getoTag() + ".";
 		}
-		orderSql += pageParam.getOrderColumn();
+		
+		if (StringUtils.isNotBlank(pageParam.getOrderColumn()) && pageParam.getOrderColumn().indexOf("pre") > -1) {// 特殊处理
+			orderSql += pageParam.getOrderColumn().replace("_pre", "");
+		} else {
+			orderSql += pageParam.getOrderColumn();
+		}
 		
 		orderSql += " " + pageParam.getOrderDir();
 
-		String pageSql = reSql + " order by t2.sales_volume_pre desc) t6 group by t6.shop_id "+  orderSql + " limit " + pageParam.getStart() + ","
-				+ pageParam.getLength();
+		String pageSql = "select t1.prd_img,t1.item_id,t1.prd_name,t2.shop_name,t2.shop_id,t2.shop_type,t3.avg_price,t4.avg_price_tran as avg_price_tran_pre,t3.sales_volume,t4.sales_volume as sales_volume_pre,"
+				  +" t3.sales_amount, t4.sales_amount as sales_amount_pre,t3.tran_count,t4.tran_count as tran_count_pre,t1.region, date_format(t3.createtime,'%Y-%m-%d') as createtime" 
+				  +  reSql +  orderSql + " limit " + pageParam.getStart() + ","+ pageParam.getLength();
 
 		List<HotGoods> pageList = sqlUtil.searchList(HotGoods.class, pageSql, params.toArray());
 

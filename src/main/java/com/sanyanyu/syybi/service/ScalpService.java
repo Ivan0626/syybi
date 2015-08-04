@@ -339,7 +339,7 @@ public class ScalpService extends BaseService {
 		PageEntity<GoodsList> pageEntity = new PageEntity<GoodsList>();
 
 		String reSql = " from tbbase.tb_base_product t1 "
-				+ " join tbdaily.tb_shua_month t2 on t1.shop_id = t2.shop_id and t1.item_id = t2.item_id and t2.tran_month = '"+ DateUtils.getCurMonth() +"'"
+				+ " left join tbdaily.tb_shua_month t2 on t1.shop_id = t2.shop_id and t1.item_id = t2.item_id and t2.tran_month = '"+ DateUtils.getCurMonth() +"'"
 				+ " left join tbdaily.tb_shua_month t4 on t1.shop_id = t4.shop_id and t1.item_id = t4.item_id and t4.tran_month = '"+ DateUtils.getOffsetMonth(-1, "yyyy-MM") +"'"
 				+ " left join tbdaily.tb_tran_month t3 on t1.shop_id = t3.shop_id and t1.item_id = t3.item_id and t3.tran_month = '"+ DateUtils.getCurMonth() +"'"
 				+ " left join tbdaily.tb_tran_month t5 on t1.shop_id = t5.shop_id and t1.item_id = t5.item_id and t5.tran_month = '"+ DateUtils.getOffsetMonth(-1, "yyyy-MM") +"'"

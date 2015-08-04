@@ -2,6 +2,10 @@ package com.sanyanyu.syybi.entity;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.sanyanyu.syybi.utils.SysUtil;
+
 /**
  * 飚量店铺搜索Entity
  * 
@@ -49,6 +53,34 @@ public class ShopSearch implements Serializable {
 	private String asid;
 	
 	private String rate_link;
+	
+	 private String item_count;
+	 private String seller;
+	 private String html_source;
+
+	public String getItem_count() {
+		return item_count;
+	}
+
+	public void setItem_count(String item_count) {
+		this.item_count = item_count;
+	}
+
+	public String getSeller() {
+		return seller;
+	}
+
+	public void setSeller(String seller) {
+		this.seller = seller;
+	}
+
+	public String getHtml_source() {
+		return html_source;
+	}
+
+	public void setHtml_source(String html_source) {
+		this.html_source = html_source;
+	}
 
 	public String getRate_link() {
 		return rate_link;
@@ -95,6 +127,9 @@ public class ShopSearch implements Serializable {
 	}
 
 	public String getShop_url() {
+		if(StringUtils.isNotBlank(this.getShop_id())){
+			return SysUtil.getShopUrl(this.getShop_id());
+		}
 		return shop_url;
 	}
 

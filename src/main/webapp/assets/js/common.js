@@ -1,15 +1,44 @@
+//检测url链接
+function isURL(str) { 
+	var RegUrl = new RegExp(); 
+	RegUrl.compile("^[A-Za-z]+://[A-Za-z0-9-_]+\\.[A-Za-z0-9-_%&\?\/.=]+$");//jihua.cnblogs.com 
+	if (!RegUrl.test(str)) { 
+		return false; 
+	} 
+	return true; 
+} 
+
 //温馨提示消息弹出框
-function showMsg(msg) {
+function showMsg(msg, callback) {
 	bootbox.dialog({
 		message : "<span class='bigger-110'>" + msg + "</span>",
 		buttons : {
 			"button" : {
 				"label" : "确定",
-				"className" : "btn-sm"
+				"className" : "btn-sm",
+				"callback": callback
 			}
 		}
 	});
 }
+
+function confirmMsg(msg, callback){
+	bootbox.confirm({  
+        buttons: {  
+            confirm: {  
+                label: '确定',  
+                className: 'btn-myStyle'  
+            },  
+            cancel: {  
+                label: '取消',  
+                className: 'btn-default'  
+            }  
+        },  
+        message: msg,  
+        callback: callback  
+	 });
+}
+
 //获取两个月份之间的月份数
 function getMonths(date1 , date2){
     //用-分成数组
@@ -533,12 +562,14 @@ function loadDataTable(config) {
 			columns : config.columns,
 			columnDefs : config.columnDefs,
 			footerCallback : config.footerCallback,
+			order: config.order,
 			ajax : {
 				url : config.url,
 				type : config.type || 'GET',
 				data : config.data
 			},
-			serverSide : true
+			serverSide : true,
+			initComplete: config.initComplete
 		});
 		
 		return table;

@@ -63,6 +63,40 @@ public class GoodsList implements Serializable {
 	/**以下属性店铺分析-宝贝列表用**/
 	private String createtime;
 	
+	/**宝贝分析-宝贝列表**/
+	private String shop_name;
+	private String shop_id;
+	private String shop_type;
+	private String shop_url;
+	
+	public String getShop_url() {
+		if(StringUtils.isNotBlank(this.getShop_id())){
+			return SysUtil.getShopUrl(this.getShop_id());
+		}
+		return shop_url;
+	}
+	
+	public void setShop_url(String shop_url) {
+		this.shop_url = shop_url;
+	}
+	public String getShop_name() {
+		return shop_name;
+	}
+	public void setShop_name(String shop_name) {
+		this.shop_name = shop_name;
+	}
+	public String getShop_id() {
+		return shop_id;
+	}
+	public void setShop_id(String shop_id) {
+		this.shop_id = shop_id;
+	}
+	public String getShop_type() {
+		return shop_type;
+	}
+	public void setShop_type(String shop_type) {
+		this.shop_type = shop_type;
+	}
 	public String getCreatetime() {
 		return createtime;
 	}

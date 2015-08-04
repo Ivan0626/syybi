@@ -63,7 +63,8 @@ function option4(data){
 	        {
 	            name:'销量',
 	            type:'bar',
-	            data:series_data_volume
+	            data:series_data_volume,
+	            barMaxWidth: 30
 	        },
 	        {
 	            name:'标价',

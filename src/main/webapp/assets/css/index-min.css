@@ -1,0 +1,1949 @@
+.ks-overlay {
+	background: #FFF;
+	z-index: 90001
+}
+
+.ks-dialog {
+	overflow: hidden;
+	padding: 7px;
+	background: rgba(0, 0, 0, .4);
+	background: #BFBFBF\0;
+	*background-color: #949993;
+	_filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#00000033,
+		endcolorstr=#00000033)
+}
+
+.ks-dialog .ks-contentbox {
+	position: relative;
+	background: #FFF;
+	height: 100%
+}
+
+.ks-dialog .ks-stdmod-header {
+	background: #F2F2F2;
+	font-size: 14px;
+	font-weight: 700;
+	line-height: 1;
+	padding: 15px;
+	border-bottom: 1px solid #B7B7B7
+}
+
+.ks-dialog .ks-ext-close {
+	display: block;
+	height: 19px;
+	width: 18px;
+	text-indent: -9999px;
+	position: absolute;
+	top: 22px;
+	right: 22px;
+	background: url(//img.alicdn.com/tps/i3/T1QlgHXc0bXXcrjATa-19-36.png) 0
+		-19px no-repeat
+}
+
+.ks-dialog .close-hover,.ks-dialog .ks-ext-close:hover {
+	cursor: pointer;
+	background-position: 0 0
+}
+
+#triangle .base {
+	display: inline-block;
+	width: 0;
+	height: 0;
+	font-size: 0;
+	line-height: 0
+}
+
+.rate-container {
+	border-top: 2px solid #999
+}
+
+.rate-item {
+	border-bottom: 1px solid #DDD;
+	padding: 20px 12px
+}
+
+.rate-userinfo {
+	float: right;
+	width: 160px
+}
+
+.reviews-list-buyer .rate-userinfo {
+	text-align: right
+}
+
+.rate-content {
+	float: left;
+	width: 450px;
+	position: relative
+}
+
+.tb-r-spu-ratting {
+	background: #FFFBF4;
+	padding: 0 0 0 5px;
+	border-bottom: 1px dashed #FFD9AF;
+	margin-bottom: 10px
+}
+
+.tb-r-spu-ratting li {
+	float: left;
+	margin-bottom: 2px;
+	width: 215px
+}
+
+.tb-r-date,.tb-r-sku {
+	color: #AAA
+}
+
+.tb-r-cnt,.tb-r-reply {
+	width: 450px;
+	word-wrap: break-word
+}
+
+.tb-r-info {
+	width: 450px
+}
+
+.tb-r-cnt {
+	color: #404040
+}
+
+.tb-r-reply {
+	margin-top: 8px;
+	color: #BD7F00
+}
+
+.tb-r-shop {
+	margin-top: .75em
+}
+
+.tb-r-shop a {
+	color: #BCBCBC
+}
+
+.tb-r-shop a .tb-rate-icf {
+	font-size: 1.4em;
+	line-height: 1
+}
+
+.tb-r-shop a:hover {
+	color: #1FA5FE;
+	text-decoration: none
+}
+
+.tb-r-shop a:hover .tb-rate-icf {
+	color: #F4533B
+}
+
+.tb-r-append {
+	background: #FFF;
+	padding-top: 8px;
+	margin-top: 12px;
+	border-top: 1px dashed #DDD
+}
+
+.tb-r-append .tb-r-reply {
+	width: 432px;
+	background: #F6F6F6;
+	margin-top: 5px;
+	padding: 9px 9px 9px 14px;
+	color: #BD7F00
+}
+
+.tb-r-append .tb-r-info {
+	padding-top: 4px;
+	color: #AAA
+}
+
+.tb-r-append .tb-r-cnt,.tb-r-append .tb-r-info {
+	width: 420px
+}
+
+.tb-r-photos {
+	*zoom: 1
+}
+
+.tb-r-photos:after,.tb-r-photos:before {
+	content: " ";
+	display: table
+}
+
+.tb-r-photos:after {
+	clear: both
+}
+
+.tb-r-photos .tb-r-photos-thumbs {
+	*zoom: 1;
+	margin: 10px 0
+}
+
+.tb-r-photos .tb-r-photos-thumbs:after,.tb-r-photos .tb-r-photos-thumbs:before
+	{
+	content: " ";
+	display: table
+}
+
+.tb-r-photos .tb-r-photos-thumbs:after {
+	clear: both
+}
+
+.tb-r-photos .tb-r-photos-thumbs .tb-current {
+	border: 2px solid #F49E00;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-o-border-radius: 2px;
+	-ms-border-radius: 2px;
+	border-radius: 2px;
+	cursor: auto
+}
+
+.tb-r-photos .tb-r-photos-thumbs .tb-current img {
+	cursor: url(//img.alicdn.com/tps/i1/T1MQMFXgXcXXaSQP_X-16-16.png),
+		url(//assets.alicdn.com/img/common/zoom_out.cur), auto
+}
+
+.tb-r-photos .tb-r-photos-thumb {
+	float: left;
+	width: 40px;
+	height: 40px;
+	border: 2px solid #F2F2F2;
+	margin-right: 5px;
+	position: relative;
+	-webkit-transition: border-color .3s ease-out;
+	-moz-transition: border-color .3s ease-out;
+	-o-transition: border-color .3s ease-out;
+	transition: border-color .3s ease-out
+}
+
+.tb-r-photos .tb-r-photos-thumb img {
+	display: block;
+	width: 40px;
+	height: 40px;
+	cursor: url(//img.alicdn.com/tps/i2/T1HqQGXgtcXXaSQP_X-16-16.png),
+		url(//assets.alicdn.com/img/common/zoom_in.cur), auto
+}
+
+.tb-r-photos .tb-photos-arrow {
+	width: 0;
+	height: 0;
+	line-height: 0;
+	font-size: 0;
+	border: 6px dashed transparent;
+	border-top: 6px solid #F49E00;
+	position: absolute;
+	left: 15px;
+	bottom: -8px;
+	opacity: 0;
+	filter: alpha(opacity = 0)
+}
+
+.tb-r-photos .tb-current .tb-photos-arrow {
+	bottom: -14px;
+	opacity: 1;
+	filter: alpha(opacity = 100)
+}
+
+.tb-r-photos .tb-r-photo-viewer {
+	position: relative;
+	margin: 0 0 10px;
+	border: 1px solid #CCC;
+	background: #FFF;
+	padding: 2px;
+	float: left;
+	overflow: hidden
+}
+
+.tb-r-photos .tb-r-photo-viewer img {
+	position: absolute;
+	vertical-align: middle;
+	cursor: url(//img.alicdn.com/tps/i1/T1MQMFXgXcXXaSQP_X-16-16.png),
+		url(//assets.alicdn.com/img/common/zoom_out.cur), auto
+}
+
+.ks-ie .tb-r-photo-viewer img {
+	position: static
+}
+
+.rate-auction {
+	padding-top: 2px;
+	float: left;
+	width: 200px;
+	word-break: break-all;
+	white-space: normal;
+	margin-right: 45px
+}
+
+.tb-r-auction-pic {
+	float: left;
+	border: 1px solid #CCC;
+	margin-right: 5px
+}
+
+.tb-r-auction-pic img {
+	display: block
+}
+
+.review-hd {
+	background: #F5F5F5;
+	border-bottom: 1px solid #E3E3E3
+}
+
+.review-hd:after,.review-hd:before {
+	content: " ";
+	display: table
+}
+
+.review-hd:after {
+	clear: both
+}
+
+.review-hd input,.review-hd label {
+	vertical-align: middle
+}
+
+.review-hd input {
+	margin-right: 2px
+}
+
+.review-hd label {
+	margin-right: 4px
+}
+
+.reviw-hd-item {
+	float: left;
+	height: 40px;
+	line-height: 40px;
+	width: 200px;
+	text-indent: 30px
+}
+
+.rate-type {
+	float: left;
+	width: 50px;
+	min-height: 10px;
+	_height: 10px;
+	margin-right: 5px;
+	text-align: center
+}
+
+.rate-type .no-effect {
+	color: #999
+}
+
+.shop-rate-box .primary-action,.shop-rate-box .secondary-action {
+	*margin-top: 10px
+}
+
+.shop-rate-box .secondary-action input {
+	vertical-align: text-bottom;
+	margin-right: 2px
+}
+
+.share-l-item {
+	margin-bottom: 20px;
+	padding: 5px 12px 15px;
+	border-bottom: 1px solid #D5D5D5
+}
+
+.share-auction {
+	margin-top: 8px;
+	margin-left: 10px;
+	padding: 5px;
+	float: right;
+	width: 254px;
+	word-break: break-all;
+	white-space: normal
+}
+
+.share-content {
+	width: 300px
+}
+
+.share-buyer {
+	float: right;
+	width: 184px;
+	padding: 5px
+}
+
+.share-reshare {
+	margin-top: 15px
+}
+
+.share-reshare .tb-r-cnt {
+	background: #F9F9F9;
+	padding: 10px
+}
+
+.rate_user_anony {
+	color: #999
+}
+
+.rate-item,.review-hd,.share-l-item,.tb-r-spu-ratting {
+	*zoom: 1
+}
+
+.rate-item:after,.rate-item:before,.review-hd:after,.review-hd:before,.share-l-item:after,.share-l-item:before,.tb-r-spu-ratting:after,.tb-r-spu-ratting:before
+	{
+	content: " ";
+	display: table
+}
+
+.rate-item:after,.review-hd:after,.share-l-item:after,.tb-r-spu-ratting:after
+	{
+	clear: both
+}
+
+.tfooter {
+	*zoom: 1;
+	background: #F5F5F5;
+	padding: 5px;
+	border-bottom: 1px solid #D5D5D5
+}
+
+.tfooter:after,.tfooter:before {
+	content: " ";
+	display: table
+}
+
+.tfooter:after {
+	clear: both
+}
+
+.tb-rate-gift {
+	margin-top: 5px;
+	float: right;
+	width: 20px;
+	height: 20px;
+	border: 1px solid #FBB688;
+	background: url(//img.alicdn.com/tps/i4/T1laC_XitpXXXXXXXX-20-20.png)
+		no-repeat #fde7d9;
+	cursor: default
+}
+
+.tb-review-tip {
+	position: absolute;
+	left: -9999px;
+	top: -999px;
+	border: 1px solid #888;
+	background: #DFDFDF;
+	padding: 3px;
+	width: 150px;
+	text-align: left
+}
+
+.tb-review-tip-cnt {
+	padding: 0 8px;
+	background: #FFF
+}
+
+.tb-review-arrow,.tb-review-arrow-inner {
+	font-size: 0;
+	line-height: 0;
+	position: absolute;
+	right: -13px;
+	top: 8px;
+	border: 7px dashed transparent;
+	border-left: #DFDFDF solid 7px
+}
+
+.tb-review-arrow {
+	right: -14px;
+	border-left: #888 solid 7px
+}
+
+.tb-no-result {
+	padding: 60px;
+	text-align: center
+}
+
+.checkcode {
+	padding: 60px 0 60px 150px
+}
+
+.checkcode .code-img {
+	width: 100px;
+	height: 30px;
+	vertical-align: middle;
+	margin-right: 3px;
+	cursor: pointer
+}
+
+.checkcode .code-input {
+	height: 18px;
+	border: 1px solid #CCC;
+	vertical-align: middle;
+	width: 60px;
+	padding: 3px;
+	margin-right: 3px
+}
+
+.checkcode .code-submit {
+	border: none;
+	vertical-align: middle;
+	background: #4FB8FF;
+	color: #FFF;
+	height: 26px;
+	line-height: 26px;
+	padding: 0 10px;
+	cursor: pointer
+}
+
+.checkcode .code-submit:hover {
+	background: #4090C2
+}
+
+.ks-overlay {
+	position: absolute;
+	left: -9999px;
+	top: -9999px
+}
+
+.ks-overlay-hidden {
+	visibility: hidden
+}
+
+.ks-overlay-mask-hidden {
+	display: none
+}
+
+.ks-overlay-shown {
+	visibility: visible
+}
+
+.ks-overlay-mask-shown {
+	display: block
+}
+
+.type-normal #shop-hd {
+	width: 950px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 10px;
+	position: relative;
+	z-index: 10;
+	background: #FFF
+}
+
+.type-normal #shop-hd .TabBarLevel1 {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	height: auto;
+	min-height: 29px;
+	_height: 29px;
+	background: url(//img.alicdn.com/bao/album/sys/misc/list_tab_bottom.gif)
+		repeat-x #fff
+}
+
+.type-normal #shop-hd .TabBarLevel1 li {
+	float: left;
+	padding: 0;
+	height: 29px;
+	min-height: 29px;
+	_height: 29px;
+	margin-right: 1px;
+	background:
+		url(//img.alicdn.com/2k5/sys/component/tabbar_level1_slice_left_bk.gif)
+		left top no-repeat
+}
+
+.type-normal #shop-hd .TabBarLevel1 li a {
+	display: block;
+	line-height: 29px;
+	padding: 0 20px;
+	color: #333;
+	white-space: nowrap;
+	background:
+		url(//img.alicdn.com/2k5/sys/component/tabbar_level1_slice_right_bk.gif)
+		right top no-repeat
+}
+
+.type-normal #shop-hd .TabBarLevel1 li a:link,.type-normal #shop-hd .TabBarLevel1 li a:visited
+	{
+	color: #333
+}
+
+.type-normal #shop-hd .TabBarLevel1 li a:active,.type-normal #shop-hd .TabBarLevel1 li a:hover
+	{
+	color: #F30;
+	text-decoration: none
+}
+
+.type-normal #shop-hd .TabBarLevel1 li.Selected {
+	background: url(//img.alicdn.com/bao/album/sys/misc/list_tab_left.gif)
+		no-repeat
+}
+
+.type-normal #shop-hd .TabBarLevel1 li.Selected a {
+	background: url(//img.alicdn.com/bao/album/sys/misc/list_tab_right.gif)
+		100% 0 no-repeat
+}
+
+.type-normal #shop-hd .TabBarLevel1 li.Selected a:link,.type-normal #shop-hd .TabBarLevel1 li.Selected a:visited
+	{
+	color: #000
+}
+
+.type-normal #shop-hd .TabBarLevel1 li.Selected a:active,.type-normal #shop-hd .TabBarLevel1 li.Selected a:hover
+	{
+	color: #F30;
+	text-decoration: none
+}
+
+.type-normal #shop-hd .TabBarLevel1 li#Forum,.type-normal #shop-hd .TabBarLevel1 li#Remark
+	{
+	background: 0 0
+}
+
+.type-normal #shop-hd .TabBarLevel1 li#Forum a,.type-normal #shop-hd .TabBarLevel1 li#Remark a
+	{
+	padding-left: 25px;
+	font-weight: 700
+}
+
+.type-normal #shop-hd .TabBarLevel1 li#Forum a:link,.type-normal #shop-hd .TabBarLevel1 li#Forum a:visited,.type-normal #shop-hd .TabBarLevel1 li#Remark a:link,.type-normal #shop-hd .TabBarLevel1 li#Remark a:visited
+	{
+	color: #04D
+}
+
+.type-normal #shop-hd .TabBarLevel1 li#Forum a:active,.type-normal #shop-hd .TabBarLevel1 li#Forum a:hover,.type-normal #shop-hd .TabBarLevel1 li#Remark a:active,.type-normal #shop-hd .TabBarLevel1 li#Remark a:hover
+	{
+	color: #F30;
+	text-decoration: none
+}
+
+.type-normal #shop-hd .TabBarLevel1 li#Remark a {
+	background:
+		url(//img.alicdn.com/bao/album/sys/auction/item060913_03.gif) left top
+		no-repeat;
+	margin: 0 0 0 10px;
+	color: #04D
+}
+
+.type-normal #shop-hd .TabBarLevel1 li#Forum a {
+	background:
+		url(//img.alicdn.com/bao/album/sys/auction/item060913_05.gif) left top
+		no-repeat;
+	margin: 0 10px 0 15px
+}
+
+.price em {
+	color: #F60;
+	maring: 0 2px;
+	font-family: Tahoma, Helvetica, Arial
+}
+
+.xiaobao-box {
+	*zoom: 1
+}
+
+.xiaobao-box:after,.xiaobao-box:before {
+	content: " ";
+	display: table
+}
+
+.xiaobao-box:after {
+	clear: both
+}
+
+.personal-info .info-block {
+	border-top: 1px dashed #CCC;
+	padding: 10px 0 10px 10px
+}
+
+.personal-info .info-block .title {
+	margin-bottom: 10px
+}
+
+.personal-info .info-block dt {
+	width: 5em;
+	float: left;
+	text-align: right
+}
+
+.personal-info .info-block dd {
+	line-height: 22px
+}
+
+.personal-info .info-block ul li {
+	margin-bottom: 9px
+}
+
+.personal-info .info-block ul.sep li img {
+	vertical-align: middle
+}
+
+.personal-info .info-block ul.sep li a,.personal-info .info-block ul.sep li span
+	{
+	padding-left: 5px
+}
+
+.personal-info .info-block .xiaobao1,.personal-info .info-block .xiaobao2
+	{
+	float: left;
+	background: url(//img.alicdn.com/tps/i1/T1I6ecXcNjXXXXXXXX-174-450.png)
+		0 -64px no-repeat;
+	width: 76px;
+	height: 81px
+}
+
+.personal-info .info-block .xiaobao2 {
+	background-position: -80px -64px
+}
+
+.personal-info .info-block .desc {
+	padding-left: 10px;
+	overflow: hidden;
+	zoom: 1
+}
+
+.personal-info .info-block .desc .title {
+	height: 25px
+}
+
+.personal-info .info-block .desc ul li {
+	height: 22px
+}
+
+.personal-info .info-block .desc ul .fake,.personal-info .info-block .desc ul .lightning,.personal-info .info-block .desc ul .safe,.personal-info .info-block .desc ul .seven,.personal-info .info-block .desc ul .thirty,.personal-info .info-block .desc ul .xb-three,.personal-info .info-block .desc ul .xiaofei
+	{
+	background: url(//img.alicdn.com/tps/i4/T1jQaaXdhgXXXXXXXX-676-800.png)
+		no-repeat;
+	display: inline-block;
+	margin-right: 5px;
+	vertical-align: middle;
+	margin-top: -2px;
+	height: 16px;
+	width: 16px
+}
+
+.personal-info .info-block .desc ul .xiaofei {
+	background-position: -50px -417px
+}
+
+.personal-info .info-block .desc ul .seven {
+	background-position: -18px -417px
+}
+
+.personal-info .info-block .desc ul .fake {
+	background-position: -200px -417px
+}
+
+.personal-info .info-block .desc ul .thirty {
+	background-position: -181px -417px
+}
+
+.personal-info .info-block .desc ul .lightning {
+	background-position: -159px -417px
+}
+
+.personal-info .info-block .desc ul .safe {
+	background-position: -2px -417px
+}
+
+.personal-info .info-block .desc ul .xb-three {
+	background: url(//img.alicdn.com/tps/i3/T1YbihXntnXXXXXXXX-16-16.jpg) 0
+		2px no-repeat;
+	_margin-right: 5px;
+	margin-right: 0
+}
+
+.personal-info .info-block .quality li {
+	height: 35px
+}
+
+.personal-info .info-block .quality li a:hover {
+	text-decoration: none
+}
+
+.personal-info .info-block .charge {
+	margin-top: 20px
+}
+
+.personal-info .info-block .charge span {
+	font-weight: 700;
+	color: #F60
+}
+
+.personal-info .info-block .flow .arrow {
+	background: url(//img.alicdn.com/tps/i1/T1WgucXjpxXXXXXXXX-1600-24.png)
+		right -10px no-repeat;
+	padding-right: 14px
+}
+
+.personal-info .info-block .tmall-pro {
+	margin: 0 0 15px
+}
+
+.personal-info .info-block .company {
+	height: auto;
+	margin-bottom: 7px
+}
+
+.personal-info .info-block .company .box-his-rate {
+	float: left;
+	width: 60px
+}
+
+.personal-info .info-block .company .box-chart {
+	float: left;
+	width: 150px
+}
+
+.personal-info .info-block .promise a {
+	display: inline-block;
+	width: 54px;
+	height: 55px;
+	margin-right: 9px
+}
+
+.personal-info .info-block .promise .pro1,.personal-info .info-block .promise .pro2,.personal-info .info-block .promise .pro3
+	{
+	display: inline-block;
+	background: url(//img.alicdn.com/tps/i1/T1I6ecXcNjXXXXXXXX-174-450.png)
+		no-repeat;
+	width: 54px;
+	height: 55px
+}
+
+.personal-info .info-block .promise .pro2 {
+	background-position: -60px 0
+}
+
+.personal-info .info-block .promise .pro3 {
+	background-position: -120px 0
+}
+
+.personal-info .info-block .company {
+	*zoom: 1
+}
+
+.personal-info .info-block .company:after,.personal-info .info-block .company:before
+	{
+	content: " ";
+	display: table
+}
+
+.personal-info .info-block .company:after {
+	clear: both
+}
+
+.personal-info .info-block .company .fleft1,.personal-info .info-block .company .fleft2
+	{
+	float: left
+}
+
+.personal-info .info-block-first {
+	border-top: 0
+}
+
+.personal-rating table td,.personal-rating table th {
+	text-align: center;
+	border-bottom: 1px solid #D7D7D7;
+	padding: 5px
+}
+
+.personal-rating table td {
+	border-bottom-width: 0
+}
+
+#seller-and-buyer .show-list li {
+	width: 100%
+}
+
+.shop-rate-box .rate-box {
+	margin-bottom: 10px
+}
+
+.shop-rate-box .personal-rating .service-info ul {
+	position: relative;
+	min-height: 128px;
+	_height: 128px;
+	padding: 0 10px;
+	background: #FFF;
+	border-left: 1px solid #CCC
+}
+
+.shop-rate-box .personal-rating .service-info li {
+	height: 14px;
+	padding: 4px 0
+}
+
+.shop-rate-box .personal-rating .service-info li label {
+	cursor: text
+}
+
+.shop-rate-box .personal-rating .service-info li em {
+	color: #F60
+}
+
+.shop-rate-box .personal-rating .service-info .effort {
+	height: auto;
+	padding-left: 60px;
+	width: 230px;
+	position: relative
+}
+
+.shop-rate-box .personal-rating .service-info .effort label {
+	position: absolute;
+	top: 8px;
+	left: 0
+}
+
+.shop-rate-box .personal-rating .service-info .effort a {
+	display: inline-block;
+	height: 18px;
+	margin-right: 5px;
+	line-height: 18px;
+	color: #666;
+	border-bottom: 1px solid #FFF
+}
+
+.shop-rate-box .personal-rating .service-info .effort a:hover {
+	color: #F60;
+	text-decoration: none;
+	border-bottom: 1px solid #F60
+}
+
+.shop-rate-box .personal-rating .service-info .effort a span {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-right: 2px;
+	background: url(//img.alicdn.com/tps/i8/T1ZQ0GXiJFXXXXXXXX-676-800.png)
+		1000px 1000px no-repeat
+}
+
+.shop-rate-box .personal-rating .service-info .effort .xb-truth span {
+	background-position: -50px -417px
+}
+
+.shop-rate-box .personal-rating .service-info .effort .xb-auth span {
+	background-position: -200px -417px
+}
+
+.shop-rate-box .personal-rating .service-info .effort .xb-return span {
+	background-position: -18px -417px
+}
+
+.shop-rate-box .personal-rating .service-info .effort .xb-quality span {
+	background-position: -2px -417px
+}
+
+.shop-rate-box .personal-rating .service-info .effort .xb-thunder span {
+	background-position: -159px -417px
+}
+
+.shop-rate-box .personal-rating .service-info .effort .xb-guarantee span
+	{
+	background-position: -187px -417px
+}
+
+.shop-rate-box .personal-rating .service-info .quality-info-box table {
+	width: 282px;
+	margin-top: -1px
+}
+
+.shop-rate-box .personal-rating .service-info .quality-info-box td,.shop-rate-box .personal-rating .service-info .quality-info-box th
+	{
+	border: 1px solid #D7D7D7;
+	height: 25px;
+	line-height: 25px;
+	padding: 0
+}
+
+.shop-rate-box .personal-rating .service-info .quality-info-box th {
+	background-color: #F8F8F8
+}
+
+.shop-rate-box .personal-rating .service-info .quality-info-box .qatype a
+	{
+	color: #04D;
+	border-bottom: 1px dashed #04D;
+	text-decoration: none
+}
+
+.shop-rate-box .personal-rating .service-info .quality-info-box .qadetail
+	{
+	text-align: left;
+	padding-left: 6px;
+	border-right-width: 0;
+	_border-right-width: 1px;
+	color: gray
+}
+
+.shop-rate-box .personal-rating .service-info .quality-info-box .qadetail .stat-no
+	{
+	padding-right: 12px
+}
+
+.shop-rate-box .personal-rating .service-info .quality-info-box .qadetail em
+	{
+	color: #404040
+}
+
+.shop-rate-box .personal-rating .service-info .quality-info-box .selected .quality-info-tip
+	{
+	display: block
+}
+
+.shop-rate-box .personal-rating .service-info .quality-info-box .tip {
+	top: 131px
+}
+
+.shop-rate-box .personal-rating .service-info .quality-info-box .tip .horn
+	{
+	margin-left: 140px
+}
+
+.shop-rate-box .personal-rating .service-info .quality-info-box .tip1 {
+	top: 53px
+}
+
+.shop-rate-box .personal-rating .service-info .quality-info-box .tip2 {
+	top: 79px
+}
+
+.shop-rate-box .personal-rating .service-info .quality-info-box .tip3 {
+	top: 105px
+}
+
+.shop-rate-box .personal-rating .service-info .quality-info-box .tip4 {
+	top: 131px
+}
+
+.shop-rate-box .personal-rating .bd h4 {
+	margin-left: 10px
+}
+
+.shop-rate-box .personal-rating .bd table {
+	background: #FFF
+}
+
+.shop-rate-box .personal-rating .bd .non-join {
+	background-position: -110px 0
+}
+
+.shop-rate-box .personal-rating .bd .service-info {
+	padding-left: 102px;
+	color: #666;
+	background: url(//img.alicdn.com/tps/i8/T1ZQ0GXiJFXXXXXXXX-676-800.png)
+		no-repeat;
+	border-top: 1px solid #CCC;
+	border-bottom: 1px solid #CCC
+}
+
+.shop-rate-box .personal-rating .bd .service-info .quality-info-box {
+	position: absolute;
+	top: 0;
+	right: 1px;
+	width: 280px;
+	padding: 0
+}
+
+.shop-rate-box .personal-rating .show-quality .quality-info-box .quality-info
+	{
+	width: 280px;
+	height: 128px;
+	overflow: hidden;
+	padding-left: 1px;
+	border-bottom: 1px solid #D7D7D7
+}
+
+.shop-rate-box .personal-rating .quality-info-tip {
+	position: absolute;
+	top: 110px;
+	left: 10px;
+	width: 260px;
+	background-color: #F0F0F0;
+	display: none;
+	border: 1px solid #999;
+	z-index: 100
+}
+
+.shop-rate-box .personal-rating .quality-info-tip p {
+	padding: 2px 8px;
+	margin: 4px;
+	background-color: #FFF;
+	text-align: left
+}
+
+.shop-rate-box .personal-rating .quality-info-tip .horn {
+	position: absolute;
+	top: -6px;
+	left: 10px;
+	width: 10px;
+	height: 6px;
+	background: url(//img.alicdn.com/tps/i8/T1ZQ0GXiJFXXXXXXXX-676-800.png)
+		-96px -274px no-repeat;
+	border: none
+}
+
+.shop-rate-box .personal-rating #seller-and-buyer {
+	position: relative;
+	z-index: 1
+}
+
+.shop-rate-box .personal-rating #seller-and-buyer .bd {
+	border-top: none !important
+}
+
+.shop-rate-box .personal-info .personal-rating h4 a {
+	font-weight: 400
+}
+
+.shop-rate-box .personal-info .personal-rating h4.buyer {
+	background-position: -293px -208px
+}
+
+.shop-rate-box .personal-info .personal-rating .seller-rate-info .selected
+	{
+	background: url(//img.alicdn.com/tps/i8/T1ZQ0GXiJFXXXXXXXX-676-800.png)
+		0 -384px no-repeat #e5e5e5
+}
+
+.dsr-info {
+	margin: 20px 0 10px 25px;
+	height: 115px;
+	width: 653px;
+	overflow: hidden;
+	position: relative;
+	z-index: 0
+}
+
+.dsr-info .dsr-item {
+	width: 382px;
+	height: 30px;
+	line-height: 30px;
+	padding-left: 10px;
+	margin-bottom: 12px;
+	vertical-align: middle
+}
+
+.dsr-info .selected {
+	background: #E5E5E5
+}
+
+.dsr-info .selected .dsr-info-box {
+	display: block
+}
+
+.dsr-info .item-scrib {
+	position: relative;
+	height: 30px;
+	line-height: 30px;
+	overflow: hidden;
+	color: gray
+}
+
+.dsr-info .item-scrib .tb-title {
+	margin-top: 4px;
+	line-height: 22px;
+	font-weight: 700;
+	color: #404040
+}
+
+.dsr-info .item-scrib .count {
+	font-size: 14px;
+	font-weight: 700;
+	color: #f40
+}
+
+.dsr-info .item-scrib .percent {
+	position: absolute;
+	right: 10px;
+	top: 2px;
+	width: 199px;
+	padding-left: 130px;
+	text-align: center;
+	height: 28px;
+	line-height: 26px;
+	display: block;
+	color: #FFF
+}
+
+.dsr-info .item-scrib .lower,.dsr-info .item-scrib .normal,.dsr-info .item-scrib .over
+	{
+	background: url(//img.alicdn.com/tps/i1/T1ivNYXXdzXXXXXXXX-676-860.png)
+		no-repeat
+}
+
+.dsr-info .item-scrib .over {
+	background-position: 0 -283px
+}
+
+.dsr-info .item-scrib .lower {
+	background-position: 0 -309px
+}
+
+.dsr-info .item-scrib .normal {
+	background-position: 0 -832px
+}
+
+.dsr-info .dsr-info-box {
+	color: #666;
+	background: #E5E5E5;
+	width: 250px;
+	height: 114px;
+	line-height: 15px;
+	position: absolute;
+	right: 15px;
+	top: 0;
+	font-size: 11px;
+	display: none;
+	margin-bottom: 0;
+	z-index: 50;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-o-border-radius: 5px;
+	-ms-border-radius: 5px;
+	border-radius: 5px
+}
+
+.dsr-info .dsr-info-box .box-wrap {
+	padding: 10px
+}
+
+.dsr-info .dsr-info-box .h {
+	color: #F50
+}
+
+.dsr-info .dsr-info-box .total {
+	height: 24px
+}
+
+.dsr-info .dsr-info-box .total .h {
+	cursor: pointer
+}
+
+.dsr-info .dsr-info-box .count {
+	height: 15px;
+	white-space: nowrap;
+	overflow: hidden
+}
+
+.dsr-info .dsr-info-box .count .unit {
+	color: gray
+}
+
+.dsr-info .dsr-info-box .rate-stat {
+	display: inline-block;
+	margin-bottom: 3px;
+	height: 10px;
+	font-size: 0;
+	line-height: 1px;
+	margin-right: 4px;
+	zoom: 1;
+	vertical-align: middle;
+	background-color: #FF944C
+}
+
+.dsr-info .dsr-info-box .people-no {
+	color: gray
+}
+
+.star-value-desc {
+	display: inline-block;
+	height: 16px;
+	line-height: 16px;
+	overflow: hidden;
+	vertical-align: top
+}
+
+.star-value-desc .star-person-num {
+	color: #404040;
+	padding: 0 3px
+}
+
+.star-value-no {
+	background: url(//img.alicdn.com/tps/i1/T1I6ecXcNjXXXXXXXX-174-450.png)
+		no-repeat
+}
+
+.star-value-5,.star-value-5d0 {
+	background-position: 0 -152px
+}
+
+.star-value-4d1,.star-value-4d2,.star-value-4d3,.star-value-4d4,.star-value-4d5,.star-value-4d6,.star-value-4d7,.star-value-4d8,.star-value-4d9
+	{
+	background-position: 0 -172px
+}
+
+.star-value-4,.star-value-4d0 {
+	background-position: 0 -193px
+}
+
+.star-value-3d1,.star-value-3d2,.star-value-3d3,.star-value-3d4,.star-value-3d5,.star-value-3d6,.star-value-3d7,.star-value-3d8,.star-value-3d9
+	{
+	background-position: 0 -214px
+}
+
+.star-value-3,.star-value-3d0 {
+	background-position: 0 -235px
+}
+
+.star-value-2d1,.star-value-2d2,.star-value-2d3,.star-value-2d4,.star-value-2d5,.star-value-2d6,.star-value-2d7,.star-value-2d8,.star-value-2d9
+	{
+	background-position: 0 -256px
+}
+
+.star-value-2,.star-value-2d0 {
+	background-position: 0 -277px
+}
+
+.star-value-1d1,.star-value-1d2,.star-value-1d3,.star-value-1d4,.star-value-1d5,.star-value-1d6,.star-value-1d7,.star-value-1d8,.star-value-1d9
+	{
+	background-position: 0 -298px
+}
+
+.star-value-1,.star-value-1d0 {
+	background-position: 0 -319px
+}
+
+.star-value-0d1,.star-value-0d2,.star-value-0d3,.star-value-0d4,.star-value-0d5,.star-value-0d6,.star-value-0d7,.star-value-0d8,.star-value-0d9
+	{
+	background-position: 0 -340px
+}
+
+.star-value-0,.star-value-0d0 {
+	background-position: 0 -361px
+}
+
+.small-star-no1,.small-star-no2,.small-star-no3,.small-star-no4,.small-star-no5
+	{
+	display: inline-block;
+	width: 78px;
+	height: 11px;
+	line-height: 11px;
+	background: url(//img.alicdn.com/tps/i1/T1I6ecXcNjXXXXXXXX-174-450.png)
+		-96px -261px no-repeat
+}
+
+.small-star-no1 {
+	background-position: -96px -325px
+}
+
+.small-star-no2 {
+	background-position: -96px -309px
+}
+
+.small-star-no3 {
+	background-position: -96px -293px
+}
+
+.small-star-no4 {
+	background-position: -96px -277px
+}
+
+.star-value-no {
+	width: 89px;
+	height: 16px;
+	overflow: hidden;
+	display: -moz-inline-box;
+	display: inline-block;
+	vertical-align: inherit !important
+}
+
+.star-value-no em {
+	visibility: hidden
+}
+
+.shop-service-info {
+	padding: 10px;
+	min-height: 168px;
+	_height: 168px
+}
+
+.shop-service-info .left1 span,.shop-service-info .left2 span {
+	display: inline-block
+}
+
+.shop-service-info .left1 {
+	float: left;
+	margin-right: 10px;
+	width: 360px
+}
+
+.shop-service-info .left1 .current {
+	position: absolute;
+	width: 358px;
+	height: 24px;
+	top: 9px;
+	left: 0;
+	background: url(//img.alicdn.com/tps/i1/T1WgucXjpxXXXXXXXX-1600-24.png)
+		-1140px 0 no-repeat;
+	z-index: 0
+}
+
+.shop-service-info .left1 .bg30 {
+	position: relative;
+	background: url(//img.alicdn.com/tps/i1/T1WgucXjpxXXXXXXXX-1600-24.png)
+		-2px 0 repeat-y
+}
+
+.shop-service-info .left2 {
+	float: left;
+	width: 253px
+}
+
+.shop-service-info .left2 .detail-con {
+	display: none
+}
+
+.shop-service-info .left2 .detail-con.selected {
+	display: block
+}
+
+.shop-service-info .left2 .detail-con .bg-top {
+	margin-top: 4px;
+	background: url(//img.alicdn.com/tps/i3/T12UtLFqdhXXaT5DPr-895-5.png)
+		no-repeat;
+	width: 295px;
+	height: 5px;
+	font-size: 0
+}
+
+.shop-service-info .left2 .detail-con .bg-con {
+	background: url(//img.alicdn.com/tps/i3/T12UtLFqdhXXaT5DPr-895-5.png)
+		-300px 0 repeat-y;
+	width: 265px;
+	height: 140px;
+	padding: 5px 15px
+}
+
+.shop-service-info .left2 .detail-con .bg-con .title {
+	font-weight: 700;
+	padding-bottom: 5px;
+	border-bottom: solid 1px #B2B2B2
+}
+
+.shop-service-info .left2 .detail-con .bg-con .orange {
+	padding-right: 3px;
+	color: #F60
+}
+
+.shop-service-info .left2 .detail-con .bg-con .uperline {
+	border-top: 1px solid #BDBDBD;
+	margin-top: 5px;
+	padding-top: 5px
+}
+
+.shop-service-info .left2 .detail-con .bg-con .gray {
+	color: #787878
+}
+
+.shop-service-info .left2 .detail-con .bg-con .status1 {
+	padding-top: 10px
+}
+
+.shop-service-info .left2 .detail-con .bg-bt {
+	background: url(//img.alicdn.com/tps/i3/T12UtLFqdhXXaT5DPr-895-5.png)
+		-600px bottom no-repeat;
+	width: 295px;
+	height: 5px;
+	font-size: 0
+}
+
+.shop-service-info .self {
+	color: #F60;
+	font-weight: 700;
+	margin-left: 125px
+}
+
+.shop-service-info .average {
+	font-weight: 700;
+	margin-left: 96px
+}
+
+.shop-service-info .each {
+	position: relative;
+	height: 25px;
+	padding-top: 10px;
+	z-index: 1;
+	cursor: pointer
+}
+
+.shop-service-info .each .tb-sub1 {
+	width: 96px;
+	padding-left: 20px
+}
+
+.shop-service-info .each .sub2 {
+	width: 59px;
+	padding-left: 3px;
+	color: #F60
+}
+
+.shop-service-info .each .sub3 {
+	width: 54px;
+	padding-left: 25px
+}
+
+.shop-service-info .each .sub4 {
+	width: 58px;
+	padding-left: 3px;
+	color: #000
+}
+
+.shop-service-info .msgbox {
+	margin-top: 10px
+}
+
+.punish-msg {
+	margin: 0 0 10px 10px
+}
+
+ul.tb-rate-tree-like {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	font-size: 12px
+}
+
+ul.tb-rate-tree-like li {
+	line-height: 18px;
+	margin: 0;
+	padding: 2px 0 0 18px;
+	background:
+		url(//img.alicdn.com/tps/i3/TB1F9rUHXXXXXcCXFXXG6tT_VXX-12-200.gif) 0
+		-90px no-repeat
+}
+
+ul.tb-rate-tree-like li:first-child {
+	padding-top: 8px;
+	background-position: 0 -84px
+}
+
+ul.tb-rate-tree-like li:last-child {
+	background-position: 0 -180px
+}
+
+ul.tb-rate-tree-like li.not-leaf {
+	background-position: 0 0;
+	color: #999;
+	padding-bottom: 2px;
+	font-size: .95em
+}
+
+ul.tb-rate-tree-like li.not-leaf:last-child {
+	background-position: 0 -180px;
+	padding-bottom: 0
+}
+
+.shop-rate-box {
+	width: 950px
+}
+
+.shop-rate-box .grid-s6m0 .main-wrap {
+	margin-left: 240px
+}
+
+.shop-rate-box .grid-s6m0 .col-sub {
+	width: 230px;
+	margin-left: -100%
+}
+
+.type-normal #page {
+	width: 950px
+}
+
+.personal-rating .box-shadow {
+	border: 3px solid #EEE
+}
+
+.personal-rating .rate-box .hd {
+	background: #F4F9FF;
+	padding: 5px 10px;
+	border: 1px solid #D7D7D7
+}
+
+.personal-rating .rate-box .hd em {
+	font-weight: 400;
+	margin-left: 10px
+}
+
+.personal-rating .rate-box .hd h4 {
+	padding-left: 2em
+}
+
+.personal-rating .rate-box .bd {
+	padding: 1px;
+	border: 1px solid #D7D7D7;
+	border-top: 0;
+	background: #FFF
+}
+
+#shop-rate-box .left-box {
+	background: url(//img.alicdn.com/tps/i1/T1I6ecXcNjXXXXXXXX-174-450.png)
+		0 -389px repeat-x #fff;
+	margin-bottom: 20px;
+	min-height: 60px
+}
+
+#shop-rate-box .left-box .hd {
+	padding: 6px 0 6px 12px;
+	font-weight: 700
+}
+
+#shop-rate-box .left-box .bd {
+	background: 0 0;
+	padding: 0
+}
+
+#shop-rate-box .personal-info-box {
+	border: 1px solid #D8D8D8;
+	background: #FFF
+}
+
+#shop-rate-box .personal-info-box .hd {
+	background: #F2F2F2;
+	border-bottom: 1px solid #D8D8D8
+}
+
+.box-shadow-combo {
+	border: 3px solid #EEE;
+	*zoom: 1
+}
+
+.box-shadow-combo:after,.box-shadow-combo:before {
+	content: " ";
+	display: table
+}
+
+.box-shadow-combo:after {
+	clear: both
+}
+
+.box-shadow-combo .rate-box {
+	border: 1px solid #D8D8D8;
+	margin: 0
+}
+
+.box-shadow-combo .box-his-rate {
+	float: left;
+	width: 400px;
+	margin-right: 10px;
+	overflow: hidden !important
+}
+
+.box-shadow-combo .box-his-rate .show-list td {
+	width: 85px;
+	height: 30px;
+	padding: 0
+}
+
+.box-shadow-combo .box-his-rate .show-his-list {
+	display: block;
+	border: 1px solid #FFF
+}
+
+.box-shadow-combo .box-his-rate .show-his-list:hover {
+	background: #F2F2F2
+}
+
+.box-shadow-combo .seller-rate-info {
+	position: relative;
+	height: 220px
+}
+
+.box-his-rate .menu-list ul,.box-his-rate .show-list ul {
+	height: auto
+}
+
+.box-his-rate .menu-list {
+	*zoom: 1;
+	padding-top: 20px;
+	position: relative;
+	margin-left: 25px;
+	_margin-left: 15px;
+	height: auto;
+	z-index: 1;
+	cursor: auto
+}
+
+.box-his-rate .menu-list:after,.box-his-rate .menu-list:before {
+	content: " ";
+	display: table
+}
+
+.box-his-rate .menu-list:after {
+	clear: both
+}
+
+.box-his-rate .menu-list li {
+	float: left;
+	width: auto;
+	height: 18px;
+	line-height: 18px;
+	margin: 0 5px 0 0;
+	padding: 2px 9px;
+	border: 1px solid #D2D2D2;
+	color: #333;
+	cursor: pointer
+}
+
+.box-his-rate .menu-list li.current {
+	border-bottom: solid 1px #FFF;
+	font-weight: 700
+}
+
+.box-his-rate .show-list {
+	position: relative;
+	padding: 20px 0 20px 20px;
+	_padding: 15px 0 20px 5px;
+	top: -1px;
+	border-top: solid 1px #D2D2D2;
+	height: auto;
+	z-index: 0;
+	cursor: auto
+}
+
+.box-his-rate .show-list li {
+	height: auto
+}
+
+.box-his-rate .show-list table {
+	width: 90%
+}
+
+.box-his-rate .show-list td {
+	border: 1px solid #E6E6E6;
+	border-collapse: collapse;
+	padding: 8px
+}
+
+.box-his-rate .show-list .orange {
+	color: #F60
+}
+
+.box-his-rate .show-list .first-col {
+	border-top: none;
+	border-left: none
+}
+
+.box-chart {
+	float: right;
+	width: 276px;
+	overflow: hidden !important
+}
+
+.box-chart .arrow {
+	position: absolute;
+	top: 126px;
+	left: 60px;
+	background: url(//img.alicdn.com/tps/i1/T1WgucXjpxXXXXXXXX-1600-24.png)
+		-1520px 0 no-repeat;
+	width: 18px;
+	height: 10px
+}
+
+.box-chart .list {
+	margin-left: 23px;
+	height: 20px;
+	line-height: 20px
+}
+
+.box-chart .list a {
+	vertical-align: middle;
+	position: relative;
+	top: -2px
+}
+
+.box-chart .frame {
+	border-top: solid 1px #D8D8D8;
+	padding-top: 10px;
+	*zoom: 1
+}
+
+.ks-chart-tooltip {
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-o-border-radius: 4px;
+	-ms-border-radius: 4px;
+	border-radius: 4px;
+	-webkit-box-shadow: 1px 1px 2px #555;
+	-moz-box-shadow: 1px 1px 2px #555;
+	-o-box-shadow: 1px 1px 2px #555;
+	box-shadow: 1px 1px 2px #555;
+	padding: 3px 5px;
+	position: absolute;
+	z-index: 9999;
+	background: #333;
+	background: rgba(20, 20, 20, .9);
+	color: #FFF
+}
+
+.ks-chart-tooltip ul {
+	list-style: none
+}
+
+.chart-box {
+	position: relative;
+	width: 276px;
+	height: 135px;
+	overflow: hidden
+}
+
+.chart-main {
+	padding: 0
+}
+
+.chart-info {
+	position: absolute;
+	width: 132px;
+	left: 123px;
+	top: 12px;
+	background: #FFF
+}
+
+.chart-info dd,.chart-info dt {
+	background: url(//img.alicdn.com/tps/i1/T1bnyfXiFcXXXXXXXX-132-43.png)
+		1000px 1000px no-repeat
+}
+
+.chart-info dt {
+	height: 19px;
+	background-position: 0 0;
+	background-color: #f40;
+	padding-left: 37px;
+	color: #FFF
+}
+
+.chart-info dd {
+	height: 24px;
+	padding-left: 8px;
+	line-height: 23px;
+	background-position: 0 -19px;
+	background-color: #DEDEDE;
+	color: #666
+}
+
+.chart-info dd .data {
+	padding-left: 8px
+}
+
+.chart-handle {
+	position: absolute;
+	top: 31px;
+	left: 99px;
+	background: url(//img.alicdn.com/tps/i2/T1VImdXX8sXXXXXXXX-24-13.gif)
+		no-repeat;
+	width: 24px;
+	height: 13px
+}
+
+#rate-chart {
+	margin-top: 25px;
+	margin-left: 18px
+}
+
+.show-rate-table {
+	width: 100%;
+	table-layout: fixed
+}
+
+.show-rate-table thead th {
+	text-align: left;
+	padding: 10px 5px;
+	background: #F5F5F5
+}
+
+.show-rate-table tbody td {
+	padding: 10px 5px
+}
+
+.show-rate-table tfoot td,.show-rate-table th {
+	background: #F8F8F8
+}
+
+.show-rate-table td,.show-rate-table th {
+	padding: 5px;
+	border-bottom: 1px solid #D5D5D5
+}
+
+.show-rate-table th {
+	text-align: left
+}
+
+.show-rate-table th.rate {
+	text-align: center
+}
+
+.show-rate-table th.comment,.show-rate-table th.ratee,.show-rate-table th.things
+	{
+	padding-left: 10px
+}
+
+.show-rate-table td.rate {
+	width: 60px;
+	padding: 5px 0;
+	text-align: center
+}
+
+.show-rate-table td.rate .result {
+	text-align: center
+}
+
+.show-rate-table td.rate .effecting {
+	color: #F60
+}
+
+.show-rate-table td.rate .no-effect {
+	font-size: 10px;
+	color: #999
+}
+
+.show-rate-table tfoot td {
+	text-align: right
+}
+
+.show-rate-table p.exp,.show-rate-table p.rate {
+	padding: 0;
+	word-wrap: break-word;
+	margin: 10px 0 2px;
+	line-height: 18px;
+	text-align: justify;
+	overflow: hidden;
+	*overflow: auto
+}
+
+.show-rate-table p.exp .link,.show-rate-table p.rate .link,.show-rate-table p.rate a
+	{
+	white-space: nowrap;
+	margin-right: 5px;
+	width: 360px
+}
+
+.show-rate-table p.exp {
+	color: #960;
+	margin-bottom: 2px;
+	max-width: 300px;
+	word-wrap: break-word;
+	overflow: hidden;
+	*overflow: auto
+}
+
+.show-rate-table p.exp a {
+	margin-right: 5px
+}
+
+.personal-info-fullwidth .show-rate-table p.exp {
+	*width: 250px
+}
+
+.show-rate-table .things {
+	width: 300px
+}
+
+.show-rate-table .date {
+	color: #999
+}
+
+.show-rate-table .price {
+	display: block;
+	line-height: 18px
+}
+
+.show-rate-table .price em {
+	color: #F60;
+	margin: 0 2px
+}
