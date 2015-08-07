@@ -6,7 +6,7 @@
     	<pattern>/a/AdviseServlet?method=init</pattern>
     	<pattern>/a/OrderServlet?method=pay</pattern>
     	<pattern>/pages/industrySubAnalysis.jsp</pattern>
-    	<pattern>/pages/brandAnalysis.jsp</pattern>
+    	<pattern>/pages/indBrandAnalysis.jsp</pattern>
     	<pattern>/pages/propAnalysis.jsp</pattern>
     	<pattern>/pages/industryAnalysis2.jsp</pattern>
     </excludes>

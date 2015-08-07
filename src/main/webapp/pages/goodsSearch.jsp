@@ -34,7 +34,7 @@
 							<a href="${ctx }/a/Dashboard">首页</a>
 						</li>
 						<li>宝贝分析</li>
-						<li><a href="${ctx }/a/ShopAnalysis">宝贝列表</a></li>
+						<li><a href="${ctx }/a/GoodsAnalysis">目录一览</a></li>
 						<li class="active">宝贝搜索</li>
 					</ul><!-- /.breadcrumb -->
 				</div>

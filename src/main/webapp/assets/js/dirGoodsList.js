@@ -11,6 +11,13 @@ jQuery(function($) {
 
 		$(this).removeClass($class);
 	});
+	
+	$('#goods-search').click(function() {
+
+		window.location.href = global.path + "/a/GoodsAnalysis?m=searchB";
+
+	});
+	
 	$('#syy-goodsAnalysis').addClass('active open');
 
 	// ======================================================宝贝列表=======================================================

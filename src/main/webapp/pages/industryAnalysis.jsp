@@ -521,7 +521,7 @@
 					html += '</ul>';
 					$("#syy-sidebar_category").empty().html(html);
 					
-					$('#ajax-content').load(global.path+'/pages/brandAnalysis.jsp',{}, function(){
+					$('#ajax-content').load(global.path+'/pages/indBrandAnalysis.jsp',{}, function(){
 						
 						var $curSelecedNav = $('.breadcrumb > .active > a:contains("'+catName+'")');
 						if($curSelecedNav.length > 0){

@@ -142,7 +142,7 @@
 																		</div>
 																	</div>
 																	<div class="col-xs-12 col-sm-3">
-																		<button type="button" class="btn btn-sm btn-grey" id="goods-search">
+																		<button type="button" class="btn btn-sm btn-grey" id="goods-upload">
 																			<span class="ace-icon fa fa-upload icon-on-right bigger-110"></span>
 																			上传链接文件
 																		</button>

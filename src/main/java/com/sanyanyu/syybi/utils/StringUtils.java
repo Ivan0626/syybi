@@ -312,8 +312,31 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 		
 	}
 	
+	//转化字符串为十六进制编码  
+	public static String toHexString(String s) {  
+	   String str = "";  
+	   for (int i = 0; i < s.length(); i++) {  
+	    int ch = (int) s.charAt(i);  
+	    String s4 = Integer.toHexString(ch);  
+	    str = str + s4;  
+	   }  
+	   return str;  
+	}  
+	
 	public static void main(String[] args) {
-		 System.out.println(genRandomNum(10));
+		
+		String str = " 三能";
+		String str2 = " 三能";
+		
+		System.out.println("|"+ str + "|");
+		System.out.println("|"+ toHexString(str) + "|");
+		System.out.println("|"+ toHexString(str2) + "|");
+		
+		System.out.println("|"+ str.trim() + "|");
+		System.out.println("|"+ str2.trim() + "|");
+		System.out.println("|"+ replaceBlank(str) + "|");
+		
+		 //System.out.println(genRandomNum(10));
 	}
 
 	

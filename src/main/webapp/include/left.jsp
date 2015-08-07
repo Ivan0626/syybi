@@ -83,8 +83,8 @@
 			
 			<b class="arrow"></b>
 		</li>
-		<li class="hover">
-			<a href="#">
+		<li class="hover" id="syy-brandAnalysis">
+			<a href="${ctx }/a/BrandAnalysis">
 				<i class="menu-icon fa fa-registered"></i>
 				<span class="menu-text"> 品牌分析 </span>
 			</a>

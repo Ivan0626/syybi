@@ -81,6 +81,16 @@
   </servlet-mapping>
   <servlet>
     <description></description>
+    <display-name>BrandAnalysisServlet</display-name>
+    <servlet-name>BrandAnalysisServlet</servlet-name>
+    <servlet-class>com.sanyanyu.syybi.servlet.BrandAnalysisServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>BrandAnalysisServlet</servlet-name>
+    <url-pattern>/a/BrandAnalysis</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
     <display-name>GoodsAnalysisServlet</display-name>
     <servlet-name>GoodsAnalysisServlet</servlet-name>
     <servlet-class>com.sanyanyu.syybi.servlet.GoodsAnalysisServlet</servlet-class>
