@@ -1756,7 +1756,7 @@ public class ShopService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public PageEntity<HotGoods> getShopSearchList(String category, String prdName, String notPrdName,
+	public PageEntity<HotGoods> getShopSearchList(String uid, String category, String prdName, String notPrdName,
 			String startAvgPrice, String endAvgPrice, String monthType, String startAvgPriceTran, String endAvgPriceTran,
 			String shopType, String region, PageParam pageParam) throws Exception{
 		
@@ -1831,8 +1831,10 @@ public class ShopService extends BaseService {
 		
 		orderSql += " " + pageParam.getOrderDir();
 
-		String pageSql = reSql + " order by t2.sales_volume_pre desc) t6 group by t6.shop_id "+  orderSql + " limit " + pageParam.getStart() + ","
-				+ pageParam.getLength();
+		String pageSql = "select tt2.asid, tt1.* from ( " + reSql + " order by t2.sales_volume_pre desc) t6 group by t6.shop_id "+  orderSql + " limit " + pageParam.getStart() + ","
+				+ pageParam.getLength()
+				+" ) tt1"
+				+" left join tbweb.tb_attn_shop tt2 on tt1.shop_id = tt2.shop_id and tt2.uid = '"+uid+"' and tt2.att_type = 1";
 
 		List<HotGoods> pageList = sqlUtil.searchList(HotGoods.class, pageSql, params.toArray());
 

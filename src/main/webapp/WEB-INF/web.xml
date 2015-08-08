@@ -101,6 +101,16 @@
   </servlet-mapping>
   <servlet>
     <description></description>
+    <display-name>DataCompareServlet</display-name>
+    <servlet-name>DataCompareServlet</servlet-name>
+    <servlet-class>com.sanyanyu.syybi.servlet.DataCompareServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DataCompareServlet</servlet-name>
+    <url-pattern>/a/DataCompare</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
     <display-name>CategoryServlet</display-name>
     <servlet-name>CategoryServlet</servlet-name>
     <servlet-class>com.sanyanyu.syybi.servlet.CategoryServlet</servlet-class>

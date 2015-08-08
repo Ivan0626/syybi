@@ -14,7 +14,7 @@ jQuery(function($) {
 
 	$('#brand-search').click(function() {
 
-		//window.location.href = global.path + "/a/ShopAnalysis?m=searchB";
+		window.location.href = global.path + "/a/BrandAnalysis?m=searchB";
 
 	});
 	
@@ -37,7 +37,10 @@ jQuery(function($) {
 			{
 				data : 'brand_name',
 				render : function(val, display, val_obj, prop) {
-					var html = '<a>' + val + '</a>';
+					
+					var brandName = encodeURI(encodeURI(val));// 编码
+					
+					var html = '<a href="'+global.path + '/a/BrandAnalysis?m=brand_ind&brandName='+brandName+'">' + val + '</a>';
 
 					return html;
 				}

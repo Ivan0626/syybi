@@ -43,6 +43,14 @@ public class HotGoods extends AdvertBase {
 	private String tran_count;
 	private String tran_count_pre;
 	
+	private String asid;
+	
+	public String getAsid() {
+		return asid;
+	}
+	public void setAsid(String asid) {
+		this.asid = asid;
+	}
 	public String getSales_volume() {
 		return sales_volume;
 	}

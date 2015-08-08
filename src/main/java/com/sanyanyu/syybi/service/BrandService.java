@@ -154,24 +154,21 @@ public class BrandService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public void attnedShop(String uid, String shopIds) throws Exception {
+	public void batchAttnedShop(String uid, String brandNames) throws Exception {
 
-		String[] shopIdArr = shopIds.split(",");
+		String[] brandNameArr = brandNames.split(",");
 		
-		List<AttnShop> list = new ArrayList<AttnShop>();
-		for(String shopId : shopIdArr){
+		List<AttnBrand> list = new ArrayList<AttnBrand>();
+		for(String brandName : brandNameArr){
 			
-			String[] sArr = shopId.split("@");
+			AttnBrand brand = new AttnBrand();
 			
-			AttnShop shop = new AttnShop();
-			shop.setAsid(SysUtil.getUUID());
-			shop.setShopId(sArr[0]);
-			shop.setShopName(sArr[1]);
-			shop.setUid(uid);
-			shop.setAttType(1);
-			list.add(shop);
+			brand.setAddid(SysUtil.getUUID());
+			brand.setBrand_name(brandName);
+			brand.setUid(uid);
+			list.add(brand);
 		}
-		sqlUtil.batchInsert(AttnShop.class, list);
+		sqlUtil.batchInsert(AttnBrand.class, list);
 	}
 
 	/**
@@ -1871,5 +1868,144 @@ public class BrandService extends BaseService {
 		
 	}
 
+	/**
+	 * 获取类目下所有叶子节点
+	 * @param catNo
+	 * @return
+	 */
+	private Map<String, Object> getLeafListByCatNo2(String catNo){
+		
+		String sql = "select tbbase.getLeafLst(?) as leafNo";
+		
+		return sqlUtil.search(sql, catNo);
+		
+	}
+	
+	/**
+	 * 品牌搜索
+	 * @param uid
+	 * @param pageParam
+	 * @return
+	 * @throws Exception
+	 */
+	public PageEntity<AttnBrand> getBrandSearchList(String uid, String category, String brandName, PageParam pageParam) throws Exception{
+		
+		String parentCatNo = "";//最底层类目编码
+		if(StringUtils.isNotBlank(category)){
+			String[] catArr = category.split(" » ");
+			parentCatNo = catArr[catArr.length - 1];
+		}
+		
+		Map<String, Object> leaf = this.getLeafListByCatNo2(parentCatNo);
+		
+		String catNoIns = parentCatNo;
+		if(leaf != null && !leaf.isEmpty() && leaf.get("leafNo") != null && !"".equals(leaf.get("leafNo").toString())){
+			catNoIns = StringUtils.strIn(leaf.get("leafNo").toString());
+		}
+		
+		this.getLeafListByCatNo2(parentCatNo);
+		
+		
+		String sql = "select t1.brand_name, t2.addid from ("
+				  +" SELECT distinct t.prop_value as brand_name FROM tbdaily.tb_tran_month_prop t" 
+				  +" where t.tran_month = ? and t.prop_name = '品牌' and t.cat_no in ("+catNoIns+") ";
+				  
+		
+		if(StringUtils.isNotBlank(brandName)){
+			sql += " and t.prop_value like '%"+brandName+"%' ";
+		}
+		
+		sql += " ) t1"
+			+" left join tbweb.tb_attn_brand t2 on t1.brand_name = t2.brand_name and t2.uid = ?";
+		
+		
+		List<AttnBrand> list = sqlUtil.searchList(AttnBrand.class, pageParam.buildSql(sql), DateUtils.getOffsetMonth(-1, "yyyy-MM"), uid);
+		
+		return PageEntity.getPageEntity(pageParam, list);
+		
+	}
+	
+	/**
+	 * 获取品牌关联的顶层类目
+	 * @param brandName
+	 * @return
+	 * @throws Exception
+	 */
+	public List<CatApi> getCatByBrand(String brandName) throws Exception{
+		
+		String sql = "select t1.cat_no as catNo, t2.cat_name as catName, t2.isparent as hasChild from ("
+				+" select distinct tbbase.getParentCatNo(t.cat_no) as cat_no from tbdaily.tb_tran_month_prop t where t.tran_month = ? and t.prop_name = '品牌' and t.prop_value = ?) t1"
+				+" join tbbase.tb_base_cat_api t2 on t1.cat_no = t2.cat_no";
+		
+		return sqlUtil.searchList(CatApi.class, sql, DateUtils.getOffsetMonth(-1, "yyyy-MM"), brandName);
+		
+	}
+	
+	private List<CatData> getCatDataByMonths(List<Map<String, Object>> leafList, String startMonth, String endMonth, String shopType, PageParam pageParam){
+		
+		StringBuffer sb = new StringBuffer();
+		 
+		sb.append("select t2.cat_no,t3.cat_name,t2.sales_volume, round(t2.sales_volume/sum(t2.sales_volume)*100,2) as volumeWeight,t2.sales_amount, round(t2.sales_amount/sum(t2.sales_amount)*100,2) as amountWeight,t2.tran_count, round(t2.tran_count/sum(t2.tran_count)*100,2) as countWeight from ("); 
+		
+		if(StringUtils.isBlank(startMonth)){
+			startMonth = DateUtils.getCurMonth();
+		}
+		if(StringUtils.isBlank(endMonth)){
+			endMonth = DateUtils.getCurMonth();
+		}
+		if(StringUtils.isBlank(shopType)){
+			shopType = FinalConstants.DEFAULT_SHOP_TYPE;
+		}
+		
+		for(int i = 0; i < leafList.size(); i++){
+			
+			Map<String, Object> leaf = leafList.get(i);
+			
+			sb.append(" select '").append(leaf.get("cat_no")).append("' as cat_no, ifnull(sum(t1.sales_volume),0) as sales_volume,ifnull(sum(t1.sales_amount),0) as sales_amount,ifnull(sum(t1.tran_count),0) as tran_count from tbdaily.tb_tran_month_cat t1")
+			.append(" where t1.cat_no in (").append(StringUtils.strIn(leaf.get("leafNo").toString())).append(")")
+			.append(" and str_to_date(t1.tran_month,'%Y-%m') between str_to_date('"+startMonth+"', '%Y-%m') and str_to_date('"+endMonth+"', '%Y-%m') ");
+			
+			if(!"ALL".equals(shopType)){
+				sb.append(" and t1.shop_type = '"+shopType+"'");
+			}
+			
+			if(i != leafList.size() - 1){
+				sb.append(" union all ");
+			}
+		}
+		
+		sb.append(" ) t2 left join tbbase.tb_base_cat_api t3 on t2.cat_no = t3.cat_no group by t2.cat_no");
+
+		String pageSql = "";
+		if(pageParam != null){
+			pageSql = pageParam.buildSql(sb.toString());
+		}else{
+			pageSql = sb.append(" order by t3.cat_name_single desc").toString();
+		}
+		
+		List<CatData> list = sqlUtil.searchList(CatData.class, pageSql);
+		
+		return list;
+	}
+	
+	private List<Map<String, Object>> getLeafListByCat(String catNos){
+		//查找类目对应的叶子节点
+		String sql = "select t1.cat_no,tbbase.getLeafLst(t1.cat_no) as leafNo from tbbase.tb_base_cat_api t1 where t1.cat_no in ("+StringUtils.strIn(catNos)+")";
+		
+		List<Map<String, Object>> leafList = sqlUtil.searchList(sql);
+		
+		return leafList;
+	}
+	
+	public List<CatData> getCateDatasByBrand(String catNos, String startMonth, String endMonth, String shopType, PageParam pageParam) throws Exception{
+		
+		List<Map<String, Object>> leafList = getLeafListByCat(catNos);
+		
+		List<CatData> list = getCatDataByMonths(leafList, startMonth, endMonth, shopType, pageParam);
+		
+		return list;
+		
+	}
+	
 	
 }

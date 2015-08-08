@@ -2005,7 +2005,7 @@ public class GoodsService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public PageEntity<HotGoods> getGoodsSearchList(String category, String shopName, String region, String shopType, String prdName, String notPrdName, String startAvgPrice, String endAvgPrice,
+	public PageEntity<HotGoods> getGoodsSearchList(String uid, String category, String shopName, String region, String shopType, String prdName, String notPrdName, String startAvgPrice, String endAvgPrice,
 		String startAvgPriceTranPre, String endAvgPriceTranPre, String startVolumePre, String endVolumePre, String startVolume, String endVolume, String startAmountPre, String endAmountPre,
 		String startAmount, String endAmount, PageParam pageParam) throws Exception{
 		
@@ -2117,9 +2117,13 @@ public class GoodsService extends BaseService {
 		
 		orderSql += " " + pageParam.getOrderDir();
 
-		String pageSql = "select t1.prd_img,t1.item_id,t1.prd_name,t2.shop_name,t2.shop_id,t2.shop_type,t3.avg_price,t4.avg_price_tran as avg_price_tran_pre,t3.sales_volume,t4.sales_volume as sales_volume_pre,"
+		String pageSql = "select concat_ws(',',tt2.shop_id, tt2.item_id) as asid, tt1.* from ("
+				+ " select t1.prd_img,t1.item_id,t1.prd_name,t2.shop_name,t2.shop_id,t2.shop_type,t3.avg_price,t4.avg_price_tran as avg_price_tran_pre,t3.sales_volume,t4.sales_volume as sales_volume_pre,"
 				  +" t3.sales_amount, t4.sales_amount as sales_amount_pre,t3.tran_count,t4.tran_count as tran_count_pre,t1.region, date_format(t3.createtime,'%Y-%m-%d') as createtime" 
-				  +  reSql +  orderSql + " limit " + pageParam.getStart() + ","+ pageParam.getLength();
+				  +  reSql +  orderSql + " limit " + pageParam.getStart() + ","+ pageParam.getLength()
+				  + " ) tt1"
+				  + " left join (select a1.shop_id, a1.item_id from tbweb.tb_attn_dir_detail a1 join tbweb.tb_attn_dir a2 on a2.adid = a1.adid"
+				  + " where a2.uid = '"+uid+"' group by a1.shop_id, a1.item_id)  tt2 on tt1.shop_id = tt2.shop_id and tt1.item_id = tt2.item_id";
 
 		List<HotGoods> pageList = sqlUtil.searchList(HotGoods.class, pageSql, params.toArray());
 

@@ -1,6 +1,7 @@
 package com.sanyanyu.syybi.servlet;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +16,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sanyanyu.syybi.entity.AttnBrand;
 import com.sanyanyu.syybi.entity.BrandList;
 import com.sanyanyu.syybi.entity.CatApi;
+import com.sanyanyu.syybi.entity.CatData;
+import com.sanyanyu.syybi.entity.HotGoods;
 import com.sanyanyu.syybi.entity.PageEntity;
 import com.sanyanyu.syybi.entity.PageParam;
 import com.sanyanyu.syybi.service.BrandService;
@@ -109,6 +113,93 @@ public class BrandAnalysisServlet extends BaseServlet {
 				logger.error("删除关注的品牌失败", e);
 			}
 
+		}else if("searchB".equals(m)){
+			
+			try {
+				// 获取商品类别
+				List<CatApi> catList = brandService.getCat("0", this.getUid(request));// 主营类目
+				request.setAttribute("catList", catList);
+			} catch (Exception e) {
+				logger.error("获取商品主类别失败", e);
+			}
+
+			request.getRequestDispatcher("/pages/brandSearch.jsp").forward(request, response);
+		}else if("brand_search".equals(m)){
+			
+			String category = request.getParameter("category");
+			String brandName = request.getParameter("brandName");
+			
+			try {
+				PageParam pageParam = PageParam.getPageParam(request);
+
+				PageEntity<AttnBrand> pageEntity = brandService.getBrandSearchList(this.getUid(request), category, brandName, pageParam);
+
+				JSONObject json = JSONObject.fromObject(pageEntity);
+				response.getWriter().print(json.toString());
+
+			} catch (Exception e) {
+				logger.error("获取品牌分析-品牌搜索数据表失败", e);
+			}
+			
+			
+			
+		}else if("batch_attned".equals(m)){//批量关注
+			try {
+				String brandNames = request.getParameter("brandNames");
+				
+				if (StringUtils.isNotBlank(brandNames)) {
+					
+					brandService.batchAttnedShop(this.getUid(request), brandNames);
+
+					JSONObject json = new JSONObject();
+					json.put("status", "1");
+					response.getWriter().print(json.toString());
+				}
+
+			} catch (Exception e) {
+				logger.error("批量关注品牌失败", e);
+			}
+			
+		}else if("brand_ind".equals(m)){
+			
+			String brandName = request.getParameter("brandName");
+			
+			if(StringUtils.isNotBlank(brandName)){
+				
+				brandName = new String(URLDecoder.decode(brandName, "utf-8"));//支持中文检索
+				
+				String catNos = "";
+				try {
+					List<CatApi> catList = brandService.getCatByBrand(brandName);
+					
+					for(int i = 0; i < catList.size(); i++){
+						
+						catNos += catList.get(i).getCatNo();
+						
+						if(i != catList.size() - 1){
+							catNos += ",";
+						}
+					}
+					
+					request.setAttribute("catList", catList);
+					request.setAttribute("catNos", catNos);
+					
+				} catch (Exception e) {
+					logger.error("获取品牌关联的顶层类目失败", e);
+				}
+				
+				try {
+					List<CatData> catDataList = brandService.getCateDatasByBrand(catNos, null, null, null, null);
+					
+					JSONArray json = JSONArray.fromObject(catDataList);
+					
+					request.setAttribute("catDataList", json.toString());
+				} catch (Exception e) {
+					logger.error("获取行业下的类目对应叶子节点的统计数据失败", e);
+				}
+			}
+			
+			request.getRequestDispatcher("/pages/brandIndAnalysis.jsp").forward(request, response);
 		}else{
 			
 			try {

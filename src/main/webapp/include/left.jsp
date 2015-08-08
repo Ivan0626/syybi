@@ -92,8 +92,8 @@
 			<b class="arrow"></b>
 		</li>
 
-		<li class="hover">
-			<a href="#">
+		<li class="hover" id="syy-dataCompare">
+			<a href="${ctx }/a/DataCompare">
 				<i class="menu-icon fa fa-balance-scale"></i>
 
 				<span class="menu-text">

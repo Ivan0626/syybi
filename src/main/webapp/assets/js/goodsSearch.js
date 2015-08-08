@@ -168,7 +168,6 @@ jQuery(function($) {
 				searchable: false,
 				orderable: false,
 				render : function(val, display, val_obj,prop) {
-					
 					if($.trim(val_obj.asid) != '' ){
 						return '已关注';
 					}else{
@@ -211,6 +210,22 @@ jQuery(function($) {
 	// 宝贝列表检索
 	$('#goods-search-btn').click(function() {
 
+		var category = [];
+		
+		$("select[name='cat'] option:selected").each(function(){
+			
+			var c = $(this).val();
+			if($.trim(c) != ''){
+				category.push(c);
+			}
+			
+		});
+		
+		if(category.length == 0){
+			showMsg("请选择商品类别");
+			return;
+		}
+		
 		$('#goodsDiv').show();
 		
 		if (goods_table) {

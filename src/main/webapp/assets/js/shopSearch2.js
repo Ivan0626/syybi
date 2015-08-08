@@ -173,6 +173,22 @@ jQuery(function($) {
 	// 宝贝列表检索
 	$('#rise-search-btn').click(function() {
 
+		var category = [];
+		
+		$("select[name='cat'] option:selected").each(function(){
+			
+			var c = $(this).val();
+			if($.trim(c) != ''){
+				category.push(c);
+			}
+			
+		});
+		
+		if(category.length == 0){
+			showMsg("请选择商品类别");
+			return;
+		}
+		
 		$('#shopDiv').show();
 		
 		if (shop_table) {

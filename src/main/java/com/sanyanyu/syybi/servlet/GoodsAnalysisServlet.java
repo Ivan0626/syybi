@@ -396,7 +396,7 @@ public class GoodsAnalysisServlet extends BaseServlet {
 			try {
 				PageParam pageParam = PageParam.getPageParam(request);
 
-				PageEntity<HotGoods> pageEntity = goodsService.getGoodsSearchList(category, shopName, region, shopType, prdName, notPrdName, startAvgPrice, endAvgPrice, 
+				PageEntity<HotGoods> pageEntity = goodsService.getGoodsSearchList(this.getUid(request), category, shopName, region, shopType, prdName, notPrdName, startAvgPrice, endAvgPrice, 
 						startAvgPriceTranPre, endAvgPriceTranPre, startVolumePre, endVolumePre, startVolume, endVolume, startAmountPre, endAmountPre, startAmount, endAmount, pageParam);
 
 				JSONObject json = JSONObject.fromObject(pageEntity);
