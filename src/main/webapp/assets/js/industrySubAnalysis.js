@@ -402,7 +402,7 @@ jQuery(function($) {
 
 		d.catNo = $('#selected-no').val();
 		d.startMonth = $('#d432113').val();
-		d.endMonth = $('#d432113').val();
+		d.endMonth = $('#d432223').val();
 		d.shopType = $('input[name="shopType3"]:checked').val();
 		
 		d.maxIndex = goods_config.maxIndex;
@@ -413,7 +413,7 @@ jQuery(function($) {
 			{
 				data : 'rowNum',
 				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
-					$(nTd).css('text-align', 'right').css('vertical-align', 'inherit');
+					$(nTd).css('text-align', 'center').css('vertical-align', 'inherit');
 				}
 			},
 			{
@@ -529,7 +529,7 @@ jQuery(function($) {
 
 		d.catNo = $('#selected-no').val();
 		d.startMonth = $('#d432114').val();
-		d.endMonth = $('#d432114').val();
+		d.endMonth = $('#d432224').val();
 		d.shopType = $('input[name="shopType4"]:checked').val();
 		
 		d.maxIndex = shop_config.maxIndex;
@@ -540,7 +540,7 @@ jQuery(function($) {
 			{
 				data : 'rowNum',
 				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
-					$(nTd).css('text-align', 'right').css('vertical-align', 'inherit');
+					$(nTd).css('text-align', 'center').css('vertical-align', 'inherit');
 				}
 			},
 			{
