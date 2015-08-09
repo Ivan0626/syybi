@@ -24,6 +24,7 @@ import com.sanyanyu.syybi.entity.HotGoods;
 import com.sanyanyu.syybi.entity.PageEntity;
 import com.sanyanyu.syybi.entity.PageParam;
 import com.sanyanyu.syybi.service.BrandService;
+import com.sanyanyu.syybi.service.CatService;
 
 /**
  * 品牌分析Servlet
@@ -38,11 +39,13 @@ public class BrandAnalysisServlet extends BaseServlet {
 	
 	private static Logger logger = LoggerFactory.getLogger(BrandAnalysisServlet.class);
 	private BrandService brandService;
+	private CatService catService;
        
     public BrandAnalysisServlet() {
         super();
         
         brandService = new BrandService();
+        catService = new CatService();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -189,7 +192,9 @@ public class BrandAnalysisServlet extends BaseServlet {
 				}
 				
 				try {
-					List<CatData> catDataList = brandService.getCateDatasByBrand(catNos, null, null, null, null);
+					
+					PageEntity<CatData> pageEntity = catService.getCateDatasByBrand(catNos, null, null, null, null);
+					List<CatData> catDataList = pageEntity.getData();
 					
 					JSONArray json = JSONArray.fromObject(catDataList);
 					

@@ -147,7 +147,7 @@ public class CatService extends BaseService {
 	}
 	
 	/**
-	 * 获取类目下的每个子类目的叶子节点
+	 * 获取类目下的每个子类目对应的叶子节点
 	 * @param catNo
 	 * @return
 	 */
@@ -156,6 +156,40 @@ public class CatService extends BaseService {
 		String sql = "select cat_no, ifnull(tbbase.getLeafLst(cat_no),cat_no) as leafNo from tbbase.tb_base_cat_api where parent_no = ?";
 		
 		return sqlUtil.searchList(sql, catNo);
+		
+	}
+	
+	/**
+	 * 获取指定catNos的叶子节点
+	 * @param catNos
+	 * @return
+	 */
+	private List<Map<String, Object>> getCatNosLeafList(String catNos){
+		//查找类目对应的叶子节点
+		String sql = "select t1.cat_no,tbbase.getLeafLst(t1.cat_no) as leafNo from tbbase.tb_base_cat_api t1 where t1.cat_no in ("+StringUtils.strIn(catNos)+")";
+		
+		List<Map<String, Object>> leafList = sqlUtil.searchList(sql);
+		
+		return leafList;
+	}
+	
+	/**
+	 * 品牌分析-行业分析
+	 * @param catNos
+	 * @param startMonth
+	 * @param endMonth
+	 * @param shopType
+	 * @param pageParam
+	 * @return
+	 * @throws Exception
+	 */
+	public PageEntity<CatData> getCateDatasByBrand(String catNos, String startMonth, String endMonth, String shopType, PageParam pageParam) throws Exception{
+		
+		List<Map<String, Object>> leafList = getCatNosLeafList(catNos);
+		
+		List<CatData> list = getCatDataByMonths(leafList, startMonth, endMonth, shopType, pageParam);
+		
+		return PageEntity.getPageEntity(pageParam, list);
 		
 	}
 	
@@ -361,6 +395,16 @@ public class CatService extends BaseService {
 	public List<Map<String, Object>> getIndTrends(String iid, String uid, String startMonth, String endMonth, String shopType) throws Exception{
 		
 		List<Map<String, Object>> leafList = getLeafListByIid(iid, uid);
+		
+		List<Map<String, Object>> list = getIndTrendDatas(leafList, startMonth, endMonth, shopType);
+		
+		return list;
+		
+	}
+	
+	public List<Map<String, Object>> getIndTrends(String catNos, String startMonth, String endMonth, String shopType) throws Exception{
+		
+		List<Map<String, Object>> leafList = this.getCatNosLeafList(catNos);
 		
 		List<Map<String, Object>> list = getIndTrendDatas(leafList, startMonth, endMonth, shopType);
 		

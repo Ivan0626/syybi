@@ -60,21 +60,27 @@ public class PageEntity<T> implements Serializable {
 
 		PageEntity<T> pageEntity = new PageEntity<T>();
 
-		if(pageParam.getLength() != -1 && pageParam.getTotalRecords() == 0){//分页的情况：特殊处理mysql查询为空，结果集却返回一行NULL值 TODO：查找原因
-			list = null;
+		if(pageParam != null){
+			if(pageParam.getLength() != -1 && pageParam.getTotalRecords() == 0){//分页的情况：特殊处理mysql查询为空，结果集却返回一行NULL值 TODO：查找原因
+				list = null;
+			}
+			
+			pageEntity.setData(list);
+			pageEntity.setDraw(pageParam.getDraw());
+			if (pageParam.getLength() == -1 && list != null) {//不分页
+				pageEntity.setRecordsFiltered(list.size());
+				pageEntity.setRecordsTotal(list.size());
+			}else{
+				pageEntity.setRecordsFiltered(pageParam.getTotalRecords());
+				pageEntity.setRecordsTotal(pageParam.getTotalRecords());
+			}
+
+		}else{
+			pageEntity.setData(list);
 		}
 		
-		pageEntity.setData(list);
-		pageEntity.setDraw(pageParam.getDraw());
-		if (pageParam.getLength() == -1 && list != null) {//不分页
-			pageEntity.setRecordsFiltered(list.size());
-			pageEntity.setRecordsTotal(list.size());
-		}else{
-			pageEntity.setRecordsFiltered(pageParam.getTotalRecords());
-			pageEntity.setRecordsTotal(pageParam.getTotalRecords());
-		}
-
 		return pageEntity;
+		
 	}
 
 }

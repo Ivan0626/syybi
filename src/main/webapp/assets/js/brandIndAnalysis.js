@@ -33,7 +33,7 @@ jQuery(function($) {
 			var chartWay = $('input[name="chartWay"]:checked').val();
 			if(chartType == 'bar'){
 				$.get(global.path+'/a/IndustryAnalysis', {
-					'iid': selectedNo,
+					'catNos': catNos,
 					'reType': reType,
 					'startMonth': startMonth,
 					'endMonth': endMonth,
@@ -51,7 +51,7 @@ jQuery(function($) {
 				
 			}else if(chartType == 'pie'){
 				$.get(global.path+'/a/IndustryAnalysis', {
-					'iid': selectedNo,
+					'catNos': catNos,
 					'reType': reType,
 					'startMonth': startMonth,
 					'endMonth': endMonth,
@@ -78,7 +78,7 @@ jQuery(function($) {
 
 				scale_config.data = function(d) {
 
-					d.iid = $('#selected-no').val();
+					d.catNos = $('#catNos').val();
 					d.reType = $('input[name="reType"]:checked').val();
 					d.startMonth = $('#d4321').val();
 					d.endMonth = $('#d4322').val();
@@ -185,7 +185,7 @@ jQuery(function($) {
 		}
 		
 		$.get(global.path+'/a/IndustryAnalysis', {
-			'iid': $('#selected-no').val(),
+			'catNos': $('#catNos').val(),
 			'reType': $('input[name="reType"]:checked').val(),
 			'startMonth': $('#d4321').val(),
 			'endMonth': $('#d4322').val(),
@@ -203,7 +203,7 @@ jQuery(function($) {
     	var endMonth = $('#d432222').val();
     	
     	$.get(global.path+'/a/IndustryAnalysis?m=ind_trend',{
-    		'iid': $('#selected-no').val(),
+    		'catNos': $('#catNos').val(),
     		'startMonth': startMonth,
 			'endMonth': endMonth,
 			'shopType': $('input[name="shopType2"]:checked').val()
@@ -333,7 +333,7 @@ jQuery(function($) {
     	var endMonth = $('#d432222').val();
     	
     	$.get(global.path+'/a/IndustryAnalysis?m=ind_trend',{
-    		'iid': $('#selected-no').val(),
+    		'catNos': $('#catNos').val(),
     		'startMonth': startMonth,
 			'endMonth': endMonth,
 			'shopType': $('input[name="shopType2"]:checked').val()
@@ -354,9 +354,9 @@ jQuery(function($) {
 		var chartType2 = $('input[name="chartType2"]:checked').val();
 		
 		//左侧类目树选中的行业或类目编号
-		var selectedNo = $('#selected-no').val();
-		if(!selectedNo){
-			showMsg('请选择左侧行业');
+		var catNos = $('#catNos').val();
+		if(!catNos){
+			showMsg('非法链接！');
 		}else{
 
 			if(chartType2 == 'data'){
@@ -412,7 +412,7 @@ jQuery(function($) {
 				};
 		    	
 		    	$.get(global.path+'/a/IndustryAnalysis', {
-					'iid': $('#selected-no').val(),
+					'catNos': $('#catNos').val(),
 					'reType': $('input[name="reType"]:checked').val(),
 					'startMonth': $('#d4321').val(),
 					'endMonth': $('#d4322').val(),

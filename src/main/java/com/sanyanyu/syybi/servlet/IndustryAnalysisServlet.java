@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,7 +65,14 @@ public class IndustryAnalysisServlet extends BaseServlet {
 				String endMonth = request.getParameter("endMonth");
 				String shopType = request.getParameter("shopType");
 				
-				PageEntity<CatData> pageEntity = catService.getCateDatasByIid2(iid, this.getUid(request), startMonth, endMonth, shopType, pageParam);
+				String catNos = request.getParameter("catNos");
+				
+				PageEntity<CatData> pageEntity = null;
+				if(StringUtils.isNotBlank(catNos)){
+					pageEntity = catService.getCateDatasByBrand(catNos, startMonth, endMonth, shopType, pageParam);
+				}else{
+					pageEntity = catService.getCateDatasByIid2(iid, this.getUid(request), startMonth, endMonth, shopType, pageParam);
+				}
 				
 				JSONObject json = JSONObject.fromObject(pageEntity);
 
@@ -102,8 +110,16 @@ public class IndustryAnalysisServlet extends BaseServlet {
 			String endMonth = request.getParameter("endMonth");
 			String shopType = request.getParameter("shopType");
 			
+			String catNos = request.getParameter("catNos");
+			
 			try {
-				List<Map<String, Object>> mapList = catService.getIndTrends(iid, this.getUid(request), startMonth, endMonth, shopType);
+				
+				List<Map<String, Object>> mapList = null;
+				if(StringUtils.isNotBlank(catNos)){
+					mapList = catService.getIndTrends(catNos, startMonth, endMonth, shopType);
+				}else{
+					mapList = catService.getIndTrends(iid, this.getUid(request), startMonth, endMonth, shopType);
+				}
 				
 				JSONArray json = JSONArray.fromObject(mapList);
 				

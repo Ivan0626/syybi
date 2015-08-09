@@ -2,12 +2,8 @@ package com.sanyanyu.syybi.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-
-import org.apache.commons.collections.map.HashedMap;
 
 import com.sanyanyu.syybi.constants.FinalConstants;
 import com.sanyanyu.syybi.entity.AdAnalysis;
@@ -19,7 +15,6 @@ import com.sanyanyu.syybi.entity.AdvertTaoke;
 import com.sanyanyu.syybi.entity.AdvertZTC;
 import com.sanyanyu.syybi.entity.AttDir;
 import com.sanyanyu.syybi.entity.AttDirDetail;
-import com.sanyanyu.syybi.entity.AttnShop;
 import com.sanyanyu.syybi.entity.CatApi;
 import com.sanyanyu.syybi.entity.CatData;
 import com.sanyanyu.syybi.entity.ChngName;
@@ -217,29 +212,29 @@ public class GoodsService extends BaseService {
 	/**
 	 * 批量关注
 	 * @param uid
-	 * @param shopId
-	 * @param shopName
-	 * @return
+	 * @param adid
+	 * @param itemIds
 	 * @throws Exception
 	 */
-	public void attnedShop(String uid, String shopIds) throws Exception {
+	public void attnedGoods(String uid, String adid, String itemIds) throws Exception {
 
-		String[] shopIdArr = shopIds.split(",");
+		String[] itemIdArr = itemIds.split(",");
 		
-		List<AttnShop> list = new ArrayList<AttnShop>();
-		for(String shopId : shopIdArr){
+		List<AttDirDetail> list = new ArrayList<AttDirDetail>();
+		for(String itemId : itemIdArr){
 			
-			String[] sArr = shopId.split("@");
+			String[] iArr = itemId.split("@");
 			
-			AttnShop shop = new AttnShop();
-			shop.setAsid(SysUtil.getUUID());
-			shop.setShopId(sArr[0]);
-			shop.setShopName(sArr[1]);
-			shop.setUid(uid);
-			shop.setAttType(1);
-			list.add(shop);
+			AttDirDetail detail = new AttDirDetail();
+			
+			detail.setAddid(SysUtil.getUUID());
+			detail.setAdid(adid);
+			detail.setItem_id(iArr[0]);
+			detail.setShop_id(iArr[1]);
+			
+			list.add(detail);
 		}
-		sqlUtil.batchInsert(AttnShop.class, list);
+		sqlUtil.batchInsert(AttDirDetail.class, list);
 	}
 
 	/**

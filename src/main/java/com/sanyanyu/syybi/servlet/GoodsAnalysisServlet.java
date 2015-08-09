@@ -2,7 +2,6 @@ package com.sanyanyu.syybi.servlet;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -407,6 +406,28 @@ public class GoodsAnalysisServlet extends BaseServlet {
 			}
 			
 			
+			
+		}else if("batch_attned".equals(m)){//批量关注
+			
+			JSONObject json = new JSONObject();
+			try {
+				
+				String adid = request.getParameter("adid");
+				String itemIds = request.getParameter("itemIds");
+				
+				if (StringUtils.isNotBlank(itemIds)) {
+					
+					goodsService.attnedGoods(this.getUid(request), adid, itemIds);
+
+					json.put("status", "1");
+				}
+
+			} catch (Exception e) {
+				logger.error("批量关注宝贝失败", e);
+				json.put("status", "0");
+			}
+			
+			response.getWriter().print(json.toString());
 			
 		} else{
 			

@@ -239,28 +239,37 @@ jQuery(function($) {
 	// 批量关注
 	$('#batch-attn-btn').click(function() {
 		
-		var shopIds = [];
+		var itemIds = [];
 		
-		$('input[name="shopIds"]:checked').each(function(){
+		$('input[name="itemIds"]:checked').each(function(){
 			
-			shopIds.push($(this).val());
+			itemIds.push($(this).val());
 			
 		});
 
-		if (shopIds.length == 0) {
+		if (itemIds.length == 0) {
 			showMsg("至少选择一项");
 			return;
 		}
 		
-		$.post(global.path + '/a/ShopAnalysis', {
-			'shopIds' : shopIds.join(','),
+		$.post(global.path + '/a/GoodsAnalysis', {
+			'itemIds' : itemIds.join(','),
+			'adid' : $('#toDir').val(),
 			'm' : "batch_attned"
 		}, function(result) {
 
 			if (result.status === '1') {
-				showMsg("店铺关注成功");
+				showMsg("宝贝关注成功", function(){
+					
+					if (goods_table) {
+						goods_table.fnDraw();
+					}else{
+						goods_table = loadDataTable(goods_config);
+					}
+					
+				});
 			} else {
-				showMsg("店铺关注失败");
+				showMsg("宝贝关注失败");
 			}
 		}, 'json');
 
