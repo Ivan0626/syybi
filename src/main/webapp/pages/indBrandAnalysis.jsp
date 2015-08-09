@@ -335,10 +335,15 @@
 							<div class="row" id="tableDiv3">
 								<div class="col-xs-12">
 									
-									<button class="pull-right btn btn-xs btn-success" id="batch-attn-btn" style="margin-top:5px;margin-left:10px;">
-										<i class="ace-icon fa fa-check"></i>
-										批量关注
-									</button>
+									<div class="pull-right" style="margin-top: 15px;">
+										<select id="toDir" name="toDir">
+										</select>
+										
+										<button class="btn btn-xs btn-success" id="batch-attn-btn" style="top:-3px;">
+											<i class="ace-icon fa fa-check"></i>
+											批量关注
+										</button>
+									</div>
 								
 									<!-- div.dataTables_borderWrap -->
 									<div>

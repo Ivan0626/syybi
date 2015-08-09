@@ -141,6 +141,9 @@ jQuery(function($) {
 						+ '" class="ace" />' + '<span class="lbl"></span>' + '</label>';
 					}
 					return '';
+				},
+				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+					$(nTd).css('text-align', 'center').css('vertical-align', 'inherit');
 				}
 			} ];
 	
@@ -221,7 +224,15 @@ jQuery(function($) {
 		}, function(result) {
 
 			if (result.status === '1') {
-				showMsg("店铺关注成功");
+				showMsg("店铺关注成功", function(){
+					
+					if (shop_table) {
+						shop_table.fnDraw();
+					} else {
+						shop_table = loadDataTable(shop_config);
+					}
+					
+				});
 			} else {
 				showMsg("店铺关注失败");
 			}

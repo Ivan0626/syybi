@@ -461,7 +461,7 @@ public class CatService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public PageEntity<HotGoods> getHotGoods(String catNo, String startMonth, String endMonth, String shopType, PageParam pageParam, String flag) throws Exception{
+	public PageEntity<HotGoods> getHotGoods(String uid, String catNo, String startMonth, String endMonth, String shopType, PageParam pageParam, String flag) throws Exception{
 		
 		String catNoIns = "";
 		if("ind".equals(flag)){
@@ -477,7 +477,8 @@ public class CatService extends BaseService {
 		params.add(startMonth);
 		params.add(endMonth);
 		
-		sb.append(" select (@rowNum:=@rowNum+1) as rowNum,t2.prd_img,t2.prd_name,t1.avg_price, round(avg(t1.avg_price_tran),2) as avg_price_tran,sum(t1.sales_volume) as sales_volume,sum(t1.sales_amount) as sales_amount,")
+		sb.append(" select concat_ws(',',tt2.shop_id, tt2.item_id) as asid, tt1.* from (")
+		 .append(" select (@rowNum:=@rowNum+1) as rowNum,t2.prd_img,t2.prd_name,t1.avg_price, round(avg(t1.avg_price_tran),2) as avg_price_tran,sum(t1.sales_volume) as sales_volume,sum(t1.sales_amount) as sales_amount,")
 		.append(" sum(t1.tran_count) as tran_count,t1.shop_name,t1.shop_id,t1.shop_type,t2.region,t2.item_id from  tbdaily.tb_tran_month t1 ")
 		.append(" join tbbase.tb_base_product t2 on t1.shop_id = t2.shop_id and t1.item_id = t2.item_id,(Select (@rowNum :=0) ) tt")
 		.append(" where str_to_date(t1.tran_month,'%Y-%m') between str_to_date(?, '%Y-%m') and str_to_date(?, '%Y-%m')");
@@ -492,6 +493,12 @@ public class CatService extends BaseService {
 		String pageSql = pageParam.buildSql(sb.toString());
 		
 		pageSql += " limit 0, 100";
+		
+		pageSql += ") tt1"
+				+" left join (select a1.shop_id, a1.item_id from tbweb.tb_attn_dir_detail a1 join tbweb.tb_attn_dir a2 on a2.adid = a1.adid"
+				+" where a2.uid = ? group by a1.shop_id, a1.item_id)  tt2 on tt1.shop_id = tt2.shop_id and tt1.item_id = tt2.item_id";
+		
+		params.add(uid);
 		
 		List<HotGoods> list = sqlUtil.searchList(HotGoods.class, pageSql, params.toArray());
 		
@@ -509,7 +516,7 @@ public class CatService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public PageEntity<HotShop> getHotShops(String catNo, String startMonth, String endMonth, String shopType, PageParam pageParam, String flag) throws Exception{
+	public PageEntity<HotShop> getHotShops(String uid, String catNo, String startMonth, String endMonth, String shopType, PageParam pageParam, String flag) throws Exception{
 		
 		String catNoIns = "";
 		if("ind".equals(flag)){
@@ -526,7 +533,8 @@ public class CatService extends BaseService {
 		params.add(startMonth);
 		params.add(endMonth);
 		
-		sb.append(" select (@rowNum:=@rowNum+1) as rowNum, t4.shop_name,t4.shop_img,t4.region,t3.sales_volume,t3.sales_amount,t3.tran_count,t3.shop_id,t4.shop_type from (")
+		sb.append("select tt2.asid, tt1.* from (")
+		.append(" select (@rowNum:=@rowNum+1) as rowNum, t4.shop_name,t4.shop_img,t4.region,t3.sales_volume,t3.sales_amount,t3.tran_count,t3.shop_id,t4.shop_type from (")
 		.append(" select t1.shop_id,sum(t1.sales_volume) as sales_volume,sum(t1.sales_amount) as sales_amount,")
 		.append(" sum(t1.tran_count) as tran_count from  tbdaily.tb_tran_month t1")
 		.append(" join tbbase.tb_base_product t2 on t1.shop_id = t2.shop_id and t1.item_id = t2.item_id")
@@ -543,6 +551,11 @@ public class CatService extends BaseService {
 		String pageSql = pageParam.buildSql(sb.toString());
 		
 		pageSql += " limit 0, 100";
+		
+		pageSql += ") tt1"
+				+"  left join tbweb.tb_attn_shop tt2 on tt1.shop_id = tt2.shop_id and tt2.uid = ? and tt2.att_type = 1";
+		
+		params.add(uid);
 		
 		List<HotShop> list = sqlUtil.searchList(HotShop.class, pageSql, params.toArray());
 		

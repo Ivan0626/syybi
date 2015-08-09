@@ -393,12 +393,28 @@ jQuery(function($) {
 		d.maxIndex = goods_config.maxIndex;
 
 	};
+	
+	goods_config.initComplete = function (settings, json) {
+		
+		if(json.extList && json.extList.length > 0){
+			
+			var html = '';
+			$.each(json.extList, function(idx, d){
+				
+				html += '<option value="'+d.adid+'">'+d.dir_name+'</option>';
+				
+			});
+			
+			$('#toDir').html(html);
+		}
+		
+    };
 
 	goods_config.columns = [
 			{
 				data : 'rowNum',
 				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
-					$(nTd).css('text-align', 'right').css('vertical-align', 'inherit');
+					$(nTd).css('text-align', 'center').css('vertical-align', 'inherit');
 				}
 			},
 			{
@@ -470,24 +486,46 @@ jQuery(function($) {
 				searchable: false,
 				orderable: false,
 				render : function(val, display, val_obj,prop) {
-					
-					//TODO：宝贝关注
-//					if($.trim(val_obj.asid) != '' ){
-//						return '已关注';
-//					}else{
-//						return '<label class="pos-rel">' + '<input type="checkbox" name="shopIds" value="' + val + "@" + val_obj.shop_name
-//						+ '" class="ace" />' + '<span class="lbl"></span>' + '</label>';
-//					}
-//					return '';
-					
-					return '<label class="pos-rel">' + '<input type="checkbox" name="shopIds" value="' + val + "@" + val_obj.prd_name
-					+ '" class="ace" />' + '<span class="lbl"></span>' + '</label>';
+					if($.trim(val_obj.asid) != '' ){
+						return '已关注';
+					}else{
+						return '<label class="pos-rel">' + '<input type="checkbox" name="itemIds" value="' + val + "@" + val_obj.shop_id
+						+ '" class="ace" />' + '<span class="lbl"></span>' + '</label>';
+					}
+					return '';
+				},
+				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+					$(nTd).css('text-align', 'center').css('vertical-align', 'inherit');
 				}
 			} ];
 
 	// 初始加载
 	var goods_table = null;//loadDataTable(goods_config);
 
+	var active_class = 'active';
+	$('#goods-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function() {
+		var th_checked = this.checked;// checkbox inside "TH" table
+		// header
+
+		$(this).closest('table').find('tbody > tr').each(function() {
+			var row = this;
+			if (th_checked)
+				$(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
+			else
+				$(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
+		});
+	});
+
+	// select/deselect a row when the checkbox is checked/unchecked
+	$('#goods-table').on('click', 'td input[type=checkbox]', function() {
+		var $row = $(this).closest('tr');
+		if (this.checked)
+			$row.addClass(active_class);
+		else
+			$row.removeClass(active_class);
+	});
+	
+	
 	// 检索
 	$('#search-goods-btn').click(function() {
 
@@ -498,6 +536,45 @@ jQuery(function($) {
 				goods_table = loadDataTable(goods_config);
 			}
     	}
+
+	});
+	
+	// 批量关注
+	$('#batch-attn-btn').click(function() {
+		
+		var itemIds = [];
+		
+		$('input[name="itemIds"]:checked').each(function(){
+			
+			itemIds.push($(this).val());
+			
+		});
+
+		if (itemIds.length == 0) {
+			showMsg("至少选择一项");
+			return;
+		}
+		
+		$.post(global.path + '/a/GoodsAnalysis', {
+			'itemIds' : itemIds.join(','),
+			'adid' : $('#toDir').val(),
+			'm' : "batch_attned"
+		}, function(result) {
+
+			if (result.status === '1') {
+				showMsg("宝贝关注成功", function(){
+					
+					if (goods_table) {
+						goods_table.fnDraw();
+					}else{
+						goods_table = loadDataTable(goods_config);
+					}
+					
+				});
+			} else {
+				showMsg("宝贝关注失败");
+			}
+		}, 'json');
 
 	});
 	

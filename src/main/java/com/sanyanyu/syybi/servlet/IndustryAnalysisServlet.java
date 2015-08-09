@@ -22,6 +22,7 @@ import com.sanyanyu.syybi.entity.PageEntity;
 import com.sanyanyu.syybi.entity.PageParam;
 import com.sanyanyu.syybi.service.AccountSettingService;
 import com.sanyanyu.syybi.service.CatService;
+import com.sanyanyu.syybi.service.GoodsService;
 
 /**
  * 行业分析Servlet
@@ -39,6 +40,7 @@ public class IndustryAnalysisServlet extends BaseServlet {
 	
 	private AccountSettingService accountSettingService;
 	private CatService catService;
+	private GoodsService goodsService;
 	
     public IndustryAnalysisServlet() {
         super();
@@ -49,6 +51,7 @@ public class IndustryAnalysisServlet extends BaseServlet {
     	super.init();
     	accountSettingService = new AccountSettingService();
     	catService = new CatService();
+    	goodsService = new GoodsService();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -162,7 +165,10 @@ public class IndustryAnalysisServlet extends BaseServlet {
 				
 				PageParam pageParam = PageParam.getPageParam(request);
 				
-				PageEntity<HotGoods> pageEntity = catService.getHotGoods(catNo, startMonth, endMonth, shopType, pageParam, "ind");
+				PageEntity<HotGoods> pageEntity = catService.getHotGoods(this.getUid(request), catNo, startMonth, endMonth, shopType, pageParam, "ind");
+				
+				List<Map<String, Object>> dirList = goodsService.getAttnedDirs(this.getUid(request));
+				pageEntity.setExtList(dirList);;
 				
 				JSONObject json =  JSONObject.fromObject(pageEntity);
 				
@@ -184,7 +190,7 @@ public class IndustryAnalysisServlet extends BaseServlet {
 				
 				PageParam pageParam = PageParam.getPageParam(request);
 				
-				PageEntity<HotShop> pageEntity = catService.getHotShops(catNo, startMonth, endMonth, shopType, pageParam, "ind");
+				PageEntity<HotShop> pageEntity = catService.getHotShops(this.getUid(request), catNo, startMonth, endMonth, shopType, pageParam, "ind");
 				
 				JSONObject json =  JSONObject.fromObject(pageEntity);
 				
@@ -246,7 +252,10 @@ public class IndustryAnalysisServlet extends BaseServlet {
 				
 				PageParam pageParam = PageParam.getPageParam(request);
 				
-				PageEntity<HotGoods> pageEntity = catService.getHotGoods(catNo, startMonth, endMonth, shopType, pageParam, "brand");
+				PageEntity<HotGoods> pageEntity = catService.getHotGoods(this.getUid(request), catNo, startMonth, endMonth, shopType, pageParam, "brand");
+				
+				List<Map<String, Object>> dirList = goodsService.getAttnedDirs(this.getUid(request));
+				pageEntity.setExtList(dirList);;
 				
 				JSONObject json =  JSONObject.fromObject(pageEntity);
 				
@@ -268,7 +277,7 @@ public class IndustryAnalysisServlet extends BaseServlet {
 				
 				PageParam pageParam = PageParam.getPageParam(request);
 				
-				PageEntity<HotShop> pageEntity = catService.getHotShops(catNo, startMonth, endMonth, shopType, pageParam, "brand");
+				PageEntity<HotShop> pageEntity = catService.getHotShops(this.getUid(request), catNo, startMonth, endMonth, shopType, pageParam, "brand");
 				
 				JSONObject json =  JSONObject.fromObject(pageEntity);
 				

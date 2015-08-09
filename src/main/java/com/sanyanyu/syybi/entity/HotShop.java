@@ -31,6 +31,14 @@ public class HotShop implements Serializable {
 	private String shop_url;
 	private String shop_type;
 	
+	private String asid;
+	
+	public String getAsid() {
+		return asid;
+	}
+	public void setAsid(String asid) {
+		this.asid = asid;
+	}
 	public String getShop_type() {
 		return shop_type;
 	}

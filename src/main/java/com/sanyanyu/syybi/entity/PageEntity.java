@@ -2,6 +2,7 @@ package com.sanyanyu.syybi.entity;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 分页参数Entity
@@ -22,6 +23,16 @@ public class PageEntity<T> implements Serializable {
 	private long recordsTotal;// 总记录数
 	private long recordsFiltered = 0;// 符合查询条件的总记录数
 	private long draw;// 请求次数
+	
+	private List<Map<String, Object>> extList;//扩展属性
+
+	public List<Map<String, Object>> getExtList() {
+		return extList;
+	}
+
+	public void setExtList(List<Map<String, Object>> extList) {
+		this.extList = extList;
+	}
 
 	public List<T> getData() {
 		return data;
