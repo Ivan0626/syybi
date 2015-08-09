@@ -7,16 +7,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>宝贝列表</title>
+<title>数据对比</title>
 
 <link rel="stylesheet" href="../assets/css/syybi.css" />
 
 </head>
 <body>
-	
-	<input type="hidden" id="searchType">
-	<input type="hidden" id="toCat">
-	<input type="hidden" id="adid" value="${param.adid }">
 	
 	<!-- /section:basics/navbar.layout -->
 	<div class="main-container" id="main-container">
@@ -136,81 +132,29 @@
 													
 													<label style="width:100px;">1:</label>
 												
-													<select id="select_1_1" name="select_1_1"
-														onchange="select_compare_type(1)">
+													<select id="select_1_1" name="select_1_1" onchange="select_compare_type(1)">
 														<option value="0">请选择比较项</option>
 														<option value="1">店铺</option>
 														<option value="2">行业</option>
-												
 														<option value="3">品牌</option>
 													</select>
-													<select id="select_1_2" name="select_1_2" ><option
-															value="1">天猫</option></select>
-													<select id="select_1_3" name="select_1_3"
-														style="width: 150px; z-index: -1;"><option value="27">J
-															- 家装主材</option></select>
-													<select id="select_1_4" name="select_1_4"
-														style="width: 150px; z-index: -1;"><option value="0"
-															selected="">选择类目</option>
-														<option value="122960001">B - 背景墙软包/床头套/工艺软包</option>
-														<option value="50002409">C - 厨房</option>
-														<option value="50022270">C - 瓷砖</option>
-														<option value="50022271">D - 地板</option>
-														<option value="50019935">D - 灯具灯饰</option>
-														<option value="50008725">E - 二手/闲置专区</option>
-														<option value="50013217">G - 光源</option>
-														<option value="2159">H - 环保/除味/保养</option>
-														<option value="50019835">J - 集成吊顶</option>
-														<option value="50020966">L - 晾衣架/晾衣杆</option>
-														<option value="120850004">O - O2O专用（天猫专用）</option>
-														<option value="50008321">Q - 其它</option>
-														<option value="50013322">Q - 墙纸</option>
-														<option value="50020007">W - 卫浴用品</option>
-														<option value="50013222">Y - 油漆</option>
-														<option value="50020573">Y - 浴霸</option></select>
-													<select id="select_1_5" name="select_1_5"
-														style="width: 150px; z-index: -1;"><option value="0"
-															selected="">选择类目</option>
-														<option value="50024948">B - 背景墙软包</option>
-														<option value="50024950">C - 床头套</option>
-														<option value="50020748">G - 工艺软包</option>
-														<option value="50024949">T - 天花板软包</option></select>
-													<select id="select_1_6" name="select_1_6"
-														style="width: 150px; z-index: -1;"><option value="0"
-															selected="">选择属性</option>
-														<option value="2">图案</option>
-														<option value="9">型号</option>
-														<option value="4">软包表面材质</option>
-														<option value="1">颜色分类</option>
-														<option value="3">风格</option></select>
-													<select id="select_1_7" name="select_1_7"
-														style="width: 150px; z-index: -1;"><option value="其他/other">其他/other</option>
-														<option value="几何图案">几何图案</option>
-														<option value="卡通动漫">卡通动漫</option>
-														<option value="叶子">叶子</option>
-														<option value="喜庆">喜庆</option>
-														<option value="圆圈">圆圈</option>
-														<option value="心形">心形</option>
-														<option value="条纹">条纹</option>
-														<option value="格子">格子</option>
-														<option value="植物花卉">植物花卉</option>
-														<option value="纯色">纯色</option>
-														<option value="风景">风景</option></select>
+													<span id="type_append_1"></span>
 												</div>
 												
 												<div class="widget-elem">
 													
 													<label style="width:100px;">2:</label>
 												
-													<select id="select_1_1" name="select_1_1"
-														onchange="select_compare_type(1)">
+													<select id="select_2_1" name="select_2_1" onchange="select_compare_type(2)">
 														<option value="0">请选择比较项</option>
 														<option value="1">店铺</option>
 														<option value="2">行业</option>
-												
 														<option value="3">品牌</option>
 													</select>
-													<a href="javascript:" id="del_old" hidefocus="true" style="outline: none"><img alt="删除选项" title="删除选项" src="${ctx }/assets/imagesLocal/op_delete.png" onclick="deloldItem()"></a>
+													<span id="type_append_2"></span>
+													<a href="javascript:" id="del_old" hidefocus="true" style="outline: none">
+														<img alt="删除选项" title="删除选项" src="${ctx }/assets/imagesLocal/op_delete.png" onclick="deloldItem()">
+													</a>
 												</div>
 												
 												<div class="form-actions center" style="margin:0 auto;padding: 9px 10px 0;">
@@ -267,7 +211,6 @@
 	<!-- page specific plugin scripts -->
 	<script src="../assets/js/dataTables/jquery.dataTables.js"></script>
 	<script src="../assets/js/dataTables/jquery.dataTables.bootstrap.js"></script>
-	<script src="../assets/js/typeahead.bundle.js"></script>
 	
 	<script src="../assets/js/My97DatePicker/WdatePicker.js"></script>
 	<script src="../assets/js/bootbox.js"></script>
@@ -278,19 +221,10 @@
 	<script src="../assets/js/option9.js"></script>
 	
 	<script src="../assets/js/common.js"></script>
-	<script src="../assets/js/columns.js"></script>
 	<script src="../assets/js/dataCompare.js"></script>
 
 	<!-- inline scripts related to this page -->
 	<script type="text/javascript">
-	
-		var dirGoodsList = {};
-		dirGoodsList.adid = "${param.adid}";
-		dirGoodsList.dirName = encodeURI("${param.dirName}");// 编码
-		dirGoodsList.tab = "${param.tab}";
-		
-		dirGoodsList.startAvgPrice = "${priceMap.avg_price_min - 0.01 }";
-		dirGoodsList.endAvgPrice = "${priceMap.avg_price_max + 0.01 }";
 		
 	</script>	
 </body>

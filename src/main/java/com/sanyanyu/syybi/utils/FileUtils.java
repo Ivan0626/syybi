@@ -1,16 +1,24 @@
 package com.sanyanyu.syybi.utils;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.sanyanyu.syybi.constants.FinalConstants;
 
 /**
  * 文件操作工具类
@@ -392,12 +400,14 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		}
 
 	}
+
 	/***
 	 * 将内容添加到文件中
+	 * 
 	 * @param fileName
 	 * @param content
 	 */
-	
+
 	public static void appendFile(String fileName, String content) {
 		try {
 			// 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件
@@ -408,7 +418,6 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			e.printStackTrace();
 		}
 	}
-	
 
 	/**
 	 * 将内容写入文件
@@ -430,6 +439,37 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static List<String> readTxtFile(String filePath) {
+
+		File file = new File(filePath);
+		return readTxtFile(file);
+
+	}
+	
+	public static List<String> readTxtFile(File file) {
+
+		List<String> lineList = new ArrayList<String>();
+		
+		try {
+			if (file.isFile() && file.exists()) { // 判断文件是否存在
+				InputStreamReader read = new InputStreamReader(new FileInputStream(file), FinalConstants.ENCODING);// 考虑到编码格式
+				BufferedReader bufferedReader = new BufferedReader(read);
+				String lineTxt = null;
+				while ((lineTxt = bufferedReader.readLine()) != null) {
+					lineList.add(lineTxt);
+					//log.info(lineTxt);
+				}
+				read.close();
+			} else {
+				log.info("找不到指定的文件");
+			}
+		} catch (Exception e) {
+			log.error("读取文件内容出错", e);
+		}
+
+		return lineList;
 	}
 
 }

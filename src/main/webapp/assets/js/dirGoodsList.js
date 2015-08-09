@@ -395,6 +395,67 @@ jQuery(function($) {
 		
 	});
 	
+	$('#goods-upload').click(function(){
+		
+		var message = '<form id="fileForm" target="id_iframe" action="'+global.path+'/a/fUploadServlet" method="post" enctype="multipart/form-data">';
+		message += '<div class="row placeholders">'
+						+'<input type="hidden" name="adid" value="'+$('#adid').val()+'"/>'
+						+'<div class="form-group col-sm-12 control-label">'
+					    	+'<div class="col-sm-9">'
+					    		+'<input type="file" id="linkFile" name="linkFile">'
+					    	+'</div>'
+					    	+'<div  class="col-sm-3">（仅支持TXT格式）</div>'
+					    +'</div>'
+					+'</div>';    
+		message += '</form>';
+				  	
+		
+		//上传链接文件
+		bootbox.dialog({
+			message: message,
+			buttons: 			
+			{
+				"success" :
+				 {
+					"label" : "<i class='ace-icon fa fa-check'></i> 提交",
+					"className" : "btn-sm btn-success",
+					"callback": function() {
+						
+						//文件格式校验
+			         	var file = $("#linkFile").val();
+			        	if(!file) {
+			        		return false;
+			        	} else {
+			        		var index = file.lastIndexOf(".");
+				        	if(index < 0) {
+				        		showMsg("仅支持TXT格式！");
+				        		return false;
+				        	} else {
+				        		var ext = file.substring(index + 1, file.length);
+				        		if(ext == "txt" || ext == "TXT") {
+				        			
+				        			//提交表单
+				        			$("#fileForm").submit();
+				        			//TODO:提交成功后，刷新父页面
+//				        			if (goods_table) {
+//				        				goods_table.fnDraw();
+//				        			}
+				        			
+				        		}else{
+				        			showMsg("仅支持TXT格式！");
+				        			return false;
+				        		}
+			        		}
+			        	}
+						
+						
+					}
+				}
+			}
+		});
+		
+	});
+	
 	// =======================================================宝贝跟踪=================================================================
 	// dataTables配置
 	var gen_config = {};

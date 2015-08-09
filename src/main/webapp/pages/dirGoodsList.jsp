@@ -20,6 +20,8 @@
 	<input type="hidden" id="toCat">
 	<input type="hidden" id="adid" value="${param.adid }">
 	
+	<iframe id="id_iframe" name="id_iframe" style="display:none;"></iframe> 
+	
 	<!-- /section:basics/navbar.layout -->
 	<div class="main-container" id="main-container">
 		<script type="text/javascript">

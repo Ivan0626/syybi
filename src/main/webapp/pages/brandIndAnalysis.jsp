@@ -494,7 +494,7 @@
 						}
 						
 						//$('.breadcrumb').append('<li class="active"><a href="javascript:void(0);" data-no="'+parentCat.catNo+'" onclick=\"loadInd(\''+parentCat.catNo+'\', \''+parentCat.catName+'\')\">'+parentCat.catName+'</a></li>');
-						$('.breadcrumb').append('<li class="active"><a href="javascript:void(0);" data-no="'+catNo+'" onclick=\"loadCat(\''+catNo+'\', \''+catName+'\')\">'+catName+'</a></li>');
+						$('.breadcrumb').append('<li class="active"><a href="javascript:void(0);" data-no="'+catNo+'" onclick=\"loadProp(\''+catNo+'\', \''+catName+'\')\">'+catName+'</a></li>');
 						
 						$('.breadcrumb').append('<li class="active">各品牌规模 (子类报表)</li>');
 						

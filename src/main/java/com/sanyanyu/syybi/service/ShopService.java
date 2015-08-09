@@ -1716,11 +1716,11 @@ public class ShopService extends BaseService {
 				 +" t2.sales_volume,t3.sales_volume as pre_sales_volume,t2.tran_count,t3.tran_count as pre_tran_count,"
 				 +" t1.shop_id, t1.seller, t1.shop_img, t4.html_source FROM tbbase.tb_base_shop t1"
 				 +" left join tbdaily.tb_tran_month_shop t2 on t1.shop_id = t2.shop_id and t2.tran_month = ?"
-				 +" left join tbdaily.tb_tran_month_shop t3 on t1.shop_id = t3.shop_id and t2.tran_month = ?"
+				 +" left join tbdaily.tb_tran_month_shop t3 on t1.shop_id = t3.shop_id and t3.tran_month = ?"
 				 +" left join tbbase.tb_shop t4 on t1.shop_id = t4.shop_id"
 				 +" where t1.shop_id = ?";
 		 
-		 return sqlUtil.search(ShopSearch.class, sql, DateUtils.getCurMonth(), DateUtils.getOffsetMonth(-1), shopId);
+		 return sqlUtil.search(ShopSearch.class, sql, DateUtils.getCurMonth(), DateUtils.getOffsetMonth(-1, "yyyy-MM"), shopId);
 		
 	}
 	

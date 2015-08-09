@@ -213,4 +213,15 @@
     <url-pattern>/a/PayOkServlet</url-pattern>
   </servlet-mapping>
   
+   <servlet>
+    <description></description>
+    <display-name>FileUploadServlet</display-name>
+    <servlet-name>FileUploadServlet</servlet-name>
+    <servlet-class>com.sanyanyu.syybi.servlet.FileUploadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FileUploadServlet</servlet-name>
+    <url-pattern>/a/fUploadServlet</url-pattern>
+  </servlet-mapping>
+  
 </web-app>

@@ -24,6 +24,7 @@ import com.sanyanyu.syybi.entity.GoodsList;
 import com.sanyanyu.syybi.entity.HotGoods;
 import com.sanyanyu.syybi.entity.PageEntity;
 import com.sanyanyu.syybi.entity.PageParam;
+import com.sanyanyu.syybi.service.DataCompareService;
 import com.sanyanyu.syybi.service.GoodsService;
 import com.sanyanyu.syybi.utils.StringUtils;
 import com.sanyanyu.syybi.utils.SysUtil;
@@ -41,20 +42,49 @@ public class DataCompareServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private static Logger logger = LoggerFactory.getLogger(DataCompareServlet.class);
-	private GoodsService goodsService;
+	private DataCompareService dataCompareService;
        
     public DataCompareServlet() {
         super();
         
-        goodsService = new GoodsService();
+        dataCompareService = new DataCompareService();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String m = request.getParameter("m");
 		
-		if ("xxx".equals(m)) {
+		if ("shop".equals(m)) {
 
+			String shopType = request.getParameter("shopType");
+			
+			try {
+				List<Map<String, Object>> mapList = dataCompareService.getShopList(this.getUid(request), shopType);
+				
+				JSONArray json = JSONArray.fromObject(mapList);
+				
+				response.getWriter().write(json.toString());
+				
+			} catch (Exception e) {
+				logger.error("获取店铺列表失败", e);
+			}
+			
+			
+		}else if("cat_shop".equals(m)){//根据店铺id获取主营类目
+			
+			String shopId = request.getParameter("shopId");
+			
+			try {
+				List<Map<String, Object>> mapList = dataCompareService.getCatByShop(shopId);
+				
+				JSONArray json = JSONArray.fromObject(mapList);
+				
+				response.getWriter().write(json.toString());
+				
+			} catch (Exception e) {
+				logger.error("根据店铺id获取主营类目失败", e);
+			}
+			
 		} else{
 			
 			request.getRequestDispatcher("/pages/dataCompare.jsp").forward(request, response);

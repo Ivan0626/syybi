@@ -429,6 +429,10 @@ public class GoodsAnalysisServlet extends BaseServlet {
 			
 			response.getWriter().print(json.toString());
 			
+		}else if("upload_file".equals(m)){//上传链接文件
+			
+			
+			
 		} else{
 			
 			try {
