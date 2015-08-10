@@ -90,6 +90,8 @@ public class CategoryServlet extends BaseServlet {
 		}else if("loadCat".equals(method)){//加载类目下的子类目及父类目或者行业
 			
 			String catNo = request.getParameter("catNo");
+			String chartWay = request.getParameter("chartWay");//排序字段
+			
 			if(StringUtils.isNotBlank(catNo)){
 				
 				List<CatData> catDataList = null;
@@ -105,7 +107,7 @@ public class CategoryServlet extends BaseServlet {
 				}
 				
 				try {
-					catDataList = catService.getCateDatasByCatNo(catNo, null, null, null, null);
+					catDataList = catService.getCateDatasByCatNo(catNo, null, null, null, null, chartWay);
 				} catch (Exception e) {
 					logger.error("获取类目下对应叶子节点的统计数据失败", e);
 				}
@@ -120,6 +122,9 @@ public class CategoryServlet extends BaseServlet {
 			
 		}else if("loadProp".equals(method)){
 			String catNo = request.getParameter("catNo");
+			
+			String chartWay = request.getParameter("chartWay");
+			
 			if(StringUtils.isNotBlank(catNo)){
 				List<CatData> catDataList = null;
 				List<CatEntity> childProps = null;
@@ -135,7 +140,7 @@ public class CategoryServlet extends BaseServlet {
 				}
 				
 				try {
-					catDataList = catService.getBrandScale(catNo, null, null, null, null);
+					catDataList = catService.getBrandScale(catNo, null, null, null, null, chartWay);
 				} catch (Exception e) {
 					logger.error("获取叶子类目对应的品牌（TOP20）的统计数据失败", e);
 				}
@@ -151,10 +156,13 @@ public class CategoryServlet extends BaseServlet {
 		}else if("loadLeaf".equals(method)){
 			String catNo = request.getParameter("catNo");
 			String propName = request.getParameter("propName");
+			
+			String chartWay = request.getParameter("chartWay");
+			
 			if(StringUtils.isNotBlank(catNo)){
 				List<CatData> catDataList = null;
 				try {
-					catDataList = catService.getPropScale(catNo, null, null, null, null, propName);
+					catDataList = catService.getPropScale(catNo, null, null, null, null, propName, chartWay);
 				} catch (Exception e) {
 					logger.error("获取叶子类目对应的属性（TOP20）的统计数据失败", e);
 				}

@@ -119,9 +119,9 @@ public class CatService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public PageEntity<CatData> getCateDatasByCatNo2(String catNo, String startMonth, String endMonth, String shopType,  PageParam pageParam) throws Exception{
+	public PageEntity<CatData> getCateDatasByCatNo2(String catNo, String startMonth, String endMonth, String shopType,  PageParam pageParam, String chartWay) throws Exception{
 		
-		List<CatData> list = this.getCateDatasByCatNo(catNo, startMonth, endMonth, shopType, pageParam);
+		List<CatData> list = this.getCateDatasByCatNo(catNo, startMonth, endMonth, shopType, pageParam, chartWay);
 		
 		PageEntity<CatData> pageEntity = PageEntity.getPageEntity(pageParam, list);
 		 
@@ -187,7 +187,7 @@ public class CatService extends BaseService {
 		
 		List<Map<String, Object>> leafList = getCatNosLeafList(catNos);
 		
-		List<CatData> list = getCatDataByMonths(leafList, startMonth, endMonth, shopType, pageParam);
+		List<CatData> list = getCatDataByMonths(leafList, startMonth, endMonth, shopType, pageParam, null);
 		
 		return PageEntity.getPageEntity(pageParam, list);
 		
@@ -198,7 +198,7 @@ public class CatService extends BaseService {
 	 * @param catNo
 	 * @return
 	 */
-	private Map<String, Object> getLeafListByCatNo2(String catNo){
+	public Map<String, Object> getLeafListByCatNo2(String catNo){
 		
 		String sql = "select tbbase.getLeafLst(?) as leafNo";
 		
@@ -215,7 +215,7 @@ public class CatService extends BaseService {
 	 * @param pageParam
 	 * @return
 	 */
-	private List<CatData> getCatDataByMonths(List<Map<String, Object>> leafList, String startMonth, String endMonth, String shopType, PageParam pageParam){
+	private List<CatData> getCatDataByMonths(List<Map<String, Object>> leafList, String startMonth, String endMonth, String shopType, PageParam pageParam, String chartWay){
 		
 		StringBuffer sb = new StringBuffer();
 		 
@@ -252,9 +252,37 @@ public class CatService extends BaseService {
 
 		String pageSql = "";
 		if(pageParam != null){
+			
+			if(StringUtils.isNotBlank(chartWay)){
+				pageParam.setoTag("t2");
+				if("volume".equals(chartWay)){
+					pageParam.setOrderColumn("sales_volume");
+				}else if("amount".equals(chartWay)){
+					pageParam.setOrderColumn("sales_amount");
+				}else if("count".equals(chartWay)){
+					pageParam.setOrderColumn("tran_count");
+				}
+				pageParam.setOrderDir("desc");
+			}
+			
 			pageSql = pageParam.buildSql(sb.toString());
+			
+			
 		}else{
-			pageSql = sb.append(" order by t3.cat_name_single desc").toString();
+			
+			if(StringUtils.isNotBlank(chartWay)){
+				if("volume".equals(chartWay)){
+					pageSql = sb.append(" order by t2.sales_volume desc").toString();
+				}else if("amount".equals(chartWay)){
+					pageSql = sb.append(" order by t2.sales_amount desc").toString();
+				}else if("count".equals(chartWay)){
+					pageSql = sb.append(" order by t2.tran_count desc").toString();
+				}
+				
+			}else{
+				pageSql = sb.append(" order by t3.cat_name_single desc").toString();
+			}
+			
 		}
 		
 		List<CatData> list = sqlUtil.searchList(CatData.class, pageSql);
@@ -277,7 +305,7 @@ public class CatService extends BaseService {
 		
 		List<Map<String, Object>> leafList = getLeafListByIid(iid, uid);
 		
-		List<CatData> list = getCatDataByMonths(leafList, startMonth, endMonth, shopType, pageParam);
+		List<CatData> list = getCatDataByMonths(leafList, startMonth, endMonth, shopType, pageParam, null);
 		
 		return list;
 		
@@ -297,7 +325,17 @@ public class CatService extends BaseService {
 		
 		List<Map<String, Object>> leafList = getLeafListByCatNo(catNo);
 		
-		List<CatData> list = getCatDataByMonths(leafList, startMonth, endMonth, shopType, pageParam);
+		List<CatData> list = getCatDataByMonths(leafList, startMonth, endMonth, shopType, pageParam, null);
+		
+		return list;
+		
+	}
+	
+	public List<CatData> getCateDatasByCatNo(String catNo, String startMonth, String endMonth, String shopType, PageParam pageParam, String chartWay) throws Exception{
+		
+		List<Map<String, Object>> leafList = getLeafListByCatNo(catNo);
+		
+		List<CatData> list = getCatDataByMonths(leafList, startMonth, endMonth, shopType, pageParam, chartWay);
 		
 		return list;
 		
@@ -573,9 +611,9 @@ public class CatService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<CatData> getBrandScale(String catNo, String startMonth, String endMonth, String shopType, PageParam pageParam) throws Exception{
+	public List<CatData> getBrandScale(String catNo, String startMonth, String endMonth, String shopType, PageParam pageParam, String chartWay) throws Exception{
 		
-		return getPropScale(catNo, startMonth, endMonth, shopType, pageParam, "品牌");
+		return getPropScale(catNo, startMonth, endMonth, shopType, pageParam, "品牌", chartWay);
 		
 	}
 
@@ -591,7 +629,7 @@ public class CatService extends BaseService {
 	 * @throws Exception
 	 */
 	public List<CatData> getPropScale(String catNo, String startMonth, String endMonth, String shopType,
-			PageParam pageParam, String propName) throws Exception {
+			PageParam pageParam, String propName, String chartWay) throws Exception {
 		StringBuffer sb = new StringBuffer();
 		
 		List<Object> params = new ArrayList<Object>();
@@ -631,8 +669,32 @@ public class CatService extends BaseService {
 		
 		String pageSql = "";
 		if(pageParam != null){
+			
+			if(StringUtils.isNotBlank(chartWay)){
+				if("volume".equals(chartWay)){
+					pageParam.setOrderColumn("sum(t1.sales_volume)");
+				}else if("amount".equals(chartWay)){
+					pageParam.setOrderColumn("sum(t1.sales_amount)");
+				}else if("count".equals(chartWay)){
+					pageParam.setOrderColumn("sum(t1.tran_count)");
+				}
+				pageParam.setOrderDir("desc");
+			}
+			
 			pageSql = pageParam.buildSql(sb.toString());
 		}else{
+			
+			if(StringUtils.isNotBlank(chartWay)){
+				if("volume".equals(chartWay)){
+					pageSql = sb.append(" order by sum(t1.sales_volume) desc").toString();
+				}else if("amount".equals(chartWay)){
+					pageSql = sb.append(" order by sum(t1.sales_amount) desc").toString();
+				}else if("count".equals(chartWay)){
+					pageSql = sb.append(" order by sum(t1.tran_count) desc").toString();
+				}
+				
+			}
+			
 			pageSql = sb.toString();
 		}
          
@@ -670,9 +732,9 @@ public class CatService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public PageEntity<CatData> getPropScaleByCatNo(String catNo, String startMonth, String endMonth, String shopType,  PageParam pageParam, String propName) throws Exception{
+	public PageEntity<CatData> getPropScaleByCatNo(String catNo, String startMonth, String endMonth, String shopType,  PageParam pageParam, String propName, String chartWay) throws Exception{
 		
-		List<CatData> list = this.getPropScale(catNo, startMonth, endMonth, shopType, pageParam, propName);
+		List<CatData> list = this.getPropScale(catNo, startMonth, endMonth, shopType, pageParam, propName, chartWay);
 		
 		PageEntity<CatData> pageEntity = PageEntity.getPageEntity(pageParam, list);
 		 
@@ -690,9 +752,9 @@ public class CatService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public PageEntity<CatData> getBrandScaleByCatNo(String catNo, String startMonth, String endMonth, String shopType,  PageParam pageParam) throws Exception{
+	public PageEntity<CatData> getBrandScaleByCatNo(String catNo, String startMonth, String endMonth, String shopType,  PageParam pageParam, String chartWay) throws Exception{
 		
-		List<CatData> list = this.getBrandScale(catNo, startMonth, endMonth, shopType, pageParam);
+		List<CatData> list = this.getBrandScale(catNo, startMonth, endMonth, shopType, pageParam, chartWay);
 		
 		PageEntity<CatData> pageEntity = PageEntity.getPageEntity(pageParam, list);
 		 

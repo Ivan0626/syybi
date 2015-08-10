@@ -52,7 +52,8 @@ function option2_2(data, chartWay, titlePrefix) {
 		legend : {
 			orient : 'vertical',
 	        x : 'left',
-			data : legend_data
+			data : legend_data,
+			show: false
 		},
 		toolbox : {
 			show : true,

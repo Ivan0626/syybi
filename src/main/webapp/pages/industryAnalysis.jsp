@@ -425,7 +425,8 @@
 		function loadCat(catNo, catName){
 			$.post(global.path+'/a/Category', {
 		    'catNo': catNo,
-		    'method': "loadCat"
+		    'method': "loadCat",
+		    'chartWay': 'volume'
 		}, function(data) {
 			if(data && data.childCats && data.parentCat && data.catDataList){
 				
@@ -481,7 +482,8 @@
 					//加载子行业数据图表
 					var chartWay = $('input[name="chartWay"]:checked').val();
 					
-					$('#echarts-scale').css('height', '1000px');
+					var width = data.catDataList.length * 30 + 200;
+					$('#echarts-scale').css('height', width+'px');
 					
 					$('#chartDiv').show();
 					$('#tableDiv').hide();
@@ -498,7 +500,8 @@
 			
 			$.post(global.path+'/a/Category',{
 				'catNo': catNo,
-				'method': 'loadProp'
+				'method': 'loadProp',
+				'chartWay': 'volume'
 			}, function(data){
 				
 				if(data && data.childProps && data.parentCat){
@@ -544,6 +547,9 @@
 						
 						$('#chartDiv').show();
 						$('#tableDiv').hide();
+						
+						var width = data.catDataList.length * 30 + 200;
+						$('#echarts-scale').css('height', width+'px');
 						
 						renderChart(option1(data.catDataList, chartWay, '各品牌'),'echarts-scale');
 					});
@@ -595,11 +601,15 @@
 				$.post(global.path+'/a/Category', {
 					'catNo': catNo,
 					'propName': propName,
-					'method': 'loadLeaf'
+					'method': 'loadLeaf',
+					'chartWay': chartWay
 				},function(data){
 					
 					$('#chartDiv').show();
 					$('#tableDiv').hide();
+					
+					var width = data.length * 30 + 200;
+					$('#echarts-scale').css('height', width+'px');
 					
 					//加载图表或数据表
 					renderChart(option1(data, chartWay,'各'+propName),'echarts-scale');

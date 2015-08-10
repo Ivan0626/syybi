@@ -42,11 +42,15 @@ jQuery(function($) {
 					'endMonth': endMonth,
 					'shopType': shopType,
 					'propName': propName,
-					'm': 'prop_scale'
+					'm': 'prop_scale',
+					'chartWay': chartWay
 				},function(data){
 					
 					$('#chartDiv').show();
 					$('#tableDiv').hide();
+					
+					var width = data.length * 30 + 200;
+					$('#echarts-scale').css('height', width+'px');
 					
 					//加载图表或数据表
 					scaleChart1 = renderChart(option1(data.data, chartWay,'各'+propName),'echarts-scale');
@@ -66,6 +70,8 @@ jQuery(function($) {
 					
 					$('#chartDiv').show();
 					$('#tableDiv').hide();
+					
+					$('#echarts-scale').css('height', '500px');
 					
 					//加载图表或数据表
 					scaleChart2 = renderChart(option2_2(data.data, chartWay, '各'+propName),'echarts-scale');
@@ -158,6 +164,9 @@ jQuery(function($) {
 				$('#chartDiv').show();
 				$('#tableDiv').hide();
 				
+				var width = data.length * 30 + 200;
+				$('#echarts-scale').css('height', width+'px');
+				
 				//加载图表或数据表
 				scaleChart1 = renderChart(option1(data.data, chartWay, '各'+$('#propName').val()),'echarts-scale');
 			};
@@ -167,6 +176,8 @@ jQuery(function($) {
 				
 				$('#chartDiv').show();
 				$('#tableDiv').hide();
+				
+				$('#echarts-scale').css('height', '500px');
 				
 				//加载图表或数据表
 				scaleChart2 = renderChart(option2_2(data.data, chartWay, '各'+$('#propName').val()),'echarts-scale');
@@ -180,7 +191,8 @@ jQuery(function($) {
 			'endMonth': $('#d4322').val(),
 			'shopType': $('input[name="shopType"]:checked').val(),
 			'propName': $('#propName').val(),
-			'm': 'prop_scale'
+			'm': 'prop_scale',
+			'chartWay': $(this).val()
 		},ajaxfn,'json');
 		
 	});

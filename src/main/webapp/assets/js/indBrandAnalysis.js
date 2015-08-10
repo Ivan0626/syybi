@@ -38,11 +38,15 @@ jQuery(function($) {
 					'startMonth': startMonth,
 					'endMonth': endMonth,
 					'shopType': shopType,
-					'm': 'brand_scale'
+					'm': 'brand_scale',
+					'chartWay': chartWay
 				},function(data){
 					
 					$('#chartDiv').show();
 					$('#tableDiv').hide();
+					
+					var width = data.data.length * 30 + 200;
+					$('#echarts-scale').css('height', width+'px');
 					
 					//加载图表或数据表
 					renderChart(option1(data.data, chartWay,'各品牌'),'echarts-scale');
@@ -61,6 +65,8 @@ jQuery(function($) {
 					
 					$('#chartDiv').show();
 					$('#tableDiv').hide();
+					
+					$('#echarts-scale').css('height', '500px');
 					
 					//加载图表或数据表
 					renderChart(option2_2(data.data, chartWay, '各品牌'),'echarts-scale');
@@ -152,6 +158,9 @@ jQuery(function($) {
 				$('#chartDiv').show();
 				$('#tableDiv').hide();
 				
+				var width = data.data.length * 30 + 200;
+				$('#echarts-scale').css('height', width+'px');
+				
 				//加载图表或数据表
 				renderChart(option1(data.data, chartWay, '各品牌'),'echarts-scale');
 			};
@@ -161,6 +170,8 @@ jQuery(function($) {
 				
 				$('#chartDiv').show();
 				$('#tableDiv').hide();
+				
+				$('#echarts-scale').css('height', '500px');
 				
 				//加载图表或数据表
 				renderChart(option2_2(data.data, chartWay, '各品牌'),'echarts-scale');
@@ -173,7 +184,8 @@ jQuery(function($) {
 			'startMonth': $('#d4321').val(),
 			'endMonth': $('#d4322').val(),
 			'shopType': $('input[name="shopType"]:checked').val(),
-			'm': 'brand_scale'
+			'm': 'brand_scale',
+			'chartWay': $(this).val()
 		},ajaxfn,'json');
 		
 	});

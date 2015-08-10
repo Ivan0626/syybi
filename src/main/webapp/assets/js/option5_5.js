@@ -1,30 +1,29 @@
-function option5(data, chartWay, startMonth, ms, titlePrefix, flag){
+function option5_5(data, chartWay){
 	
 	var legend_data = [], xAxis_data = [], series = [], title_text = '';
 	
-	$.each(data, function(idx, d){
+	var mapList = data.mapList;
+	var dayList = data.dayList;
+	
+	$.each(mapList, function(idx, d){
 		
 		var ss = {};
-		if(flag == 'compare'){
-			legend_data.push('对象'+d.compare);
-			ss.name = '对象'+d.compare;
-		}else{
-			legend_data.push(d.cat_name);
-			ss.name = d.cat_name;
-		}
+		legend_data.push('对象'+d.compare);
+		ss.name = '对象'+d.compare;
 		
 		ss.type = 'line';
 		ss.stack = '总量';
 		
 		var dd = [];
-		for(var i = 0; i < ms; i++){
+		
+		for(var i = 0; i < dayList.length; i++){
 			if(chartWay == 'volume'){
-				dd[i] = d['a'+addMonth(startMonth, i).replace("-", "")];
+				dd[i] = d['a'+dayList[i].replace(/\-/g,"")];
 			}else if(chartWay == 'amount'){
-				dd[i] = d['b'+addMonth(startMonth, i).replace("-", "")];
+				dd[i] = d['b'+dayList[i].replace(/\-/g,"")];
 				
 			}else if(chartWay == 'count'){
-				dd[i] = d['c'+addMonth(startMonth, i).replace("-", "")];
+				dd[i] = d['c'+dayList[i].replace(/\-/g,"")];
 			}
 			
 		}
@@ -35,8 +34,8 @@ function option5(data, chartWay, startMonth, ms, titlePrefix, flag){
 		series.push(ss);
 	});
 	
-	for(var i = 0; i < ms; i++){
-		xAxis_data[i] = addMonth(startMonth, i);
+	for(var i = 0; i < dayList.length; i++){
+		xAxis_data[i] = dayList[i];
 	}
 	
 	if(chartWay == 'volume'){
@@ -50,7 +49,7 @@ function option5(data, chartWay, startMonth, ms, titlePrefix, flag){
 	
 	return {
 			title : {
-		        text: titlePrefix+title_text + "趋势图",
+		        text: title_text + "趋势图",
 		        x:'center'
 		    },	
 		    tooltip : {

@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.sanyanyu.syybi.entity.AdvertBase;
 import com.sanyanyu.syybi.entity.AttDirDetail;
 import com.sanyanyu.syybi.entity.CatApi;
+import com.sanyanyu.syybi.entity.DataCompare;
 import com.sanyanyu.syybi.entity.DirEntity;
 import com.sanyanyu.syybi.entity.GoodsList;
 import com.sanyanyu.syybi.entity.HotGoods;
@@ -26,6 +27,8 @@ import com.sanyanyu.syybi.entity.PageEntity;
 import com.sanyanyu.syybi.entity.PageParam;
 import com.sanyanyu.syybi.service.DataCompareService;
 import com.sanyanyu.syybi.service.GoodsService;
+import com.sanyanyu.syybi.service.MarketService;
+import com.sanyanyu.syybi.utils.DateUtils;
 import com.sanyanyu.syybi.utils.StringUtils;
 import com.sanyanyu.syybi.utils.SysUtil;
 import com.sanyanyu.syybi.utils.URLUtil;
@@ -43,13 +46,16 @@ public class DataCompareServlet extends BaseServlet {
 	
 	private static Logger logger = LoggerFactory.getLogger(DataCompareServlet.class);
 	private DataCompareService dataCompareService;
+	private MarketService marketService;
        
     public DataCompareServlet() {
         super();
         
         dataCompareService = new DataCompareService();
+        marketService = new MarketService();
     }
 
+	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String m = request.getParameter("m");
@@ -83,6 +89,93 @@ public class DataCompareServlet extends BaseServlet {
 				
 			} catch (Exception e) {
 				logger.error("根据店铺id获取主营类目失败", e);
+			}
+			
+		}else if("cat_top".equals(m)){//
+			
+			try {
+				List<CatApi> catList = marketService.getCat("0", this.getUid(request));// 主营类目
+				
+				JSONArray json = JSONArray.fromObject(catList);
+				
+				response.getWriter().write(json.toString());
+			} catch (Exception e) {
+				logger.error("获取关注的类目失败", e);
+			}
+			
+		}else if("brand".equals(m)){//关注的品牌
+			
+			try {
+				List<Map<String, Object>> mapList = dataCompareService.getBrand(this.getUid(request));
+				
+				JSONArray json = JSONArray.fromObject(mapList);
+				
+				response.getWriter().write(json.toString());
+				
+			} catch (Exception e) {
+				logger.error("获取关注的品牌失败", e);
+			}
+			
+		}else if("cat_brand".equals(m)){//品牌关联的父级类目
+			
+			String brandName = request.getParameter("brandName");
+			
+			try {
+				List<Map<String, Object>> mapList = dataCompareService.getCatByBrand(brandName);
+				
+				JSONArray json = JSONArray.fromObject(mapList);
+				
+				response.getWriter().write(json.toString());
+				
+			} catch (Exception e) {
+				logger.error("获取品牌关联的顶级类目失败", e);
+			}
+			
+		}else if("compare_month".equals(m)){//按月对比
+			
+			String compares = request.getParameter("compares");
+			String startDate = request.getParameter("startDate");
+			String endDate = request.getParameter("endDate");
+			
+			JSONArray jsonArray = JSONArray.fromObject(compares);
+			
+			@SuppressWarnings("deprecation")
+			List<DataCompare> compareList = JSONArray.toList(jsonArray, DataCompare.class);
+			
+			try {
+				List<Map<String, Object>> mapList = dataCompareService.compareMonth(compareList, startDate, endDate);
+				
+				JSONArray json = JSONArray.fromObject(mapList);
+				
+				response.getWriter().write(json.toString());
+				
+			} catch (Exception e) {
+				logger.error("按月对比失败", e);
+			}
+		}else if("compare_day".equals(m)){//按日对比
+			
+			String compares = request.getParameter("compares");
+			String startDate = request.getParameter("startDate");
+			String endDate = request.getParameter("endDate");
+			
+			JSONArray jsonArray = JSONArray.fromObject(compares);
+			
+			@SuppressWarnings("deprecation")
+			List<DataCompare> compareList = JSONArray.toList(jsonArray, DataCompare.class);
+			
+			try {
+				List<String> dayList = DateUtils.getDaysListBetweenDates(startDate, endDate);
+				
+				List<Map<String, Object>> mapList = dataCompareService.compareDay(compareList, startDate, endDate, dayList);
+				
+				JSONObject json = new JSONObject();
+				json.put("dayList", dayList);
+				json.put("mapList", mapList);
+				
+				response.getWriter().write(json.toString());
+				
+			} catch (Exception e) {
+				logger.error("按日对比失败", e);
 			}
 			
 		} else{

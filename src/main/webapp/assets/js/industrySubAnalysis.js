@@ -38,13 +38,15 @@ jQuery(function($) {
 					'startMonth': startMonth,
 					'endMonth': endMonth,
 					'shopType': shopType,
-					'm': 'ind_scale_sub'
+					'm': 'ind_scale_sub',
+					'chartWay': chartWay
 				},function(data){
 					
 					$('#chartDiv').show();
 					$('#tableDiv').hide();
 					
-					$('#echarts-scale').css('height', '1000px');
+					var width = data.data.length * 30 + 200;
+					$('#echarts-scale').css('height', width+'px');
 					
 					//加载图表或数据表
 					renderChart(option1(data.data, chartWay, '各类别'),'echarts-scale');
@@ -173,7 +175,8 @@ jQuery(function($) {
 				$('#chartDiv').show();
 				$('#tableDiv').hide();
 				
-				$('#echarts-scale').css('height', '1000px');
+				var width = data.data.length * 30 + 200;
+				$('#echarts-scale').css('height', width+'px');
 				
 				//加载图表或数据表
 				renderChart(option1(data.data, chartWay, '各类别'),'echarts-scale');
@@ -197,7 +200,8 @@ jQuery(function($) {
 			'startMonth': $('#d4321').val(),
 			'endMonth': $('#d4322').val(),
 			'shopType': $('input[name="shopType"]:checked').val(),
-			'm': 'ind_scale_sub'
+			'm': 'ind_scale_sub',
+			'chartWay': $(this).val()
 		},ajaxfn,'json');
 		
 	});

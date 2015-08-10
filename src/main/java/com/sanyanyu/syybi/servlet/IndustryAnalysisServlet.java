@@ -95,7 +95,9 @@ public class IndustryAnalysisServlet extends BaseServlet {
 				String endMonth = request.getParameter("endMonth");
 				String shopType = request.getParameter("shopType");
 				
-				PageEntity<CatData> pageEntity = catService.getCateDatasByCatNo2(catNo, startMonth, endMonth, shopType, pageParam);
+				String chartWay = request.getParameter("chartWay");
+				
+				PageEntity<CatData> pageEntity = catService.getCateDatasByCatNo2(catNo, startMonth, endMonth, shopType, pageParam, chartWay);
 				
 				JSONObject json = JSONObject.fromObject(pageEntity);
 
@@ -210,7 +212,9 @@ public class IndustryAnalysisServlet extends BaseServlet {
 				String endMonth = request.getParameter("endMonth");
 				String shopType = request.getParameter("shopType");
 				
-				PageEntity<CatData> pageEntity = catService.getBrandScaleByCatNo(catNo, startMonth, endMonth, shopType, pageParam);
+				String chartWay = request.getParameter("chartWay");
+				
+				PageEntity<CatData> pageEntity = catService.getBrandScaleByCatNo(catNo, startMonth, endMonth, shopType, pageParam, chartWay);
 				
 				JSONObject json = JSONObject.fromObject(pageEntity);
 
@@ -298,7 +302,9 @@ public class IndustryAnalysisServlet extends BaseServlet {
 				String endMonth = request.getParameter("endMonth");
 				String shopType = request.getParameter("shopType");
 				
-				PageEntity<CatData> pageEntity = catService.getPropScaleByCatNo(catNo, startMonth, endMonth, shopType, pageParam, propName);
+				String chartWay = request.getParameter("chartWay");
+				
+				PageEntity<CatData> pageEntity = catService.getPropScaleByCatNo(catNo, startMonth, endMonth, shopType, pageParam, propName, chartWay);
 				
 				JSONObject json = JSONObject.fromObject(pageEntity);
 
