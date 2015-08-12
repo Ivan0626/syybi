@@ -1575,6 +1575,82 @@ public class ShopService extends BaseService {
 		return pageEntity;
 	}
 	
+	public PageEntity<HotGoods> getHotGoods2(String uid, String category, String shopType, String prdName, String volumeTotal, String amountTotal, PageParam pageParam) throws Exception{
+		
+		int volumeTotalInt = StringUtils.toInteger(volumeTotal);
+		if(volumeTotalInt == 0){
+			volumeTotalInt = FinalConstants.DEFAULT_QUERY_VOLUME;
+		}
+		
+		int amountTotalInt = StringUtils.toInteger(amountTotal);
+		if(amountTotalInt == 0){
+			amountTotalInt = FinalConstants.DEFAULT_QUERY_AMOUNT;
+		}
+		
+		String coreSql = " from ("
+					+" SELECT t1.item_id,t1.prd_img,t1.prd_name,t1.shop_id,t2.shop_type,t2.shop_name,t1.cat_path,c.avg_price,c.b_avg_price AS avg_price_tran_pre,"
+					+" c.sales_volume,c.b_sales_volume AS sales_volume_pre,c.sales_amount,c.b_sales_amount AS sales_amount_pre"
+					+" FROM"
+					+" (SELECT a.shop_id,a.item_id,a.avg_price,a.sales_volume,a.sales_amount,b.avg_price b_avg_price,b.sales_volume b_sales_volume,b.sales_amount b_sales_amount"
+					+" FROM"
+					+" (SELECT t3.shop_id,t3.item_id,t3.avg_price,t3.sales_volume,t3.sales_amount FROM tbdaily.tb_tran_month t3"
+					+" LEFT JOIN tbweb.tb_attn_shop t5 ON t3.shop_id = t5.shop_id"
+					+" WHERE t3.tran_month = '"+DateUtils.getOffsetMonth(-1, "yyyy-MM")+"' AND t5.uid = '"+uid+"' and t5.att_type = 1) b"
+					+" LEFT JOIN "
+					+" (SELECT t4.shop_id,t4.item_id,t4.avg_price,t4.sales_volume,t4.sales_amount FROM tbdaily.tb_tran_month t4"
+					+" LEFT JOIN tbweb.tb_attn_shop t5 ON t4.shop_id = t5.shop_id"
+					+" WHERE t4.tran_month = '"+DateUtils.getCurMonth()+"' AND t5.uid = '"+uid+"' and t5.att_type = 1) a "
+					+" ON a.item_id = b.item_id"
+					+" WHERE b.sales_volume >= "+volumeTotalInt+" AND b.sales_amount  >= "+amountTotalInt+") c"
+					+" JOIN"
+					+" tbbase.tb_base_product t1 ON c.item_id = t1.item_id"
+					+" JOIN"
+					+" tbbase.tb_base_shop t2 ON t2.shop_id = c.shop_id"
+					+" WHERE t2.shop_type = '"+shopType+"'";
+		
+		if(StringUtils.isNotBlank(category)){
+			coreSql += " and t1.cat_path like '"+category+"%'";
+		}
+		
+		if(StringUtils.isNotBlank(prdName)){
+			coreSql += " and t1.prd_name like '%"+prdName+"%'";
+		}
+		
+		String totalSql = "select count(0) as cnt "+ coreSql + " ) t";
+		
+		Map<String, Object> map = sqlUtil.search(totalSql);
+		
+		long cnt = StringUtils.toLong(map.get("cnt"));
+		
+		PageEntity<HotGoods> pageEntity = new PageEntity<HotGoods>();
+		pageEntity.setRecordsFiltered(cnt);
+		pageEntity.setRecordsTotal(cnt);
+		pageEntity.setDraw(pageParam.getDraw());
+		
+		String orderSql = " order by ";
+		if(StringUtils.isNotBlank(pageParam.getoTag())){
+			orderSql = " order by " + pageParam.getoTag() + ".";
+		}
+		
+		if (StringUtils.isNotBlank(pageParam.getOrderColumn()) && pageParam.getOrderColumn().indexOf("pre") > -1) {// 特殊处理
+			orderSql += pageParam.getOrderColumn().replace("_pre", "");
+		} else {
+			orderSql += pageParam.getOrderColumn();
+		}
+		orderSql += " " + pageParam.getOrderDir();
+
+		String pageSql = "select concat_ws(',',t.shop_id, t.item_id) as asid, t.* "+ coreSql + orderSql + " limit " + pageParam.getStart() + ","
+				+ pageParam.getLength() + " ) t"
+				+" left join (select a1.shop_id, a1.item_id from tbweb.tb_attn_dir_detail a1 join tbweb.tb_attn_dir a2 on a2.adid = a1.adid"
+				+" where a2.uid = '"+uid+"' group by a1.shop_id, a1.item_id)  tt2 on t.shop_id = tt2.shop_id and t.item_id = tt2.item_id ";
+		
+		List<HotGoods> list = sqlUtil.searchList(HotGoods.class, pageSql);
+		
+		pageEntity.setData(list);
+		
+		return pageEntity;
+	}
+	
 	/**
 	 * 店铺分析-宝贝列表
 	 * @param shopId

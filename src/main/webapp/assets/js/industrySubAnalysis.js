@@ -413,6 +413,8 @@ jQuery(function($) {
 
 	};
 	
+	goods_config.order = [[ 4, 'desc' ]];
+	
 	goods_config.initComplete = function (settings, json) {
 		
 		if(json.extList && json.extList.length > 0){
@@ -457,7 +459,7 @@ jQuery(function($) {
 				},
 				render : function(data, type, full, meta) {
 
-					if (data < full.avg_price) {
+					if (parseFloat(data) < parseFloat(full.avg_price)) {
 						return data + '<img src="' + global.path + '/assets/img/down_arrow_new.gif">';
 					} else if (data > full.avg_price) {
 						return data + '<img src="' + global.path + '/assets/img/up_arrow_new.gif">';
@@ -617,6 +619,8 @@ jQuery(function($) {
 
 	};
 
+	shop_config.order = [[ 2, 'desc' ]];
+	
 	shop_config.columns = [
 			{
 				data : 'rowNum',

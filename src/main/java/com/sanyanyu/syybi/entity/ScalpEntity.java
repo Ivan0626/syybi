@@ -29,13 +29,29 @@ public class ScalpEntity implements Serializable {
 	private String tran_count;
 	private String tran_date;
 	private String item_count;
+	private String shop_url;
+	
 	private String shua_amount;
 	private String shua_volume;
 	private String shua_count;
-	private String shop_url;
+	private String precision;
+	
+	private String a_shua_amount;
+	private String a_shua_volume;
+	private String a_shua_count;
+	private String a_precision;
+	
+	private String b_shua_amount;
+	private String b_shua_volume;
+	private String b_shua_count;
+	private String b_precision;
+	
+	private String c_shua_amount;
+	private String c_shua_volume;
+	private String c_shua_count;
+	private String c_precision;
 	
 	private String rule;
-	private String precision;
 	
 	/**店铺分析使用**/
 	private String tag;
@@ -44,6 +60,102 @@ public class ScalpEntity implements Serializable {
 	private String sales_amount_pre;
 	private String att_date;
 	
+	public String getA_shua_amount() {
+		return a_shua_amount;
+	}
+
+	public void setA_shua_amount(String a_shua_amount) {
+		this.a_shua_amount = a_shua_amount;
+	}
+
+	public String getA_shua_volume() {
+		return a_shua_volume;
+	}
+
+	public void setA_shua_volume(String a_shua_volume) {
+		this.a_shua_volume = a_shua_volume;
+	}
+
+	public String getA_shua_count() {
+		return a_shua_count;
+	}
+
+	public void setA_shua_count(String a_shua_count) {
+		this.a_shua_count = a_shua_count;
+	}
+
+	public String getA_precision() {
+		return a_precision;
+	}
+
+	public void setA_precision(String a_precision) {
+		this.a_precision = a_precision;
+	}
+
+	public String getB_shua_amount() {
+		return b_shua_amount;
+	}
+
+	public void setB_shua_amount(String b_shua_amount) {
+		this.b_shua_amount = b_shua_amount;
+	}
+
+	public String getB_shua_volume() {
+		return b_shua_volume;
+	}
+
+	public void setB_shua_volume(String b_shua_volume) {
+		this.b_shua_volume = b_shua_volume;
+	}
+
+	public String getB_shua_count() {
+		return b_shua_count;
+	}
+
+	public void setB_shua_count(String b_shua_count) {
+		this.b_shua_count = b_shua_count;
+	}
+
+	public String getB_precision() {
+		return b_precision;
+	}
+
+	public void setB_precision(String b_precision) {
+		this.b_precision = b_precision;
+	}
+
+	public String getC_shua_amount() {
+		return c_shua_amount;
+	}
+
+	public void setC_shua_amount(String c_shua_amount) {
+		this.c_shua_amount = c_shua_amount;
+	}
+
+	public String getC_shua_volume() {
+		return c_shua_volume;
+	}
+
+	public void setC_shua_volume(String c_shua_volume) {
+		this.c_shua_volume = c_shua_volume;
+	}
+
+	public String getC_shua_count() {
+		return c_shua_count;
+	}
+
+	public void setC_shua_count(String c_shua_count) {
+		this.c_shua_count = c_shua_count;
+	}
+
+	public String getC_precision() {
+		return c_precision;
+	}
+
+	public void setC_precision(String c_precision) {
+		this.c_precision = c_precision;
+	}
+
 	public String getTag() {
 		return tag;
 	}

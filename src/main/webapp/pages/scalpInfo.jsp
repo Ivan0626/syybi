@@ -78,11 +78,11 @@
 													<label>图表类型</label>
 														
 													<label style="margin-left: 50px;">
-														<input name="chartType" type="radio" value="1" class="ace" />
+														<input name="chartType" type="radio" value="1" class="ace" checked  />
 														<span class="lbl"> 图表</span>
 													</label>
 													<label>
-														<input name="chartType" type="radio" value="2" class="ace" checked />
+														<input name="chartType" type="radio" value="2" class="ace"/>
 														<span class="lbl"> 数据表</span>
 													</label>
 												</div>
@@ -100,16 +100,16 @@
 								</div>
 							</div>
 							
-							<div class="row placeholders" id="chartDiv" style="display:none;">
+							<div class="row placeholders" id="chartDiv">
 								<div class="col-md-12">
-									<input name="chartWay" value="volume" type="radio" class="ace" checked /><span class="lbl"> 销量</span>
-									<input name="chartWay" value="amount" type="radio" class="ace" /><span class="lbl"> 销售额</span>
-									<input name="chartWay" value="count" type="radio" class="ace" /><span class="lbl"> 成交次数</span>
+									<input name="chartWay" value="volume" type="radio" class="ace" checked /><span class="lbl"> 刷单量</span>
+									<input name="chartWay" value="amount" type="radio" class="ace" /><span class="lbl"> 刷单额</span>
+									<input name="chartWay" value="count" type="radio" class="ace" /><span class="lbl"> 刷单次数</span>
 								</div>
 				          		<div class="col-md-12" id="echarts-ad" style="height:500px;"></div>
 					        </div>
 							
-							<div class="row" id="tableDiv">
+							<div class="row" id="tableDiv" style="display:none;">
 								<div class="col-xs-12">
 
 									<!-- div.dataTables_borderWrap -->
@@ -117,14 +117,29 @@
 										<table id="info-table" class="table table-striped table-bordered table-hover">
 											<thead>
 												<tr role="row">
-													<th>时间</th>
-													<th>销售额</th>
-													<th>销量</th>
-													<th>成交次数</th>
+													<th rowspan="3">时间</th>
+													<th rowspan="3">销售额</th>
+													<th rowspan="3">销量</th>
+													<th rowspan="3">成交次数</th>
+													<th colspan="12" style="text-align:center">识别策略</th>
+												</tr>
+												<tr role="row">
+													<th colspan="4" style="text-align:center">购买行为</th>
+													<th colspan="4" style="text-align:center">评论行为</th>
+													<th colspan="4" style="text-align:center">购买行为,评论行为</th>
+												</tr>
+												<tr role="row">
 													<th>刷单额</th>
 													<th>刷单量</th>
 													<th>刷单次数</th>
-													<th>识别策略</th>
+													<th>识别精准系数</th>
+													<th>刷单额</th>
+													<th>刷单量</th>
+													<th>刷单次数</th>
+													<th>识别精准系数</th>
+													<th>刷单额</th>
+													<th>刷单量</th>
+													<th>刷单次数</th>
 													<th>识别精准系数</th>
 												</tr>
 											</thead>
@@ -150,7 +165,7 @@
 	
 	<!-- echarts库必须在bootbox之后加载 -->
 	<script src="../assets/js/echarts/source/echarts.js"></script>
-	<script src="../assets/js/option6.js"></script>
+	<script src="../assets/js/option10.js"></script>
 	<script src="../assets/js/My97DatePicker/WdatePicker.js"></script>
 
 	<script src="../assets/js/common.js"></script>

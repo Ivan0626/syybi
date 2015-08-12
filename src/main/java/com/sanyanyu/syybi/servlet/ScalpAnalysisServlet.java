@@ -325,7 +325,7 @@ public class ScalpAnalysisServlet extends BaseServlet {
 				PageParam pageParam = PageParam.getPageParam(request);
 				PageEntity<?> pageEntity = null;
 
-				pageEntity = scalpService.getScalpInfos(pageParam, shopId, itemId, startDate, endDate);
+				pageEntity = scalpService.getScalpInfos2(pageParam, shopId, itemId, startDate, endDate);
 
 				JSONObject json = JSONObject.fromObject(pageEntity);
 				response.getWriter().print(json.toString());

@@ -701,9 +701,9 @@ public class MarketService extends BaseService {
 	public PageEntity<AdvertHot> getShopZuan(PageParam pageParam, String shopId, String startDate, String endDate,
 			String zuanType) {
 
-		String sql = "select t1.tran_date,t1.sales_amount,t1.sales_volume,t1.tran_count, t4.position,t4.pic_url,t4.ad_pic,t4.screenshots from tbdaily.tb_tran_day t1"
+		String sql = "select t1.tran_date,t1.sales_amount,t1.sales_volume,t1.tran_count, t4.position,t4.pic_url,t4.ad_pic,t4.screenshots from tbdaily.tb_tran_day_shop t1"
 				+ " left join (select t2.put_date,t2.shop_id,t2.item_id,t3.position,t3.pic_url,t2.ad_pic,t2.screenshots from tbdaily.tb_advert_zuanz t2 "
-				+ " join tbbase.tb_base_postion t3 on t2.bpid = t3.bpid where t3.ad_type = ? and t2.item_id = '') t4 "
+				+ " join tbbase.tb_base_postion t3 on t2.bpid = t3.bpid where t3.ad_type = ? ) t4 "
 				+ " on t1.tran_date = t4.put_date and t1.shop_id = t4.shop_id "
 				+ " where t1.shop_id = ? and t1.tran_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d')";
 
@@ -1123,8 +1123,8 @@ public class MarketService extends BaseService {
 	public PageEntity<AdvertHot> getShopTaobaos(PageParam pageParam, String shopId, String startDate, String endDate, String isphone) throws Exception{
 		
 		String sql = "select t1.tran_date,t1.sales_amount,t1.sales_volume,t1.tran_count,t2.position,"
-				+" t2.ad_pos_url,t2.ad_dest_url,t2.ad_pic,t2.screenshots from tbdaily.tb_tran_day t1 "
-				+" left join tbdaily.tb_advert_taobao t2 on t1.tran_date = t2.put_date and t1.shop_id = t2.shop_id and t2.isphone = ? and t2.item_id = ''"
+				+" t2.ad_pos_url,t2.ad_dest_url,t2.ad_pic,t2.screenshots from tbdaily.tb_tran_day_shop t1 "
+				+" left join tbdaily.tb_advert_taobao t2 on t1.tran_date = t2.put_date and t1.shop_id = t2.shop_id and t2.isphone = ? "
 				+" where t1.shop_id = ? and t1.tran_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d')";
 		
 		List<AdvertHot> list = sqlUtil.searchList(AdvertHot.class, pageParam.buildSql(sql), isphone, shopId, startDate, endDate);

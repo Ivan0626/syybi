@@ -123,14 +123,26 @@ font-size: 12px;
 						<li class="first">优惠价</li>
 						
 						<li class="even">适用对象</li>
-						<li>产品数据</li>
-						<li class="even">行业数据</li>
-						<li>产品预测</li>
-						<li class="even">类目分析</li>
+						<li>数据类目</li>
+						<li class="even">宝贝数据</li>
+						<li>店铺数据</li>
+						<li class="even">运营分析数据</li>
+						<li>刷单数据</li>
+						<li class="even">热词数据</li>
+						<li>品牌数据</li>
+						<li class="even">数据对比</li>
+						<li>品牌分析</li>
+						<li class="even">数据预测</li>
+						<li>热词分析</li>
+						<li class="even">刷单分析</li>
+						<li>属性分析</li>
+						<li class="even">运营分析</li>
 						<li>行业分析</li>
-						<li class="even">品牌分析</li>
-						<li>产品分析</li>
-						
+						<li class="even">钻展透视</li>
+						<li>店铺分析</li>
+						<li class="even">宝贝分析</li>
+						<li>售后服务</li>
+						<li class="even" >金牌保障</li>
 					</ul>
 				</div>
 				<div class="combo-detail">
@@ -144,14 +156,27 @@ font-size: 12px;
 						</li>
 						<li class="first">--<br>--
 						</li>
-						<li>适合初级个人用户</li>
+						<li >适合初级个人用户（试用一周）</li>
+						<li>1个行业</li>
 						<li>1个</li>
-						<li>0个</li>
+						<li>1家</li>
+						<li>0家</li>
+						<li>0家</li>
+						<li>1个</li>
+						<li>1个</li>
+						<li><span class="false"></span></li>
+						<li><span class="false"></span></li>
+						<li><span class="false"></span></li>
+						<li><span class="false"></span></li>
+						<li><span class="false"></span></li>
 						<li><span class="false"></span></li>
 						<li><span class="false"></span></li>
 						<li><span class="false"></span></li>
 						<li><span class="true"></span></li>
 						<li><span class="true"></span></li>
+						<li><span class="true"></span></li>
+						<li >QQ群、论坛、邮件</li>
+						<li >--</li>
 						<li class="last"><a href="${pageContext.request.contextPath}/index/login.jsp"
 							class="plan-btn plan-btn-success">免费体验</a></li>
 					</ul>
@@ -162,21 +187,34 @@ font-size: 12px;
 						<li class="head">
 							<p>专业版</p>
 							<p class="version">
-								<span class="unit">￥</span><span class="price">59</span><span
+								<span class="unit">￥</span><span class="price">688</span><span
 									class="monthly"> / 月</span>
 							</p>
 						</li>
-						<li class="first"><span class="cross">￥177</span><span
-							class="highlight">￥159/季</span><br>
-						<span class="cross">￥708</span><span class="highlight">￥599/年</span></li>
-						<li>适合专业级用户</li>
-						<li>6个</li>
+						<li class="first"><span class="cross">￥3999</span><span
+							class="highlight">￥1888/季</span><br>
+						<span class="cross">￥12999</span><span class="highlight">￥6888/年</span></li>
+						<li >适合专业级个人用户</li>
+						<li>1个行业</li>
+						<li>10个</li>
+						<li>10家</li>
+						<li>0家</li>
+						<li>0家</li>
+						<li>0个</li>
 						<li>0个</li>
 						<li><span class="false"></span></li>
 						<li><span class="false"></span></li>
 						<li><span class="false"></span></li>
+						<li><span class="false"></span></li>
+						<li><span class="false"></span></li>
+						<li><span class="false"></span></li>
+						<li><span class="false"></span></li>
+						<li><span class="false"></span></li>
 						<li><span class="true"></span></li>
 						<li><span class="true"></span></li>
+						<li><span class="true"></span></li>
+						<li >专业版QQ群</li>
+						<li >包年套餐签订软件服务合同，提供全方位售后保障</li>
 						<li class="last"><a href="${pageContext.request.contextPath}/a/OrderServlet?method=confirm&v=<%=Base64Util.getBASE64("专业版") %>" id="pay2"
 							class="plan-btn plan-btn-success" style="background-image:-webkit-linear-gradient(top,#f08542,#e86e23);background-color:#e86e23">立即购买</a></li>
 					</ul>
@@ -188,21 +226,34 @@ font-size: 12px;
 						<li class="head">
 							<p>旗舰版</p>
 							<p class="version">
-								<span class="unit">￥</span><span class="price">199</span><span
+								<span class="unit">￥</span><span class="price">1688</span><span
 									class="monthly"> / 月</span>
 							</p>
 						</li>
-						<li class="first"><span class="cross">￥597</span><span
-							class="highlight">￥499/季</span><br>
-						<span class="cross">￥2388</span><span class="highlight">￥1999/年</span></li>
-						<li>适合中小型企业</li>
-						<li>10个</li>
-						<li>2个</li>
+						<li class="first"><span class="cross">￥8999</span><span
+							class="highlight">￥4888/季</span><br>
+						<span class="cross">￥32999</span><span class="highlight">￥16888/年</span></li>
+						<li>适合小型团队或企业</li>
+						<li>1个行业（新增可定制）</li>
+						<li>30个</li>
+						<li>30家</li>
+						<li>3家</li>
+						<li>3家</li>
+						<li>50个</li>
+						<li>0个</li>
+						<li><span class="false"></span></li>
+						<li><span class="false"></span></li>
 						<li><span class="false"></span></li>
 						<li><span class="true"></span></li>
 						<li><span class="true"></span></li>
 						<li><span class="true"></span></li>
 						<li><span class="true"></span></li>
+						<li><span class="true"></span></li>
+						<li><span class="true"></span></li>
+						<li><span class="true"></span></li>
+						<li><span class="true"></span></li>
+						<li >技术支持：旗舰版QQ群、电话；一对一专属优质服务</li>
+						<li >包年套餐签订软件服务合同，提供全方位金牌保障</li>
 						<li class="last"><a href="${pageContext.request.contextPath}/a/OrderServlet?method=confirm&v=<%=Base64Util.getBASE64("旗舰版") %>" id="pay2"
 							class="plan-btn plan-btn-success" style="background-image:-webkit-linear-gradient(top,#f08542,#e86e23);background-color:#e86e23">立即购买</a></li>
 					</ul>
@@ -212,20 +263,40 @@ font-size: 12px;
 					<ul>
 						<li class="head">
 							<p>企业版</p>
-							<p class="version">
+							<%-- <p class="version">
 								<a href="${pageContext.request.contextPath}/index/about.jsp#contact" class="plan-btn plan-btn-success" role="button">联系我们</a>
+							</p> --%>
+							<p class="version">
+								<span class="unit">￥</span><span class="price">2688</span><span
+									class="monthly"> / 月</span>
 							</p>
 						</li>
-						<li class="first">--<br>--
+						<li class="first"><span class="cross">￥16999</span><span
+							class="highlight">￥8888/季</span><br>
+						<span class="cross">￥56999</span><span class="highlight">￥26888/年</span>
 						</li>
-						<li>适合咨询公司</li>
-						<li>20个</li>
-						<li>5个</li>
+						<li>适合中大型企业</li>
+						<li>1个行业（新增可定制）</li>
+						<li>60个</li>
+						<li>60家</li>
+						<li>6家</li>
+						<li>6家</li>
+						<li>100个</li>
+						<li>6个</li>
 						<li><span class="true"></span></li>
 						<li><span class="true"></span></li>
 						<li><span class="true"></span></li>
 						<li><span class="true"></span></li>
 						<li><span class="true"></span></li>
+						<li><span class="true"></span></li>
+						<li><span class="true"></span></li>
+						<li><span class="true"></span></li>
+						<li><span class="true"></span></li>
+						<li><span class="true"></span></li>
+						<li><span class="true"></span></li>
+						<li >多项企业级专属功能；一对一专属优质服务</li>
+						<li >包年套餐签订软件服务合同，</li>
+						<li >提供全方位企业级保障</li>
 						<li class="last"><a href="${pageContext.request.contextPath}/index/about.jsp#contact"
 							class="plan-btn plan-btn-success">联系我们</a></li>
 					</ul>

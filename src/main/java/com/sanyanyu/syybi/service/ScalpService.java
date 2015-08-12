@@ -611,6 +611,32 @@ public class ScalpService extends BaseService {
 		return pageEntity;
 	}
 
+	public PageEntity<ScalpEntity> getScalpInfos2(PageParam pageParam, String shopId, String itemId, String startDate,
+			String endDate) throws Exception {
+
+		 String sql = "SELECT t1.tran_date,t2.sales_amount,t2.sales_volume,t2.tran_count,"
+				 +" sum(if(t1.rule = '购买行为', t1.shua_volume, 0)) as a_shua_volume, sum(if(t1.rule = '购买行为', t1.shua_amount, 0)) as a_shua_amount, "
+				 +" sum(if(t1.rule = '购买行为', t1.shua_count, 0)) as a_shua_count, sum(if(t1.rule = '购买行为', t1.`precision`, 0)) as a_precision,"
+				 +" sum(if(t1.rule = '评论行为', t1.shua_volume, 0)) as b_shua_volume, sum(if(t1.rule = '评论行为', t1.shua_amount, 0)) as b_shua_amount, "
+				 +" sum(if(t1.rule = '评论行为', t1.shua_count, 0)) as b_shua_count, sum(if(t1.rule = '评论行为', t1.`precision`, 0)) as b_precision,"
+				 +" sum(if(t1.rule = '购买行为,评论行为', t1.shua_volume, 0)) as c_shua_volume, sum(if(t1.rule = '购买行为,评论行为', t1.shua_amount, 0)) as c_shua_amount, "
+				 +" sum(if(t1.rule = '购买行为,评论行为', t1.shua_count, 0)) as c_shua_count, sum(if(t1.rule = '购买行为,评论行为', t1.`precision`, 0)) as c_precision"
+				 +" FROM tbdaily.tb_shua_day t1 "
+				 +" left join tbdaily.tb_tran_day t2 on t1.shop_id = t2.shop_id and t1.item_id = t2.item_id and t1.tran_date = t2.tran_date "
+				 +" where t1.shop_id = ? and t1.item_id = ? and t1.tran_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d')"
+				 +" group by tran_date ";
+		
+		List<ScalpEntity> list = sqlUtil.searchList(ScalpEntity.class, pageParam.buildSql(sql), shopId, itemId,
+				startDate, endDate);
+
+		PageEntity<ScalpEntity> pageEntity = PageEntity.getPageEntity(pageParam, list);
+
+		return pageEntity;
+	}
+	
+	 
+	
+	
 	/**
 	 * 店铺运营分析-宝贝列表
 	 * 

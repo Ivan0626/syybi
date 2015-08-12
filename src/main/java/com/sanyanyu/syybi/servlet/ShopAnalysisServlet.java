@@ -26,6 +26,7 @@ import com.sanyanyu.syybi.entity.PageParam;
 import com.sanyanyu.syybi.entity.ScalpEntity;
 import com.sanyanyu.syybi.entity.ShopRate;
 import com.sanyanyu.syybi.entity.ShopSearch;
+import com.sanyanyu.syybi.service.GoodsService;
 import com.sanyanyu.syybi.service.ShopService;
 
 public class ShopAnalysisServlet extends BaseServlet {
@@ -33,11 +34,13 @@ public class ShopAnalysisServlet extends BaseServlet {
 	
 	private static Logger logger = LoggerFactory.getLogger(ShopAnalysisServlet.class);
 	private ShopService shopService;
+	private GoodsService goodsService;
        
     public ShopAnalysisServlet() {
         super();
         
         shopService = new ShopService();
+        goodsService = new GoodsService();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -198,7 +201,10 @@ public class ShopAnalysisServlet extends BaseServlet {
 			try {
 				PageParam pageParam = PageParam.getPageParam(request);
 				
-				PageEntity<HotGoods> pageEntity = shopService.getHotGoods(this.getUid(request), category, shopType, prdName, volumeTotal, amountTotal, pageParam);
+				PageEntity<HotGoods> pageEntity = shopService.getHotGoods2(this.getUid(request), category, shopType, prdName, volumeTotal, amountTotal, pageParam);
+				
+				List<Map<String, Object>> dirList = goodsService.getAttnedDirs(this.getUid(request));
+				pageEntity.setExtList(dirList);;
 				
 				JSONObject json = JSONObject.fromObject(pageEntity);
 				

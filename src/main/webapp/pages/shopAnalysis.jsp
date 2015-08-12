@@ -350,15 +350,15 @@
 														</div>
 														
 														<div class="widget-elem" >
-															<label for="volumeTotal">最近2个月销量下限</label>
+															<label for="volumeTotal">上月销量下限</label>
 				
-															<input type="text" id="volumeTotal" name="volumeTotal" value="2000" placeholder="请输入宝贝名称" size="50" style="margin-left: 36px;"/>
+															<input type="text" id="volumeTotal" name="volumeTotal" value="2000" placeholder="请输入宝贝名称" size="50" style="margin-left: 72px;"/>
 														</div>
 														
 														<div class="widget-elem" >
-															<label for="amountTotal">最近2个月销售额下限</label>
+															<label for="amountTotal">上月销售额下限</label>
 				
-															<input type="text" id="amountTotal" name="amountTotal" value="2000" placeholder="请输入宝贝名称" size="50" style="margin-left: 22px;"/>
+															<input type="text" id="amountTotal" name="amountTotal" value="2000" placeholder="请输入宝贝名称" size="50" style="margin-left: 58px;"/>
 														</div>
 														
 														<div class="form-actions center" style="margin:0 auto;padding: 9px 10px 0;">
@@ -373,13 +373,18 @@
 										</div>
 									</div>
 									
-									<div class="row" id="tableDiv3">
+									<div class="row" id="tableDiv3" style="display:none;">
 										<div class="col-xs-12">
 											
-											<button class="pull-right btn btn-xs btn-success" id="batch-attn-btn" style="margin-top:5px;margin-left:10px;">
-												<i class="ace-icon fa fa-check"></i>
-												批量关注
-											</button>
+											<div class="pull-right" style="margin-top: 15px;">
+												<select id="toDir" name="toDir">
+												</select>
+												
+												<button class="btn btn-xs btn-success" id="batch-attn-btn" style="top:-3px;">
+													<i class="ace-icon fa fa-check"></i>
+													批量关注
+												</button>
+											</div>
 										
 											<!-- div.dataTables_borderWrap -->
 											<div>
