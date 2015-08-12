@@ -136,7 +136,7 @@
 																		<span>
 																			<a href="${pageContext.request.contextPath}/a/OrderServlet?method=confirm&v=<%=Base64Util.getBASE64("专业版") %>" id="upVersion1" class="btn btn-warning btn-xs" role="button">升级为专业版</a>&nbsp;&nbsp;
 																			<a href="${pageContext.request.contextPath}/a/OrderServlet?method=confirm&v=<%=Base64Util.getBASE64("旗舰版") %>" id="upVersion2" class="btn btn-warning btn-xs" role="button">升级为旗舰版</a>
-																			<a href="${pageContext.request.contextPath}/index/plan.jsp" class="btn btn-link btn-sm" role="button">了解各版本详情</a>
+																			<a href="${pageContext.request.contextPath}/f/Plan" class="btn btn-link btn-sm" role="button">了解各版本详情</a>
 																		</span>
 																	</c:if>
 																	
@@ -145,7 +145,7 @@
 																			class="ace-label ace-label-grey arrowed arrowed-right">${user.groupName }</span></span>
 																		<span>
 																			<a href="${pageContext.request.contextPath}/a/OrderServlet?method=confirm&v=<%=Base64Util.getBASE64("旗舰版") %>" id="upVersion2" class="btn btn-warning btn-xs" role="button">升级为旗舰版</a>
-																			<a href="${pageContext.request.contextPath}/index/plan.jsp" class="btn btn-link btn-sm" role="button">了解各版本详情</a>
+																			<a href="${pageContext.request.contextPath}/f/Plan" class="btn btn-link btn-sm" role="button">了解各版本详情</a>
 																		</span>
 																	</c:if>
 																	
@@ -154,7 +154,7 @@
 																			class="ace-label ace-label-grey arrowed arrowed-right">${user.groupName }</span>
 																		</span>
 																		<span>
-																			<a href="${pageContext.request.contextPath}/index/plan.jsp" class="btn btn-link btn-sm" role="button">了解各版本详情</a>
+																			<a href="${pageContext.request.contextPath}/f/Plan" class="btn btn-link btn-sm" role="button">了解各版本详情</a>
 																		</span>
 																	</c:if>
 																	

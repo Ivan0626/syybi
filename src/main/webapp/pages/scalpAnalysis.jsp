@@ -120,6 +120,9 @@
 							
 							<div class="row">
 								<div class="col-xs-12">
+									
+									<span class="pull-left" style="margin-top:15px;"> 店铺数(<span id="shop-len"></span>/<span id="shop-total">${user.scalpNum }</span>) </span>
+									
 									<button class="pull-right btn btn-xs btn-success" id="del-btn" style="margin-top:5px;margin-left:10px;">
 										<i class="ace-icon fa fa-check"></i>
 										删除所选

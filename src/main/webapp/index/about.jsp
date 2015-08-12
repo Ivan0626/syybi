@@ -54,7 +54,7 @@ end of Google Analysis -->
 		<h1 style="display: none;">深圳三眼鱼科技有限公司</h1>
 		<div class="container">
 			<div id="logo" class="pull-left">
-				<a href="${pageContext.request.contextPath}/index/main.jsp"><img src="${pageContext.request.contextPath}/index/main/logo.png"></a>
+				<a href="${pageContext.request.contextPath}/f/Index"><img src="${pageContext.request.contextPath}/index/main/logo.png"></a>
 			</div>
 			<div class="pull-right">
 				<c:if test="${user != null }">
@@ -68,13 +68,13 @@ end of Google Analysis -->
 
 			<div id="nav" class="pull-right">
 				<ul>
-					<li class="nav1 nav-li"><a href="${pageContext.request.contextPath}/index/main.jsp">首页</a>
+					<li class="nav1 nav-li"><a href="${pageContext.request.contextPath}/f/Index">首页</a>
 					</li>
 					<!-- 
 					<li class="nav2 nav-li"><a href="http://www.huoradar.com/picture">信息图</a>
 					 -->
 					</li>
-					<li class="nav3 nav-li"><a href="${pageContext.request.contextPath}/index/plan.jsp">套餐价格</a>
+					<li class="nav3 nav-li"><a href="${pageContext.request.contextPath}/f/Plan">套餐价格</a>
 					</li>
 					<li class="nav4 nav-li"><a class="active"
 						href="${pageContext.request.contextPath}/index/about.jsp">关于我们</a></li>
@@ -309,7 +309,7 @@ end of Google Analysis -->
 					<li class="foo-li">
 						<h3>产品服务</h3>
 						<ul>
-							<li><a href="${pageContext.request.contextPath}/index/main.jsp">电商指数</a></li>
+							<li><a href="${pageContext.request.contextPath}/f/Index">电商指数</a></li>
 						</ul>
 					</li>
 					<li class="foo-li">

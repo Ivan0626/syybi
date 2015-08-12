@@ -22,6 +22,7 @@ import com.sanyanyu.syybi.service.BaseUserService;
 import com.sanyanyu.syybi.service.LogLoginService;
 import com.sanyanyu.syybi.service.LogSystemService;
 import com.sanyanyu.syybi.service.OrderService;
+import com.sanyanyu.syybi.service.PermissionService;
 import com.sanyanyu.syybi.service.PointsLogService;
 import com.sanyanyu.syybi.utils.Base64Util;
 import com.sanyanyu.syybi.utils.DateUtils;
@@ -37,6 +38,7 @@ public class UserServlet extends BaseServlet {
 	private BaseUserService baseUserService;
 	private OrderService orderService;
 	private PointsLogService pointsLogService;
+	private PermissionService permService;
 
 	@Override
 	public void init() throws ServletException {
@@ -47,6 +49,8 @@ public class UserServlet extends BaseServlet {
 		this.logSystemService = new LogSystemService();
 		this.orderService = new OrderService();
 		this.pointsLogService = new PointsLogService();
+		
+		permService = new PermissionService();
 	}
 
 	public UserServlet() {
@@ -85,7 +89,7 @@ public class UserServlet extends BaseServlet {
 						request.getSession().removeAttribute("user");
 					}
 					//收费用户如果到期，直接降为免费版
-					if(!"免费版".equals(baseUser.getGroupName())){
+					if(!FinalConstants.GROUP_FREE_EDITION.equals(baseUser.getGroupId())){
 						
 						Date curDate = new Date();
 						
@@ -93,12 +97,20 @@ public class UserServlet extends BaseServlet {
 						Date beyondDate = DateUtils.addDays(validEndDate, 1);
 						
 						if(DateUtils.isSameDay(curDate, beyondDate)){
+							
+							int days = 0;
+							try {
+								days = permService.getFreeEditionDays();
+							} catch (Exception e) {
+								logger.error("获取免费的天数失败", e);
+							}
+							
 							//更新为免费版
-							baseUserService.updateValidDate(baseUser.getRegDate(), FinalConstants.VALID_END_DATE, "免费版", baseUser.getEmail());
+							baseUserService.updateValidDate2(DateUtils.getDate(), DateUtils.getOffsetDate(days), FinalConstants.GROUP_FREE_EDITION, baseUser.getEmail());
 							
 							baseUser.setGroupName("免费版");
-							baseUser.setValidStartDate(baseUser.getRegDate());
-							baseUser.setValidEndDate(FinalConstants.VALID_END_DATE);
+							baseUser.setValidStartDate(DateUtils.getDate());
+							baseUser.setValidEndDate(DateUtils.getOffsetDate(days));
 							
 						}
 						

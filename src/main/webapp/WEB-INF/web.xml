@@ -51,6 +51,28 @@
   
   <servlet>
     <description></description>
+    <display-name>IndexServlet</display-name>
+    <servlet-name>IndexServlet</servlet-name>
+    <servlet-class>com.sanyanyu.syybi.servlet.IndexServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>IndexServlet</servlet-name>
+    <url-pattern>/f/Index</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>PlanServlet</display-name>
+    <servlet-name>PlanServlet</servlet-name>
+    <servlet-class>com.sanyanyu.syybi.servlet.PlanServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PlanServlet</servlet-name>
+    <url-pattern>/f/Plan</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description></description>
     <display-name>DashboardServlet</display-name>
     <servlet-name>DashboardServlet</servlet-name>
     <servlet-class>com.sanyanyu.syybi.servlet.DashboardServlet</servlet-class>

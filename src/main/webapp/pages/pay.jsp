@@ -162,7 +162,7 @@
 					<input type="hidden" name="WIDsubject" value="${baseOrder.orderName }">
 					<input type="hidden" name="WIDtotal_fee" value="${baseOrder.amount }">
 					<input type="hidden" name="WIDbody" value="${baseOrder.detail }">
-					<input type="hidden" name="WIDshow_url" value="http://${pageContext.request.localAddr }:${pageContext.request.localPort}${pageContext.request.contextPath}/index/plan.jsp">
+					<input type="hidden" name="WIDshow_url" value="http://${pageContext.request.localAddr }:${pageContext.request.localPort}${pageContext.request.contextPath}/f/Plan">
 					
 					<input type="hidden" name="usePoints" value="${baseOrder.usePoints }">
 					<input type="hidden" name="validStartDate" value="${baseOrder.validStartDate }">

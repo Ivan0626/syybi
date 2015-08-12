@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sanyanyu.syybi.constants.FinalConstants;
+import com.sanyanyu.syybi.entity.AttDir;
 import com.sanyanyu.syybi.entity.BaseUser;
 import com.sanyanyu.syybi.entity.PointsLog;
 import com.sanyanyu.syybi.utils.Base64Util;
@@ -17,6 +19,7 @@ import com.sanyanyu.syybi.utils.JDBCUtils;
 import com.sanyanyu.syybi.utils.SendEmail;
 import com.sanyanyu.syybi.utils.SqlUtil;
 import com.sanyanyu.syybi.utils.StringUtils;
+import com.sanyanyu.syybi.utils.SysUtil;
 
 /**
  * 用户信息的业务逻辑处理
@@ -56,7 +59,10 @@ public class BaseUserService extends BaseService {
 			apoints.setPoints(1000);
 			apoints.setPointsType(1);
 			apoints.setRemark("新人注册大礼包");
-			apoints.setUid(getBaseUserByUsername(baseUser.getUsername()));
+			
+			String uid = getBaseUserByUsername(baseUser.getUsername());
+			
+			apoints.setUid(uid);
 			
 			sqlUtil.insert(JDBCUtils.getConnection(), apoints);
 			
@@ -91,6 +97,15 @@ public class BaseUserService extends BaseService {
 				}
 				
 			}
+			
+			//生成默认宝贝目录（未归属宝贝）
+			AttDir dir = new AttDir();
+			dir.setUid(uid);
+			dir.setDir_name(FinalConstants.DEFAULT_GOODS_DIR);
+			dir.setAdid(SysUtil.getUUID());
+			
+			sqlUtil.insert(JDBCUtils.getConnection(), dir);
+			
 			JDBCUtils.commitTransaction();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -262,15 +277,21 @@ public class BaseUserService extends BaseService {
 	 */
 	public BaseUser getBaseUserByUP(String username, String password) {
 
-		String sql = "select t1.shop_name as shopName, t1.points, t1.user_type as userType, t1.industry, t1.channel, t1.contact_person as contactPerson, t1.contact_tel as contactTel, t1.company_name as companyName, "
-				+ " t1.valid_start_date as validStartDate, t1.valid_end_date as validEndDate, t1.username, t1.password, t1.email, t1.groupid as groupId,t2.group_name as groupName, t1.regdate as regDate, t1.createtime as createTime,"
-				+ " t1.pay, t1.paydate as payDate,t1.uid FROM bi_base_user t1 left join bi_base_group t2 on t1.groupid = t2.gid where (t1.username = ? or t1.email = ?) and t1.password = ? and t1.status = 1 and t1.emailstatus = 1";
+//		String sql = "select t1.shop_name as shopName, t1.points, t1.user_type as userType, t1.industry, t1.channel, t1.contact_person as contactPerson, t1.contact_tel as contactTel, t1.company_name as companyName, "
+//				+ " t1.valid_start_date as validStartDate, t1.valid_end_date as validEndDate, t1.username, t1.password, t1.email, t1.groupid as groupId,t2.group_name as groupName, t1.regdate as regDate, t1.createtime as createTime,"
+//				+ " t1.pay, t1.paydate as payDate,t1.uid FROM bi_base_user t1 left join bi_base_group t2 on t1.groupid = t2.gid where (t1.username = ? or t1.email = ?) and t1.password = ? and t1.status = 1 and t1.emailstatus = 1";
 
-		//logger.info(sql);
-		BaseUser baseUser = sqlUtil.search(BaseUser.class, sql, new Object[] { username, username, password });
-
-		//logger.info(""+baseUser);
+		String sql = "select t1.shop_name as shopName, t1.points, t1.user_type as userType, t1.industry, t1.channel, t1.contact_person as contactPerson,"
+		 +" t1.contact_tel as contactTel, t1.company_name as companyName,  t1.valid_start_date as validStartDate, t1.valid_end_date as validEndDate,"
+		 +" t1.username, t1.password, t1.email, t1.groupid as groupId,t2.group_name as groupName, t1.regdate as regDate, t1.createtime as createTime,"
+		 +" t1.pay, t1.paydate as payDate,t1.uid,t2.goods_num as goodsNum, t2.shop_num as shopNum, t2.market_num as marketNum,"
+		+" t2.scalp_num as scalpNum, t2.hot_num as hotNum, t2.brand_num as brandNum FROM tbweb.bi_base_user t1"
+		 +" left join tbweb.bi_base_group t2 on t1.groupid = t2.gid "
+		 +" where (t1.username = ? or t1.email = ?) and t1.password = ?"
+		 +" and t1.status = 1 and t1.emailstatus = 1";
 		
+		BaseUser baseUser = sqlUtil.search(BaseUser.class, sql, username, username, password);
+
 		return baseUser;
 
 	}
@@ -401,6 +422,14 @@ public class BaseUserService extends BaseService {
 				+ " groupid = (select max(gid) from bi_base_group t where t.group_name = ?)  where email = ?";
 
 		sqlUtil.update(sql, new Object[] { validStartDate, validEndDate, groupName, email });
+
+	}
+	
+	public void updateValidDate2(String validStartDate, String validEndDate, String groupId, String email) {
+
+		String sql = "update bi_base_user set valid_start_date = ?, valid_end_date = ?, groupid = ?  where email = ?";
+
+		sqlUtil.update(sql, new Object[] { validStartDate, validEndDate, groupId, email });
 
 	}
 

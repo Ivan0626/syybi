@@ -25,7 +25,7 @@
 	<div class="page">
 		<div class="top-bar">
 			<div class="container">
-				<a href="${pageContext.request.contextPath}/index/main.jsp" id="logo"> <img
+				<a href="${pageContext.request.contextPath}/f/Index" id="logo"> <img
 					src="${pageContext.request.contextPath}/images/logo-white.png">
 				</a>
 				<div class="top-bar-nav">

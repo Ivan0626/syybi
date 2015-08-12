@@ -25,6 +25,11 @@ jQuery(function($) {
 		d.shopName = $('#shop-attned').val().trim();
 		d.maxIndex = shop_config.maxIndex;
 	};
+	
+	shop_config.initComplete = function (settings, json) {
+		$('#shop-len').text(json.data.length);
+    };
+	
 	shop_config.columns = [
 			{
 				data : 'shop_name',
@@ -202,7 +207,14 @@ jQuery(function($) {
 
 	// 关注
 	$('#attn-btn').click(function() {
-		// alert($('#shopId').val());
+		
+		if(parseInt($('#shop-total').text()) <= parseInt($('#shop-len').text())){
+			showMsg("超出关注上限！");
+			return false;
+		}
+		
+		var allLen = $('#'+shop_config.tableId+' > tbody > tr').length;
+		
 		// 添加该店铺
 		$.post(global.path + '/a/ScalpAnalysis', {
 			'shopId' : $('#shopId').val(),
@@ -213,9 +225,15 @@ jQuery(function($) {
 			if (result.status === 'notexist') {
 				showMsg("该店铺不存在");
 			} else if (result.status === 'success') {
-				if (shopTable) {
-					shopTable.fnDraw();
-				}
+				
+				showMsg("关注成功！", function(){
+					
+					if (shopTable) {
+						shopTable.fnDraw();
+						$('#shop-len').text(allLen + 1);
+					}
+				});
+				
 			} else {
 				showMsg("店铺关注失败");
 			}
@@ -236,7 +254,9 @@ jQuery(function($) {
 			return;
 		}
 
-		bootbox.confirm("确定删除?", function(result) {
+		var allLen = $('#'+shop_config.tableId+' > tbody > tr').length;
+		
+		confirmMsg("确定删除?", function(result) {
 			if (result) {
 				$.get(global.path + '/a/ScalpAnalysis', {
 					'shopIds' : shopIds + "",
@@ -246,9 +266,14 @@ jQuery(function($) {
 					if (result.status == 'disabledDel') {
 						showMsg("店铺添加关注一个月后才能删除");
 					} else if (result.status == 'delSuccess') {
-						if (shopTable) {
-							shopTable.fnDraw();
-						}
+						
+						showMsg("删除成功",function(){
+							if (shopTable) {
+								shopTable.fnDraw();
+								
+								$('#shop-len').text(allLen - shopIds.length);
+							}
+						});
 					}
 				}, 'json');
 			}

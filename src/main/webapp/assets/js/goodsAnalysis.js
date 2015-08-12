@@ -151,6 +151,8 @@ jQuery(function($) {
 			return false;
 		}
 		
+		var allLen = $('#dir-table > tbody > tr').length;
+		
 		// 添加目录
 		$.post(global.path + '/a/GoodsAnalysis', {
 			'dirName' : dirName,
@@ -165,7 +167,7 @@ jQuery(function($) {
 					if (dirTable) {
 						dirTable.fnDraw();
 						//由于dirTable.fnDraw()不会自动调用initComplete
-						$('#dir-len').text($('#dir-table > tbody > tr').length + 1);
+						$('#dir-len').text(allLen + 1);
 					}
 				});
 				
@@ -200,6 +202,8 @@ jQuery(function($) {
 			return;
 		}
 
+		var allLen = $('#dir-table > tbody > tr').length;
+		
 		confirmMsg('确定删除?', function(result) {  
             if(result) {  
             	$.get(global.path + '/a/GoodsAnalysis', {
@@ -216,7 +220,7 @@ jQuery(function($) {
 							if (dirTable) {
 								dirTable.fnDraw();
 								
-								$('#dir-len').text($('#dir-table > tbody > tr').length - dirIds.length);
+								$('#dir-len').text(allLen - dirIds.length);
 							}
 						});
 					}

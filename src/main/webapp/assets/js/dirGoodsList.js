@@ -80,6 +80,8 @@ jQuery(function($) {
 			return false;
 		}
 		
+		var allLen = $('#goods-table > tbody > tr').length;
+		
 		$.get(global.path + '/a/GoodsAnalysis?m=attn_url', {
 			
 			adid: $('#adid').val(),
@@ -99,7 +101,7 @@ jQuery(function($) {
 					
 					if (goods_table) {
 						goods_table.fnDraw();
-						$('#goods-len').text($('#goods-table > tbody > tr').length + 1);
+						$('#goods-len').text(allLen + 1);
 					}
 					
 				});
@@ -332,6 +334,8 @@ jQuery(function($) {
 			showMsg("至少选择一项");
 			return;
 		}
+		
+		var allLen = $('#'+goods_config.tableId+' > tbody > tr').length;
 
 		confirmMsg("确定删除?", function(result) {
 			if (result) {
@@ -347,7 +351,7 @@ jQuery(function($) {
 						if (goods_table) {
 							goods_table.fnDraw();
 							
-							$('#goods-len').text($('#'+goods_config.tableId+' > tbody > tr').length - itemIds.length);
+							$('#goods-len').text(allLen - itemIds.length);
 						}
 					}
 				}, 'json');

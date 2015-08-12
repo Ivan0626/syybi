@@ -52,7 +52,12 @@
 
 		<li class="hover" id="syy-industryAnalysis">
 			<a href="${ctx }/a/IndustryAnalysis">
-				<i class="menu-icon fa fa-industry"></i>
+				<!-- <i class="menu-icon fa fa-industry"></i> -->
+				
+				<i class="menu-icon">
+					<img alt="" src="${ctx }/assets/imagesLocal/bar18.gif">
+				</i>
+				
 				<span class="menu-text">
 					行业分析
 				</span>
@@ -85,7 +90,10 @@
 		</li>
 		<li class="hover" id="syy-brandAnalysis">
 			<a href="${ctx }/a/BrandAnalysis">
-				<i class="menu-icon fa fa-registered"></i>
+				<!-- <i class="menu-icon fa fa-registered"></i> -->
+				<i class="menu-icon">
+					<img alt="" src="${ctx }/assets/imagesLocal/R.gif">
+				</i>
 				<span class="menu-text"> 品牌分析 </span>
 			</a>
 			
@@ -94,8 +102,10 @@
 
 		<li class="hover" id="syy-dataCompare">
 			<a href="${ctx }/a/DataCompare">
-				<i class="menu-icon fa fa-balance-scale"></i>
-
+				<!-- <i class="menu-icon fa fa-balance-scale"></i> -->
+				<i class="menu-icon">
+					<img alt="" src="${ctx }/assets/imagesLocal/cheng18.gif">
+				</i>
 				<span class="menu-text">
 					数据对比
 				</span>
@@ -106,7 +116,10 @@
 
 		<li class="hover" id="syy-diamondAnalysis">
 			<a href="${ctx }/a/DiamondAnalysis">
-				<i class="menu-icon fa fa-diamond"></i>
+				<!-- <i class="menu-icon fa fa-diamond"></i> -->
+				<i class="menu-icon">
+					<img alt="" src="${ctx }/assets/imagesLocal/zuan.gif">
+				</i>
 				<span class="menu-text"> 钻展透视 </span>
 			</a>
 

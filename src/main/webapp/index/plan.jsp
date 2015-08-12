@@ -83,7 +83,7 @@ font-size: 12px;
 		<h1 style="display: none;">深圳三眼鱼科技有限公司</h1>
 		<div class="container">
 			<div id="logo" class="pull-left">
-				<a href="${pageContext.request.contextPath}/index/main.jsp"><img src="${pageContext.request.contextPath}/index/main/logo.png"></a>
+				<a href="${pageContext.request.contextPath}/f/Index"><img src="${pageContext.request.contextPath}/index/main/logo.png"></a>
 			</div>
 			<div class="pull-right">
 				<c:if test="${user != null }">
@@ -97,14 +97,14 @@ font-size: 12px;
 
 			<div id="nav" class="pull-right">
 				<ul>
-					<li class="nav1 nav-li"><a href="${pageContext.request.contextPath}/index/main.jsp">首页</a>
+					<li class="nav1 nav-li"><a href="${pageContext.request.contextPath}/f/Index">首页</a>
 					</li>
 					<!-- 
 					<li class="nav2 nav-li"><a href="http://www.ibbd.net/picture">信息图</a>
 					 -->
 					</li>
 					<li class="nav3 nav-li"><a class="active"
-						href="${pageContext.request.contextPath}/index/plan.jsp">套餐价格</a></li>
+						href="${pageContext.request.contextPath}/f/Plan">套餐价格</a></li>
 					<li class="nav4 nav-li"><a href="${pageContext.request.contextPath}/index/about.jsp">关于我们</a>
 					</li>
 				</ul>
@@ -120,35 +120,33 @@ font-size: 12px;
 			<div class="container">
 				<div class="combo-option">
 					<ul>
-						<li class="first">优惠价</li>
+						<li class="first">体验价</li>
 						
 						<li class="even">适用对象</li>
 						<li>数据类目</li>
 						<li class="even">宝贝数据</li>
 						<li>店铺数据</li>
-						<li class="even">运营分析数据</li>
+						<li class="even">运营数据</li>
 						<li>刷单数据</li>
 						<li class="even">热词数据</li>
 						<li>品牌数据</li>
 						<li class="even">数据对比</li>
 						<li>品牌分析</li>
-						<li class="even">数据预测</li>
-						<li>热词分析</li>
 						<li class="even">刷单分析</li>
-						<li>属性分析</li>
-						<li class="even">运营分析</li>
+						<li>运营分析</li>
+						<li class="even">热词分析</li>
 						<li>行业分析</li>
 						<li class="even">钻展透视</li>
 						<li>店铺分析</li>
 						<li class="even">宝贝分析</li>
-						<li>售后服务</li>
-						<li class="even" >金牌保障</li>
+						<li style="line-height:96px;">售后服务</li>
+						<li style="line-height:96px;" class="even" >金牌保障</li>
 					</ul>
 				</div>
 				<div class="combo-detail">
 					<ul>
 						<li class="head">
-							<p>免费版</p>
+							<p>${groupList[0].groupName }</p>
 							<p class="version">
 								<span class="unit">￥</span><span class="price">0</span><span
 									class="monthly"> / 月</span>
@@ -156,17 +154,14 @@ font-size: 12px;
 						</li>
 						<li class="first">--<br>--
 						</li>
-						<li >适合初级个人用户（试用一周）</li>
-						<li>1个行业</li>
-						<li>1个</li>
-						<li>1家</li>
-						<li>0家</li>
-						<li>0家</li>
-						<li>1个</li>
-						<li>1个</li>
-						<li><span class="false"></span></li>
-						<li><span class="false"></span></li>
-						<li><span class="false"></span></li>
+						<li style="font-size: 0.8125em;">${groupList[0].applyUser }（试用${groupList[0].usableTime }）</li>
+						<li>${groupList[0].industryNum }个行业</li>
+						<li>${groupList[0].goodsNum }个</li>
+						<li>${groupList[0].shopNum }家</li>
+						<li>${groupList[0].marketNum }家</li>
+						<li>${groupList[0].scalpNum }家</li>
+						<li>${groupList[0].hotNum }个</li>
+						<li>${groupList[0].brandNum }个</li>
 						<li><span class="false"></span></li>
 						<li><span class="false"></span></li>
 						<li><span class="false"></span></li>
@@ -175,8 +170,9 @@ font-size: 12px;
 						<li><span class="true"></span></li>
 						<li><span class="true"></span></li>
 						<li><span class="true"></span></li>
-						<li >QQ群、论坛、邮件</li>
-						<li >--</li>
+						<li><span class="true"></span></li>
+						<li style="font-size: 0.8125em;line-height:95px;height: 95px">${groupList[0].serviceSupport }</li>
+						<li style="font-size: 0.8125em;line-height:95px;height: 95px">--</li>
 						<li class="last"><a href="${pageContext.request.contextPath}/index/login.jsp"
 							class="plan-btn plan-btn-success">免费体验</a></li>
 					</ul>
@@ -185,27 +181,23 @@ font-size: 12px;
 				<div class="combo-detail">
 					<ul>
 						<li class="head">
-							<p>专业版</p>
+							<p>${groupList[1].groupName }</p>
 							<p class="version">
-								<span class="unit">￥</span><span class="price">688</span><span
+								<span class="unit">￥</span><span class="price">${groupList[1].priceMonth }</span><span
 									class="monthly"> / 月</span>
 							</p>
 						</li>
-						<li class="first"><span class="cross">￥3999</span><span
-							class="highlight">￥1888/季</span><br>
-						<span class="cross">￥12999</span><span class="highlight">￥6888/年</span></li>
-						<li >适合专业级个人用户</li>
-						<li>1个行业</li>
-						<li>10个</li>
-						<li>10家</li>
-						<li>0家</li>
-						<li>0家</li>
-						<li>0个</li>
-						<li>0个</li>
-						<li><span class="false"></span></li>
-						<li><span class="false"></span></li>
-						<li><span class="false"></span></li>
-						<li><span class="false"></span></li>
+						<li class="first"><span class="cross">￥${groupList[1].priceQuarterOld }</span><span
+							class="highlight">￥${groupList[1].priceQuarter }/季</span><br>
+						<span class="cross">￥${groupList[1].priceYearOld }</span><span class="highlight">￥${groupList[1].priceYear }/年</span></li>
+						<li style="font-size: 0.8125em;">${groupList[1].applyUser }</li>
+						<li>${groupList[1].industryNum }个行业</li>
+						<li>${groupList[1].goodsNum }个</li>
+						<li>${groupList[1].shopNum }家</li>
+						<li>${groupList[1].marketNum }家</li>
+						<li>${groupList[1].scalpNum }家</li>
+						<li>${groupList[1].hotNum }个</li>
+						<li>${groupList[1].brandNum }个</li>
 						<li><span class="false"></span></li>
 						<li><span class="false"></span></li>
 						<li><span class="false"></span></li>
@@ -213,8 +205,19 @@ font-size: 12px;
 						<li><span class="true"></span></li>
 						<li><span class="true"></span></li>
 						<li><span class="true"></span></li>
-						<li >专业版QQ群</li>
-						<li >包年套餐签订软件服务合同，提供全方位售后保障</li>
+						<li><span class="true"></span></li>
+						<li><span class="true"></span></li>
+						<li style="font-size: 0.8125em;line-height:95px;height: 95px">${groupList[1].serviceSupport }</li>
+						<li style="line-height:95px;height: 95px;">
+							<table style="height:95px;" cellspacing="0" cellpadding="0">
+	                            <tr>
+	                            	<td><span style="font-size: 0.8125em;text-align:center;display:block; padding-left:35px; padding-right:35px;">
+	                            			${groupList[1].promise }
+	                            		</span>
+	                            	</td>
+	                            </tr>
+                            </table>
+						</li>
 						<li class="last"><a href="${pageContext.request.contextPath}/a/OrderServlet?method=confirm&v=<%=Base64Util.getBASE64("专业版") %>" id="pay2"
 							class="plan-btn plan-btn-success" style="background-image:-webkit-linear-gradient(top,#f08542,#e86e23);background-color:#e86e23">立即购买</a></li>
 					</ul>
@@ -224,26 +227,25 @@ font-size: 12px;
 					<div class="pricing-star">超值</div>
 					<ul>
 						<li class="head">
-							<p>旗舰版</p>
+							<p>${groupList[2].groupName }</p>
 							<p class="version">
-								<span class="unit">￥</span><span class="price">1688</span><span
+								<span class="unit">￥</span><span class="price">${groupList[2].priceMonth }</span><span
 									class="monthly"> / 月</span>
 							</p>
 						</li>
-						<li class="first"><span class="cross">￥8999</span><span
-							class="highlight">￥4888/季</span><br>
-						<span class="cross">￥32999</span><span class="highlight">￥16888/年</span></li>
-						<li>适合小型团队或企业</li>
-						<li>1个行业（新增可定制）</li>
-						<li>30个</li>
-						<li>30家</li>
-						<li>3家</li>
-						<li>3家</li>
-						<li>50个</li>
-						<li>0个</li>
+						<li class="first"><span class="cross">￥${groupList[2].priceQuarterOld }</span><span
+							class="highlight">￥${groupList[2].priceQuarter }/季</span><br>
+						<span class="cross">￥${groupList[2].priceYearOld }</span><span class="highlight">￥${groupList[2].priceYear }/年</span></li>
+						<li style="font-size: 0.8125em;">${groupList[2].applyUser }</li>
+						<li>${groupList[2].industryNum }个行业（新增可定制）</li>
+						<li>${groupList[2].goodsNum }个</li>
+						<li>${groupList[2].shopNum }家</li>
+						<li>${groupList[2].marketNum }家</li>
+						<li>${groupList[2].scalpNum }家</li>
+						<li>${groupList[2].hotNum }个</li>
+						<li>${groupList[2].brandNum }个</li>
 						<li><span class="false"></span></li>
 						<li><span class="false"></span></li>
-						<li><span class="false"></span></li>
 						<li><span class="true"></span></li>
 						<li><span class="true"></span></li>
 						<li><span class="true"></span></li>
@@ -251,9 +253,26 @@ font-size: 12px;
 						<li><span class="true"></span></li>
 						<li><span class="true"></span></li>
 						<li><span class="true"></span></li>
-						<li><span class="true"></span></li>
-						<li >技术支持：旗舰版QQ群、电话；一对一专属优质服务</li>
-						<li >包年套餐签订软件服务合同，提供全方位金牌保障</li>
+						<li style="line-height:95px;height: 95px;">
+							<table style="height:95px;" cellspacing="0" cellpadding="0">
+	                            <tr>
+	                            	<td><span style="font-size: 0.8125em;text-align:center;display:block; padding-left:35px; padding-right:35px;">
+	                            			${groupList[2].serviceSupport }
+	                            		</span>
+	                            	</td>
+	                            </tr>
+                            </table>
+						</li>
+						<li style="line-height:95px;height: 95px;">
+							<table style="height:95px;" cellspacing="0" cellpadding="0">
+	                            <tr>
+	                            	<td><span style="font-size: 0.8125em;text-align:center;display:block; padding-left:35px; padding-right:35px;">
+	                            			${groupList[2].promise }
+	                            		</span>
+	                            	</td>
+	                            </tr>
+                            </table>
+						</li>
 						<li class="last"><a href="${pageContext.request.contextPath}/a/OrderServlet?method=confirm&v=<%=Base64Util.getBASE64("旗舰版") %>" id="pay2"
 							class="plan-btn plan-btn-success" style="background-image:-webkit-linear-gradient(top,#f08542,#e86e23);background-color:#e86e23">立即购买</a></li>
 					</ul>
@@ -261,171 +280,68 @@ font-size: 12px;
 				</div>
 				<div class="combo-detail">
 					<ul>
+					
 						<li class="head">
-							<p>企业版</p>
+							<p>${groupList[3].groupName }</p>
 							<%-- <p class="version">
 								<a href="${pageContext.request.contextPath}/index/about.jsp#contact" class="plan-btn plan-btn-success" role="button">联系我们</a>
 							</p> --%>
 							<p class="version">
-								<span class="unit">￥</span><span class="price">2688</span><span
+								<span class="unit">￥</span><span class="price">${groupList[3].priceMonth }</span><span
 									class="monthly"> / 月</span>
 							</p>
 						</li>
-						<li class="first"><span class="cross">￥16999</span><span
-							class="highlight">￥8888/季</span><br>
-						<span class="cross">￥56999</span><span class="highlight">￥26888/年</span>
+						<li class="first"><span class="cross">￥${groupList[3].priceQuarterOld }</span><span
+							class="highlight">￥${groupList[3].priceQuarter }/季</span><br>
+						<span class="cross">￥${groupList[3].priceYearOld }</span><span class="highlight">￥${groupList[3].priceYear }/年</span></li>
+						<li style="font-size: 0.8125em;">${groupList[3].applyUser }</li>
+						<li>${groupList[3].industryNum }个行业（新增可定制）</li>
+						<li>${groupList[3].goodsNum }个</li>
+						<li>${groupList[3].shopNum }家</li>
+						<li>${groupList[3].marketNum }家</li>
+						<li>${groupList[3].scalpNum }家</li>
+						<li>${groupList[3].hotNum }个</li>
+						<li>${groupList[3].brandNum }个</li>
+					
+						<li><span class="true"></span></li>
+						<li><span class="true"></span></li>
+						<li><span class="true"></span></li>
+						<li><span class="true"></span></li>
+						<li><span class="true"></span></li>
+						<li><span class="true"></span></li>
+						<li><span class="true"></span></li>
+						<li><span class="true"></span></li>
+						<li><span class="true"></span></li>
+						<li style="line-height:95px;height: 95px;">
+							<table style="height:95px;" cellspacing="0" cellpadding="0">
+	                            <tr>
+	                            	<td><span style="font-size: 0.8125em;text-align:center;display:block; padding-left:35px; padding-right:35px;">
+	                            			${groupList[3].serviceSupport }
+	                            		</span>
+	                            	</td>
+	                            </tr>
+                            </table>
 						</li>
-						<li>适合中大型企业</li>
-						<li>1个行业（新增可定制）</li>
-						<li>60个</li>
-						<li>60家</li>
-						<li>6家</li>
-						<li>6家</li>
-						<li>100个</li>
-						<li>6个</li>
-						<li><span class="true"></span></li>
-						<li><span class="true"></span></li>
-						<li><span class="true"></span></li>
-						<li><span class="true"></span></li>
-						<li><span class="true"></span></li>
-						<li><span class="true"></span></li>
-						<li><span class="true"></span></li>
-						<li><span class="true"></span></li>
-						<li><span class="true"></span></li>
-						<li><span class="true"></span></li>
-						<li><span class="true"></span></li>
-						<li >多项企业级专属功能；一对一专属优质服务</li>
-						<li >包年套餐签订软件服务合同，</li>
-						<li >提供全方位企业级保障</li>
-						<li class="last"><a href="${pageContext.request.contextPath}/index/about.jsp#contact"
-							class="plan-btn plan-btn-success">联系我们</a></li>
+						<li style="line-height:95px;height: 95px;">
+							<table style="height:95px;" cellspacing="0" cellpadding="0">
+	                            <tr>
+	                            	<td><span style="font-size: 0.8125em;text-align:center;display:block; padding-left:35px; padding-right:35px;">
+	                            			${groupList[3].promise }
+	                            		</span>
+	                            	</td>
+	                            </tr>
+                            </table>
+						</li>
+						<%-- <li class="last"><a href="${pageContext.request.contextPath}/index/about.jsp#contact"
+							class="plan-btn plan-btn-success">联系我们</a></li> --%>
+						<li class="last"><a href="${pageContext.request.contextPath}/a/OrderServlet?method=confirm&v=<%=Base64Util.getBASE64("企业版") %>" id="pay3"
+							class="plan-btn plan-btn-success" style="background-image:-webkit-linear-gradient(top,#f08542,#e86e23);background-color:#e86e23">立即购买</a></li>
 					</ul>
 					<div class="transparent"></div>
 				</div> 
 			</div>
 		</div>
 		
-		<!-- 
-		<div class="row">
-			<div id="slide">
-				<span class="close">×</span>
-				<div class="container">
-					<div id="order">
-						<div class="left order">
-							<input type="hidden" id="combo-count" value="1"
-								class="input-order">
-							<div>
-								<div class="tcImg baseMonth" tc="basic_monthly"></div>
-								<div class="tcImg baseSeason" tc="basic_quarterly"></div>
-								<div class="tcImg baseYear" tc="basic_yearly"></div>
-								<div class="tcImg proMonth" tc="pro_monthly"></div>
-								<div class="tcImg proSeason" tc="pro_quarterly"></div>
-								<div class="tcImg proYear" tc="pro_yearly"></div>
-								<select style="display: none;" id="combo-select"
-									class="input-order">
-									<option value="basic_monthly">基础版月套餐</option>
-									<option value="basic_quarterly">基础版季套餐</option>
-									<option value="basic_yearly">基础版年套餐</option>
-									<option value="pro_monthly">专业版月套餐</option>
-									<option value="pro_quarterly">专业版季套餐</option>
-									<option value="pro_yearly">专业版年套餐</option>
-								</select>
-							</div>
-						</div>
-						<div class="right order">
-							<div>
-								您选择了电商指数"<span id="selectBuyName" style="color: #1487f1;">基础版季套餐</span>"
-							</div>
-							<div class="cell">
-								<p class="left"
-									style="line-height: 40px; height: auto; width: 100%; position: relative;">
-									价格：<span id="combo-price"
-										style="color: #e97025; font-size: 30px;"></span> <span
-										id="showDisCount"
-										style="position: absolute; bottom: 0; right: 0; color: 808388; cursor: pointer;">活动购买</span>
-									<script type="text/javascript"
-										src="./plan/jquery.min.js" charset="UTF-8"></script>
-									<script type="text/javascript">
-										$("#showDisCount").click(function() {
-											$("#disCountDiv").slideToggle();
-										});
-									</script>
-								</p>
-							</div>
-							<style type="text/css">
-								#disCountDiv td {
-									line-height: 40px;
-									font-size: 0.8125em;
-									font-family: '微软雅黑';
-								}
-							</style>
-							
-							<div id="disCountDiv" class="cell" style="display: none;">
-								<table>
-									<tbody>
-										<tr>
-											<td>使用<span id="ticket-value"></span>元代金券：
-											</td>
-											<td><input type="text" id="ticket-quantity"
-												class="input-small">张<span id="ticket-limit"></span>
-											</td>
-											<td><span id="ticket-discount"
-												style="color: #e97025; font-size: 20px; float: right;"></span>
-											</td>
-										</tr>
-										<tr>
-											<td>使用现金账户：</td>
-											<td><input type="text" id="cash-input"
-												class="input-small">元<span id="cash-limit"></span></td>
-											<td><span id="cash-discount"
-												style="color: #e97025; font-size: 20px; float: right;"></span>
-											</td>
-										</tr>
-										<tr>
-											<td>实付款：</td>
-											<td><span class="" id="final-bill"></span></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-							<div style="margin-top: 20px;">
-								<a href="javascript:void(0);" class="btn btn-orange btn-pay"
-									data-payway="alipay">支付宝支付</a>
-								<p id="buy-info"></p>
-							</div>
-						</div>
-					</div>
-					<div id="login" style="display: block;">
-						<div class="left">
-							<div class="login">
-								<p>
-									本站帐号登录：<span class="login-info"></span>
-								</p>
-								<form method="post" id="login-form">
-									<input type="text" name="user" id="user" placeholder="帐号邮箱"
-										class="input-login" title="账号邮箱"> <input
-										type="password" name="passwd" id="passwd" placeholder="密码"
-										class="input-login" title="密码">
-									<div>
-										<button type="submit" id="local-login" class="btn btn-blue">登录</button>
-										<a style="display: inline-block; margin-left: 5px;"
-											class="btn btn-orange" href="http://www.ibbd.net/register">注册</a>
-									</div>
-								</form>
-							</div>
-						</div>
-						<div class="right" style="display: none;">
-							<div class="taobao-login">
-								<a href="javascript:void(0);" class="btn btn-taobao-login">淘宝帐号登录</a>
-							</div>
-							<p>
-								还没有帐号？一分钟<a href="http://www.ibbd.net/register">快速注册</a>
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			 -->
 			<div class="container">
 				<div class="faq">
 					<p class="q">数据来源哪里？</p>
@@ -497,7 +413,7 @@ font-size: 12px;
 					<li class="foo-li">
 						<h3>产品服务</h3>
 						<ul>
-							<li><a href="${pageContext.request.contextPath}/index/main.jsp">电商指数</a></li>
+							<li><a href="${pageContext.request.contextPath}/f/Index">电商指数</a></li>
 						</ul>
 					</li>
 					<li class="foo-li">

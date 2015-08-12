@@ -15,4 +15,11 @@ public class FinalConstants {
 	public static final int DEFAULT_QUERY_VOLUME = 2000;//最近2个月销量下限
 	public static final int DEFAULT_QUERY_AMOUNT = 2000;//最近2个月销售额下限
 	
+	public static final String GROUP_FREE_EDITION = "FREE_EDITION";
+	public static final String GROUP_PROFESSIONAL_EDITION = "PROFESSIONAL_EDITION";
+	public static final String GROUP_ULTIMATE_EDITION = "ULTIMATE_EDITION";
+	public static final String GROUP_ENTERPRISE_EDITION = "ENTERPRISE_EDITION";
+	
+	public static final String DEFAULT_GOODS_DIR = "未归属宝贝";
+	
 }

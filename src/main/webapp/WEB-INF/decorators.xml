@@ -3,6 +3,7 @@
     <!-- 此处用来定义不需要过滤的页面 -->
     <excludes>
     	<pattern>/index/*</pattern>
+    	<pattern>/f/*</pattern>
     	<pattern>/a/AdviseServlet?method=init</pattern>
     	<pattern>/a/OrderServlet?method=pay</pattern>
     	<pattern>/pages/industrySubAnalysis.jsp</pattern>

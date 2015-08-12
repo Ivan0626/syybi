@@ -202,13 +202,14 @@ public class ShopService extends BaseService {
 	public boolean enabledDel(String uid, String shopIds) throws Exception {
 
 		String sql = "select count(0) as cnt from tbweb.tb_attn_shop where shop_id in (" + StringUtils.strIn(shopIds)
-				+ ") and uid = ? and att_type = 1 and str_to_date(att_date, '%Y-%m-%d') < date_sub(curdate(), interval 1 month)";
+				+ ") and uid = ? and att_type = 1 and str_to_date(att_date, '%Y-%m-%d') > date_sub(curdate(), interval 1 month)";
 
 		Map<String, Object> map = sqlUtil.search(sql, uid);
 
 		int cnt = StringUtils.toInteger(map.get("cnt"));
 
-		return cnt > 0;
+		return cnt == 0;
+		
 	}
 
 	/**

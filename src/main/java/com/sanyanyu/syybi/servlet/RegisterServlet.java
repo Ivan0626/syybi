@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONObject;
 
+import com.sanyanyu.syybi.constants.FinalConstants;
 import com.sanyanyu.syybi.entity.BaseUser;
 import com.sanyanyu.syybi.service.BaseUserService;
 import com.sanyanyu.syybi.service.LogSystemService;
-import com.sanyanyu.syybi.service.PermissionService;
 import com.sanyanyu.syybi.utils.MD5Util;
 import com.sanyanyu.syybi.utils.SendEmail;
 import com.sanyanyu.syybi.utils.StringUtils;
@@ -28,7 +28,6 @@ public class RegisterServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
     
 	private BaseUserService baseUserService;
-	private PermissionService permissionService;
 	
 	@Override
 	public void init() throws ServletException {
@@ -36,7 +35,6 @@ public class RegisterServlet extends BaseServlet {
 		
 		this.baseUserService = new BaseUserService();
 		this.logSystemService = new LogSystemService();
-		this.permissionService = new PermissionService();
 	}
 	
     public RegisterServlet() {
@@ -77,7 +75,7 @@ public class RegisterServlet extends BaseServlet {
 			baseUser.setUsername(username);
 			baseUser.setUserno(username);
 			baseUser.setStatus(1);//有效用户
-			baseUser.setGroupId(permissionService.getGidByName("旗舰版"));//默认为旗舰版
+			baseUser.setGroupId(FinalConstants.GROUP_FREE_EDITION);//默认为免费版
 			
 			String validateCode = MD5Util.encode2hex(username + email);
 			baseUser.setValidateCode(validateCode);

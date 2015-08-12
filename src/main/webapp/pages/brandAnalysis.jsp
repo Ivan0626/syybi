@@ -106,6 +106,9 @@
 							
 							<div class="row">
 								<div class="col-xs-12">
+									
+									<span class="pull-left" style="margin-top:15px;"> 品牌数(<span id="brand-len"></span>/<span id="brand-total">${user.brandNum }</span>) </span>
+									
 									<button class="pull-right btn btn-xs btn-success" id="del-btn" style="margin-top:5px;margin-left:10px;">
 										<i class="ace-icon fa fa-check"></i>
 										删除所选

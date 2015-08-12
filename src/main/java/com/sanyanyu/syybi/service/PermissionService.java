@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.sanyanyu.syybi.constants.FinalConstants;
 import com.sanyanyu.syybi.entity.BaseGroup;
 import com.sanyanyu.syybi.entity.BasePermission;
-import com.sanyanyu.syybi.entity.GroupPermission;
 import com.sanyanyu.syybi.utils.JDBCUtils;
 import com.sanyanyu.syybi.utils.StringUtils;
 
@@ -29,6 +29,39 @@ public class PermissionService extends BaseService {
 
 	}
 
+	public int getFreeEditionDays() throws Exception{
+		
+		int days = 0;
+		
+		String sql = "SELECT usable_time FROM tbweb.bi_base_group where gid = 'FREE_EDITION'";
+		Map<String, Object> map = sqlUtil.search(sql);
+		
+		if(map != null && !map.isEmpty()){
+			String ut = map.get("usable_time").toString();
+			
+			if(ut.indexOf("周") > -1){
+				
+				days = 7 * StringUtils.toInteger(ut.replace("周", ""));
+				
+			}
+			//TODO:转换其他计量单位
+			
+		}
+		
+		return days;
+		
+	}
+	
+	public List<BaseGroup> getAllGroups() throws Exception{
+		
+		String sql = "SELECT gid, group_name as groupName, price_month as priceMonth, price_quarter as priceQuarter, price_year as priceYear,apply_user as applyUser,"
+				+" goods_num as goodsNum, industry_num as industryNum, price_year_old as priceYearOld, shop_num as shopNum, market_num as marketNum,"
+				+" scalp_num as scalpNum, hot_num as hotNum, brand_num as brandNum,promise, service_support as serviceSupport, usable_time as usableTime FROM tbweb.bi_base_group order by price_month";
+		
+		return sqlUtil.searchList(BaseGroup.class, sql);
+		
+	}
+	
 	public List<BasePermission> getUserPermissions(String uid){
 		
 		String sql = "select t4.perm_no as permNo from bi_base_user t1 left join bi_base_group t2 on t1.groupid = t2.gid"
@@ -44,55 +77,94 @@ public class PermissionService extends BaseService {
 		
 		List<BaseGroup> baseGroupList = new ArrayList<BaseGroup>();
 		BaseGroup baseGroup1 = new BaseGroup();
+		baseGroup1.setGid(FinalConstants.GROUP_FREE_EDITION);
 		baseGroup1.setApplyUser("适合初级个人用户");
 		baseGroup1.setGroupName("免费版");
-		baseGroup1.setIndustryNum(0);
-		baseGroup1.setPriceMonth(0);
+		baseGroup1.setIndustryNum(1);
+		baseGroup1.setGoodsNum(1);
 		baseGroup1.setPriceQuarter(-1);
 		baseGroup1.setPriceYear(-1);
 		baseGroup1.setPriceQuarterOld(-1);
 		baseGroup1.setPriceYearOld(-1);
-		baseGroup1.setProductNum(1);
+		baseGroup1.setServiceSupport("QQ群、论坛、邮件");
+		baseGroup1.setUsableTime("1周");
 
 		BaseGroup baseGroup2 = new BaseGroup();
-		baseGroup2.setApplyUser("适合专业级用户");
+		baseGroup2.setGid(FinalConstants.GROUP_PROFESSIONAL_EDITION);
+		baseGroup2.setApplyUser("适合专业级个人用户");
 		baseGroup2.setGroupName("专业版");
-		baseGroup2.setIndustryNum(0);
-		baseGroup2.setPriceMonth(59);
-		baseGroup2.setPriceQuarter(159);
-		baseGroup2.setPriceYear(599);
-		baseGroup2.setPriceQuarterOld(177);
-		baseGroup2.setPriceYearOld(708);
-		baseGroup2.setProductNum(6);
+		baseGroup2.setIndustryNum(1);
+		baseGroup2.setGoodsNum(10);
+		baseGroup2.setPriceMonth(688);
+		baseGroup2.setPriceQuarter(1888);
+		baseGroup2.setPriceYear(6888);
+		baseGroup2.setPriceQuarterOld(3999);
+		baseGroup2.setPriceYearOld(12999);
+		baseGroup2.setShopNum(10);
+		baseGroup2.setHotNum(10);
+		baseGroup2.setServiceSupport("专业版QQ群");
+		baseGroup2.setPromise("包年套餐签订软件服务合同，提供全方位售后保障");
 
 		BaseGroup baseGroup3 = new BaseGroup();
-		baseGroup3.setApplyUser("适合中小型企业");
+		baseGroup3.setGid(FinalConstants.GROUP_ULTIMATE_EDITION);
+		baseGroup3.setApplyUser("适合小型团队或企业");
 		baseGroup3.setGroupName("旗舰版");
-		baseGroup3.setIndustryNum(2);
-		baseGroup3.setPriceMonth(199);
-		baseGroup3.setPriceQuarter(499);
-		baseGroup3.setPriceYear(1999);
-		baseGroup3.setPriceQuarterOld(597);
-		baseGroup3.setPriceYearOld(2388);
-		baseGroup3.setProductNum(10);
+		baseGroup3.setIndustryNum(1);
+		baseGroup3.setGoodsNum(30);
+		baseGroup3.setShopNum(30);
+		baseGroup3.setMarketNum(3);
+		baseGroup3.setScalpNum(3);
+		baseGroup3.setHotNum(50);
+		baseGroup3.setServiceSupport("技术支持：旗舰版QQ群、电话；一对一专属优质服务");
+		baseGroup3.setPromise("包年套餐签订软件服务合同，提供全方位金牌保障");
+		baseGroup3.setPriceMonth(1688);
+		baseGroup3.setPriceQuarter(4888);
+		baseGroup3.setPriceYear(16888);
+		baseGroup3.setPriceQuarterOld(8999);
+		baseGroup3.setPriceYearOld(32999);
+		
 
 		BaseGroup baseGroup4 = new BaseGroup();
-		baseGroup4.setApplyUser("适合咨询公司");
+		baseGroup4.setGid(FinalConstants.GROUP_ENTERPRISE_EDITION);
+		baseGroup4.setApplyUser("适合中大型企业");
 		baseGroup4.setGroupName("企业版");
-		baseGroup4.setIndustryNum(5);
-		baseGroup4.setPriceMonth(-1);
-		baseGroup4.setPriceQuarter(-1);
-		baseGroup4.setPriceYear(-1);
-		baseGroup4.setPriceQuarterOld(-1);
-		baseGroup4.setPriceYearOld(-1);
-		baseGroup4.setProductNum(20);
+		baseGroup4.setIndustryNum(1);
+		baseGroup4.setGoodsNum(60);
+		baseGroup4.setShopNum(60);
+		baseGroup4.setMarketNum(6);
+		baseGroup4.setScalpNum(6);
+		baseGroup4.setHotNum(100);
+		baseGroup4.setBrandNum(6);
+		baseGroup4.setServiceSupport("多项企业级专属功能；一对一专属优质服务");
+		baseGroup4.setPromise("包年套餐签订软件服务合同，提供全方位企业级保障");
+		
+		baseGroup4.setPriceMonth(2688);
+		baseGroup4.setPriceQuarter(8888);
+		baseGroup4.setPriceYear(26888);
+		baseGroup4.setPriceQuarterOld(16999);
+		baseGroup4.setPriceYearOld(56999);
 
 		baseGroupList.add(baseGroup1);
 		baseGroupList.add(baseGroup2);
 		baseGroupList.add(baseGroup3);
 		baseGroupList.add(baseGroup4);
+		
+		JDBCUtils.startTransaction();
+		try {
+			//先清除
+			sqlUtil.delete("delete from tbweb.bi_base_group");
+			
+			// 保存权限组
+			sqlUtil.batchInsert(JDBCUtils.getConnection(), BaseGroup.class, baseGroupList);
+			JDBCUtils.commitTransaction();
 
-		List<BasePermission> bpList = new ArrayList<BasePermission>();
+		} catch (SQLException e) {
+			JDBCUtils.rollbackTransaction();
+		} finally {
+			JDBCUtils.closeConnection();
+		}
+
+		/*List<BasePermission> bpList = new ArrayList<BasePermission>();
 		BasePermission bp1 = new BasePermission();
 		bp1.setPermName("产品预测");
 		BasePermission bp2 = new BasePermission();
@@ -217,7 +289,7 @@ public class PermissionService extends BaseService {
 			JDBCUtils.rollbackTransaction();
 		} finally {
 			JDBCUtils.closeConnection();
-		}
+		}*/
 
 	}
 

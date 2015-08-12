@@ -31,7 +31,7 @@ public class BaseUser implements Serializable {
 	private String payDate = "";
 	private String email = "";
 	private Integer emailStatus = 0;
-	private Integer groupId = 0;
+	private String groupId;
 	private String groupName;
 	private String regDate = DateUtils.getDate();
 	private Timestamp createTime = new Timestamp(System.currentTimeMillis());
@@ -51,6 +51,49 @@ public class BaseUser implements Serializable {
 	
 	private String attnCnt;
 	
+	private Integer shopNum;
+	private Integer MarketNum;
+	private Integer ScalpNum;
+	private Integer HotNum;
+	private Integer brandNum;
+	private Integer goodsNum;
+	
+	public Integer getShopNum() {
+		return shopNum;
+	}
+	public void setShopNum(Integer shopNum) {
+		this.shopNum = shopNum;
+	}
+	public Integer getMarketNum() {
+		return MarketNum;
+	}
+	public void setMarketNum(Integer marketNum) {
+		MarketNum = marketNum;
+	}
+	public Integer getScalpNum() {
+		return ScalpNum;
+	}
+	public void setScalpNum(Integer scalpNum) {
+		ScalpNum = scalpNum;
+	}
+	public Integer getHotNum() {
+		return HotNum;
+	}
+	public void setHotNum(Integer hotNum) {
+		HotNum = hotNum;
+	}
+	public Integer getBrandNum() {
+		return brandNum;
+	}
+	public void setBrandNum(Integer brandNum) {
+		this.brandNum = brandNum;
+	}
+	public Integer getGoodsNum() {
+		return goodsNum;
+	}
+	public void setGoodsNum(Integer goodsNum) {
+		this.goodsNum = goodsNum;
+	}
 	public String getAttnCnt() {
 		return attnCnt;
 	}
@@ -213,10 +256,10 @@ public class BaseUser implements Serializable {
 	}
 	
 	@Column(name="groupid")
-	public Integer getGroupId() {
+	public String getGroupId() {
 		return groupId;
 	}
-	public void setGroupId(Integer groupId) {
+	public void setGroupId(String groupId) {
 		this.groupId = groupId;
 	}
 	

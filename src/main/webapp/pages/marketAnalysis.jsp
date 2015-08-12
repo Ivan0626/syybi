@@ -119,21 +119,13 @@
 							</div>
 							
 							<div class="row">
-								<div class="col-xs-12" style="position:relative;">
-
-									<div class="clearfix" style="position:absolute;right:12px;top:10px;">
-										
-										<button class="pull-right btn btn-xs btn-success" id="del-btn" style="margin-top:5px;margin-left:10px;">
-											<i class="ace-icon fa fa-check"></i>
-											删除所选
-										</button>
+								<div class="col-xs-12">
+									<span class="pull-left" style="margin-top:15px;"> 店铺数(<span id="shop-len"></span>/<span id="shop-total">${user.marketNum }</span>) </span>
+									<button class="pull-right btn btn-xs btn-success" id="del-btn" style="margin-top:5px;margin-left:10px;">
+										<i class="ace-icon fa fa-check"></i>
+										删除所选
+									</button>
 									
-										<!-- 
-										<div class="pull-right tableTools-container"></div>
-										 -->
-									</div>
-									<!-- div.table-responsive -->
-
 									<!-- div.dataTables_borderWrap -->
 									<div>
 										<table id="dynamic-table" class="table table-striped table-bordered table-hover">

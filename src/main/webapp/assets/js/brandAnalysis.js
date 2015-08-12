@@ -29,6 +29,10 @@ jQuery(function($) {
 	
 	brand_config.type = 'POST';
 
+	brand_config.initComplete = function (settings, json) {
+		$('#brand-len').text(json.data.length);
+    };
+	
 	brand_config.data = function(d) {
 		// 添加额外的参数传给服务器
 		d.maxIndex = brand_config.maxIndex;
@@ -157,6 +161,13 @@ jQuery(function($) {
 			
 		}
 		
+		if(parseInt($('#brand-total').text()) <= parseInt($('#brand-len').text())){
+			showMsg("超出关注上限！");
+			return false;
+		}
+		
+		var allLen = $('#'+brand_config.tableId+' > tbody > tr').length;
+		
 		// 添加该品牌
 		$.post(global.path + '/a/BrandAnalysis', {
 			'brandName' : $('#brand-attn').val(),
@@ -171,6 +182,7 @@ jQuery(function($) {
 					
 					if (brandTable) {
 						brandTable.fnDraw();
+						$('#brand-len').text(allLen + 1);
 					}
 				});
 				
@@ -193,6 +205,8 @@ jQuery(function($) {
 			return;
 		}
 
+		var allLen = $('#'+brand_config.tableId+' > tbody > tr').length;
+		
 		confirmMsg("确定删除?", function(result){
 			
 			if (result) {
@@ -208,6 +222,8 @@ jQuery(function($) {
 							
 							if (brandTable) {
 								brandTable.fnDraw();
+								
+								$('#brand-len').text(allLen - brandNames.length);
 							}
 							
 						});

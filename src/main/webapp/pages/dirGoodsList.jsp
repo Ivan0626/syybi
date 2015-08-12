@@ -165,7 +165,7 @@
 										<div class="row">
 											<div class="col-xs-12">
 			
-												<span class="pull-left" style="margin-top:15px;"> 宝贝数(<span id="goods-len"></span>/<span id="goods-total">300</span>) </span>
+												<span class="pull-left" style="margin-top:15px;"> 宝贝数(<span id="goods-len"></span>/<span id="goods-total">${user.goodsNum }</span>) </span>
 									
 												<button class="pull-right btn btn-xs btn-success" id="del-btn" style="margin-top:15px;margin-left:10px;">
 													<i class="ace-icon fa fa-check"></i>
