@@ -11,8 +11,9 @@
 			<!-- #section:basics/navbar.layout.brand -->
 			<a href="${pageContext.request.contextPath }/f/Index" class="navbar-brand">
 				<small>
-					<i class="fa fa-leaf"></i>
-					电商指数
+					<!-- <i class="fa fa-leaf"></i>
+					电商指数 -->
+					<img src="${pageContext.request.contextPath}/images/logo-white.png" height="30px">
 				</small>
 			</a>
 

@@ -55,7 +55,7 @@ public class PermissionService extends BaseService {
 	public List<BaseGroup> getAllGroups() throws Exception{
 		
 		String sql = "SELECT gid, group_name as groupName, price_month as priceMonth, price_quarter as priceQuarter, price_year as priceYear,apply_user as applyUser,"
-				+" goods_num as goodsNum, industry_num as industryNum, price_year_old as priceYearOld, shop_num as shopNum, market_num as marketNum,"
+				+" goods_num as goodsNum, industry_num as industryNum, price_quarter_old as priceQuarterOld, price_year_old as priceYearOld, shop_num as shopNum, market_num as marketNum,"
 				+" scalp_num as scalpNum, hot_num as hotNum, brand_num as brandNum,promise, service_support as serviceSupport, usable_time as usableTime FROM tbweb.bi_base_group order by price_month";
 		
 		return sqlUtil.searchList(BaseGroup.class, sql);

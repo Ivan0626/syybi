@@ -10,130 +10,99 @@ jQuery(function($) {
 	});
 	$('#syy-hotAnalysis').addClass('active open');
 
-	$('#shop-search').click(function() {
+	$('#hot-search').click(function() {
 
-		window.location.href = marketAnalysis.path + "/a/MarketAnalysis?m=searchB";
+		window.location.href = global.path + "/a/HotAnalysis?m=searchB";
 
 	});
 
-	var table = $('#dynamic-table').dataTable(
+	var hotTable = null;
+	//===================================================店铺列表==========================================================
+	
+	var hot_config = {};
+	hot_config.tableId = 'hot-table';
+	hot_config.url = global.path + '/a/HotAnalysis?m=hot_list';
+	hot_config.maxIndex = 6;
+	
+	hot_config.type = 'POST';
+
+	hot_config.data = function(d) {
+		// 添加额外的参数传给服务器
+		d.hotName = $('#hot-attned').val().trim();
+		d.maxIndex = hot_config.maxIndex;
+	};
+	
+	hot_config.initComplete = function (settings, json) {
+		$('#hot-len').text(json.data.length);
+    };
+	
+	hot_config.columns = [
 			{
-				autoWidth : false,
-				columns : [ {
-					"data" : "shopName",
-					fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
-						$(nTd).css('text-align', 'left').css('vertical-align', 'inherit');
-					}
-				}, {
-					"data" : "riseIndex",
-					fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
-						$(nTd).css('text-align', 'right').css('vertical-align', 'inherit');
-						if(sData > 10){
-							$(nTd).css('color', 'red');
-						}
-					}
-				}, {
-					"data" : "salesAmountPre"
-				}, {
-					"data" : "itemCount"
-				}, {
-					"data" : "phoneShopAdv"
-				}, {
-					"data" : "phoneItemAdv"
-				}, {
-					"data" : "phoneItemTrain"
-				}, {
-					"data" : "phoneItemPromotion"
-				}, {
-					"data" : "webShopAdv"
-				}, {
-					"data" : "webItemAdv"
-				}, {
-					"data" : "webShopTrain"
-				}, {
-					"data" : "webItemTrain"
-				}, {
-					"data" : "taokeItem"
-				}, {
-					"data" : "juItem"
-				}, {
-					"data" : "cuItem"
-				}, {
-					"data" : "shopId",
-					"orderable" : false
-				}, {
-					"data" : "asid",
-					"orderable" : false
-				} ],
-				language : dataTableConfig.language,
-				dom : dataTableConfig.dom,
-				ajax : {
-					url : marketAnalysis.path + "/a/MarketAnalysis?m=shop_list",
-					type : 'POST',
-					data : function(d) {
-						// 添加额外的参数传给服务器
-						var shopName = marketAnalysis.shopName;
-						shopName = decodeURI(decodeURI(shopName));// 解码
-						if (shopName) {
-							d.shopName = shopName;
-						} else {
-							d.shopName = $('#shop-attned').val().trim();
-						}
-					}
+				data : "seq",
+				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+					$(nTd).css('text-align', 'center').css('vertical-align', 'inherit');
+				}
+			}, {
+				data : "key"
+			},{
+				data : "rise",
+				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+					$(nTd).css('text-align', 'right').css('vertical-align', 'inherit');
 				},
-				serverSide : true,
-				paging: false,
-				initComplete : function (settings, json) {
-					$('#shop-len').text(json.data.length);
-			    },
-				columnDefs : [
-						{
-							targets : 0,
-							render : function(val, display, val_obj, prop) {
-								var html = '<a target="_blank" href="' + val_obj.shopUrl + '">' + val + '</a>';
+				render : function(val, display, val_obj, prop) {
+					
+					data = parseFloat(val.replace('%', ''));
+					
+					if (data < 0) {
+						return val + '<img src="' + global.path + '/assets/img/down_arrow_new.gif">';
+					} else if (data > 0) {
+						return val + '<img src="' + global.path + '/assets/img/up_arrow_new.gif">';
+					} else {
+						return data;
+					}
+				}
+			},{
+				data : "cat_path"
+			},{
+				data : "att_date"
+			}, {
+				data : 'id',
+				searchable: false,
+				orderable: false,
+				render : function(val, display, val_obj, prop) {
 
-								if (val_obj.shopType == 'TMALL') {
-									html = '<img src="' + marketAnalysis.path + '/assets/imagesLocal/bc_shop_icon.png">'
-											+ ' <a target="_blank" href="' + val_obj.shopUrl + '">' + val + '</a>';
-								}
+					var shopName = encodeURI(encodeURI(val_obj.shop_name));// 编码
 
-								return html;
-							}
-						},
-						{
-							targets : 15,
-							render : function(val, display, val_obj, prop) {
+					var html = '<div class="hidden-sm hidden-xs action-buttons"><a href="' + global.path+ '/a/HotAnalysis?m=goods_list&shopId=' + val + '&shopName=' + shopName + '&tab=tab1">'
+							+ '<img alt="热词趋势" title="热词趋势" src="' + global.path + '/assets/imagesLocal/ci.png"></a>'
+							+ '<a href="'+ global.path + '/a/HotAnalysis?m=goods_list&shopId=' + val + '&shopName=' + shopName+ '&tab=tab2">' 
+							+ '<img alt="关联店铺" title="关联店铺" src="' + global.path + '/assets/imagesLocal/guan.png"></a></div>';
+					return html;
+				},
+				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+					$(nTd).css('text-align', 'center').css('vertical-align', 'inherit');
+				}
+			}, {
+				data : 'id',
+				searchable: false,
+				orderable: false,
+				render : function(val, display, val_obj, prop) {
 
-								var shopName = encodeURI(encodeURI(val_obj.shopName));// 编码
-
-								var html = '<div class="hidden-sm hidden-xs action-buttons"><a href="' + marketAnalysis.path+ '/a/MarketAnalysis?m=goods_list&shopId=' + val_obj.shopId + '&shopName=' + shopName + '&tab=tab1">'
-										+ '<img alt="宝贝列表" title="宝贝列表" src="' + marketAnalysis.path + '/assets/imagesLocal/bao.png"></a>'
-										+ '<a href="'+ marketAnalysis.path + '/a/MarketAnalysis?m=goods_list&shopId=' + val_obj.shopId + '&shopName=' + shopName+ '&tab=tab2">' 
-										+ '<img alt="广告分析" title="广告分析" src="' + marketAnalysis.path + '/assets/imagesLocal/guang.png"></a></div>';
-								return html;
-							}
-						},
-						{
-							targets : 16,
-							render : function(val, display, val_obj, prop) {
-
-								var html = '<label class="pos-rel">' + '<input type="checkbox" name="shopIds" value="' + val_obj.shopId
-										+ '" class="ace" />' + '<span class="lbl"></span>' + '</label>';
-								return html;
-							}
-						}, {
-							className : "datatables-body-td",
-							"targets" : [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ]
-						},{
-							fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
-								$(nTd).css('text-align', 'right').css('vertical-align', 'inherit');
-							},
-							"targets" : [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ]
-						} ]
-			});
-
+					var html = '<label class="pos-rel">' + '<input type="checkbox" name="hotIds" value="' + val
+							+ '" class="ace" />' + '<span class="lbl"></span>' + '</label>';
+					return html;
+				},
+				fnCreatedCell : function(nTd, sData, oData, iRow, iCol) {
+					$(nTd).css('text-align', 'center').css('vertical-align', 'inherit');
+				}
+			} ];
+	
+	if(hotTable == null){
+		hotTable = loadDataTable(hot_config);
+	}
+	
 	var active_class = 'active';
-	$('#dynamic-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function() {
+	$('#'+hot_config.tableId+' > thead > tr > th input[type=checkbox]').eq(0).on('click', function() {
 		var th_checked = this.checked;// checkbox inside "TH" table
 		// header
 
@@ -147,7 +116,7 @@ jQuery(function($) {
 	});
 
 	// select/deselect a row when the checkbox is checked/unchecked
-	$('#dynamic-table').on('click', 'td input[type=checkbox]', function() {
+	$('#'+hot_config.tableId).on('click', 'td input[type=checkbox]', function() {
 		var $row = $(this).closest('tr');
 		if (this.checked)
 			$row.addClass(active_class);
@@ -157,58 +126,58 @@ jQuery(function($) {
 
 	// 搜索已关注的店铺
 	// 远程数据源
-	var attned_shops = new Bloodhound({
-		datumTokenizer : Bloodhound.tokenizers.obj.whitespace('shop_name'),
+	var attned_hots = new Bloodhound({
+		datumTokenizer : Bloodhound.tokenizers.obj.whitespace('hot_name'),
 		queryTokenizer : Bloodhound.tokenizers.whitespace,
 		// 在文本框输入字符时才发起请求
-		remote : marketAnalysis.path + '/a/MarketAnalysis?m=shop_attned&q=%QUERY',
+		remote : global.path + '/a/HotAnalysis?m=hot_attned&q=%QUERY',
 		limit : 50
 	});
 
-	attned_shops.initialize();
+	attned_hots.initialize();
 
-	$('#shop-attned').typeahead({
+	$('#hot-attned').typeahead({
 		hint : true,
 		highlight : true,
 		minLength : 1
 	}, {
-		name : 'shops',
-		display : 'shop_name',
-		source : attned_shops.ttAdapter()
+		name : 'hots',
+		display : 'hot_name',
+		source : attned_hots.ttAdapter()
 	});
 
 	// 添加关注店铺
 	// 远程数据源
-	var attn_shops = new Bloodhound({
-		datumTokenizer : Bloodhound.tokenizers.obj.whitespace('shop_name'),
+	var attn_hots = new Bloodhound({
+		datumTokenizer : Bloodhound.tokenizers.obj.whitespace('hot_name'),
 		queryTokenizer : Bloodhound.tokenizers.whitespace,
 		// 在文本框输入字符时才发起请求
-		remote : marketAnalysis.path + '/a/MarketAnalysis?m=shop_attn&q=%QUERY',
+		remote : global.path + '/a/HotAnalysis?m=hot_attn&q=%QUERY',
 		limit : 50
 	});
 
-	attn_shops.initialize();
+	attn_hots.initialize();
 
-	$('#shop-attn').typeahead({
+	$('#hot-attn').typeahead({
 		hint : true,
 		highlight : true,
 		minLength : 1
 	}, {
-		name : 'shops',
-		display : 'shop_name',
-		source : attn_shops.ttAdapter()
+		name : 'hots',
+		display : 'hot_name',
+		source : attn_hots.ttAdapter()
 	});
 
-	$('#shop-attn').on('typeahead:selected', function(e, item) {
-		$('#shopId').val(item.shop_id);
-		$('#shopName').val(item.shop_name);
+	$('#hot-attn').on('typeahead:selected', function(e, item) {
+		$('#hotId').val(item.hot_id);
+		$('#hotName').val(item.hot_name);
 	});
 
 	// 检索
 	$('#search-btn').click(function() {
 
-		if (table) {
-			table.fnDraw();
+		if (hotTable) {
+			hotTable.fnDraw();
 		}
 
 	});
@@ -216,17 +185,17 @@ jQuery(function($) {
 	// 关注
 	$('#attn-btn').click(function() {
 		
-		if(parseInt($('#shop-total').text()) <= parseInt($('#shop-len').text())){
+		if(parseInt($('#hot-total').text()) <= parseInt($('#hot-len').text())){
 			showMsg("超出关注上限！");
 			return false;
 		}
 		
-		var allLen = $('#dynamic-table > tbody > tr').length;
+		var allLen = $('#'+hot_config.tableId+' > tbody > tr').length;
 		
 		// 添加该店铺
-		$.post(marketAnalysis.path + '/a/MarketAnalysis', {
-			'shopId' : $('#shopId').val(),
-			'shopName' : $('#shop-attn').val(),
+		$.post(global.path + '/a/HotAnalysis', {
+			'hotId' : $('#hotId').val(),
+			'hotName' : $('#hot-attn').val(),
 			'm' : "attned"
 		}, function(result) {
 
@@ -236,9 +205,9 @@ jQuery(function($) {
 				
 				showMsg("关注成功！", function(){
 					
-					if (table) {
-						table.fnDraw();
-						$('#shop-len').text(allLen + 1);
+					if (hotTable) {
+						hotTable.fnDraw();
+						$('#hot-len').text(allLen + 1);
 					}
 				});
 				
@@ -252,22 +221,22 @@ jQuery(function($) {
 	// 删除所选
 	$('#del-btn').click(function() {
 
-		var shopIds = [];
-		$.each($("input[name='shopIds']:checked"), function(idx, d) {
-			shopIds.push(d.value);
+		var hotIds = [];
+		$.each($("input[name='hotIds']:checked"), function(idx, d) {
+			hotIds.push(d.value);
 		});
 
-		if (shopIds.length == 0) {
+		if (hotIds.length == 0) {
 			showMsg("至少选择一项");
 			return;
 		}
 
-		var allLen = $('#dynamic-table > tbody > tr').length;
+		var allLen = $('#'+hot_config.tableId+' > tbody > tr').length;
 		
 		confirmMsg("确定删除?", function(result) {
 			if (result) {
-				$.get(marketAnalysis.path + '/a/MarketAnalysis', {
-					'shopIds' : shopIds + "",
+				$.get(global.path + '/a/HotAnalysis', {
+					'hotIds' : hotIds + "",
 					'm' : "del_attn"
 				}, function(result) {
 
@@ -276,18 +245,17 @@ jQuery(function($) {
 					} else if (result.status == 'delSuccess') {
 						
 						showMsg("删除成功",function(){
-							if (table) {
-								table.fnDraw();
+							if (hotTable) {
+								hotTable.fnDraw();
 								
-								$('#shop-len').text(allLen - shopIds.length);
+								$('#hot-len').text(allLen - hotIds.length);
 							}
 						});
-						
 					}
 				}, 'json');
 			}
 		});
-		
 	});
+
 
 });

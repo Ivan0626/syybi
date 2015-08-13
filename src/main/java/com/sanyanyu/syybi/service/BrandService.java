@@ -1849,15 +1849,28 @@ public class BrandService extends BaseService {
 	 */
 	public PageEntity<BrandList> getBrandAnalysisList(String uid, PageParam pageParam) throws Exception{
 		
+//		String sql = "select t4.cat_name,t.* from ("
+//				+" select t1.brand_name,t3.category,t2.tmall,t3.tmall as tmall_pre, t2.taobao, t3.taobao as taobao_pre, t1.att_date from tbweb.tb_attn_brand t1" 
+//
+//				+" left join (SELECT t.prop_value as brand_name,tbbase.getParentCatNo(t.cat_no) as category,   if(t.shop_type='TMALL', sum(t.sales_amount), 0) as tmall,   if(t.shop_type='TAOBAO', sum(t.sales_amount), 0) as taobao FROM tbdaily.tb_tran_month_prop t" 
+//				+" where t.tran_month = ? and t.prop_name = '品牌' group by brand_name,category) t2"
+//				+" on t1.brand_name = t2.brand_name"
+//
+//				+" left join (SELECT t.prop_value as brand_name,tbbase.getParentCatNo(t.cat_no) as category,   if(t.shop_type='TMALL', sum(t.sales_amount), 0) as tmall,   if(t.shop_type='TAOBAO', sum(t.sales_amount), 0) as taobao FROM tbdaily.tb_tran_month_prop t" 
+//				+" where t.tran_month = ? and t.prop_name = '品牌' group by brand_name,category) t3"
+//				+" on t1.brand_name = t3.brand_name"
+//
+//				+" where t1.uid = ? order by (t3.tmall+t3.taobao) desc) t join tbbase.tb_base_cat_api t4 on t.category = t4.cat_no group by t.brand_name";
+		
 		String sql = "select t4.cat_name,t.* from ("
 				+" select t1.brand_name,t3.category,t2.tmall,t3.tmall as tmall_pre, t2.taobao, t3.taobao as taobao_pre, t1.att_date from tbweb.tb_attn_brand t1" 
 
-				+" left join (SELECT t.prop_value as brand_name,tbbase.getParentCatNo(t.cat_no) as category,   if(t.shop_type='TMALL', sum(t.sales_amount), 0) as tmall,   if(t.shop_type='TAOBAO', sum(t.sales_amount), 0) as taobao FROM tbdaily.tb_tran_month_prop t" 
-				+" where t.tran_month = ? and t.prop_name = '品牌' group by brand_name,category) t2"
+				+" left join (SELECT t.prop_value as brand_name,b.top_cat_no as category,   if(t.shop_type='TMALL', sum(t.sales_amount), 0) as tmall, if(t.shop_type='TAOBAO', sum(t.sales_amount), 0) as taobao FROM tbdaily.tb_tran_month_prop t" 
+				+" join tbbase.tb_base_cat_api b on t.cat_no = b.cat_no where t.tran_month = ? and t.prop_name = '品牌' group by brand_name,category) t2"
 				+" on t1.brand_name = t2.brand_name"
 
-				+" left join (SELECT t.prop_value as brand_name,tbbase.getParentCatNo(t.cat_no) as category,   if(t.shop_type='TMALL', sum(t.sales_amount), 0) as tmall,   if(t.shop_type='TAOBAO', sum(t.sales_amount), 0) as taobao FROM tbdaily.tb_tran_month_prop t" 
-				+" where t.tran_month = ? and t.prop_name = '品牌' group by brand_name,category) t3"
+				+" left join (SELECT t.prop_value as brand_name,b.top_cat_no as category,   if(t.shop_type='TMALL', sum(t.sales_amount), 0) as tmall, if(t.shop_type='TAOBAO', sum(t.sales_amount), 0) as taobao FROM tbdaily.tb_tran_month_prop t" 
+				+" join tbbase.tb_base_cat_api b on t.cat_no = b.cat_no where t.tran_month = ? and t.prop_name = '品牌' group by brand_name,category) t3"
 				+" on t1.brand_name = t3.brand_name"
 
 				+" where t1.uid = ? order by (t3.tmall+t3.taobao) desc) t join tbbase.tb_base_cat_api t4 on t.category = t4.cat_no group by t.brand_name";
@@ -1933,9 +1946,15 @@ public class BrandService extends BaseService {
 	 */
 	public List<CatApi> getCatByBrand(String brandName) throws Exception{
 		
-		String sql = "select t1.cat_no as catNo, t2.cat_name as catName, t2.isparent as hasChild from ("
-				+" select distinct tbbase.getParentCatNo(t.cat_no) as cat_no from tbdaily.tb_tran_month_prop t where t.tran_month = ? and t.prop_name = '品牌' and t.prop_value = ?) t1"
-				+" join tbbase.tb_base_cat_api t2 on t1.cat_no = t2.cat_no";
+//		String sql = "select t1.cat_no as catNo, t2.cat_name as catName, t2.isparent as hasChild from ("
+//				+" select distinct tbbase.getParentCatNo(t.cat_no) as cat_no from tbdaily.tb_tran_month_prop t where t.tran_month = ? and t.prop_name = '品牌' and t.prop_value = ?) t1"
+//				+" join tbbase.tb_base_cat_api t2 on t1.cat_no = t2.cat_no";
+		
+		String sql = "select tt2.cat_no as catNo, tt2.cat_name as catName, tt2.isparent as hasChild  from ("
+				+" SELECT b.top_cat_no as cat_no FROM tbdaily.tb_tran_month_prop a"
+				+" join tbbase.tb_base_cat_api b on a.cat_no = b.cat_no"
+				+" where a.prop_name = '品牌' and a.tran_month = ? and a.prop_value = ? group by b.top_cat_no) tt1"
+				+" join tbbase.tb_base_cat_api tt2 on tt1.cat_no = tt2.cat_no order by tt2.cat_name_single";
 		
 		return sqlUtil.searchList(CatApi.class, sql, DateUtils.getOffsetMonth(-1, "yyyy-MM"), brandName);
 		

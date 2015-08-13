@@ -77,7 +77,7 @@
 																	搜索已关注的热词
 																</span>
 																<div class="pos-rel">
-																	<input id="shop-attned" class="typeahead scrollable" style="font-size:14px;line-height:1.42857143;" size="54" type="text" placeholder="请输入热词名称" />
+																	<input id="hot-attned" class="typeahead scrollable" style="font-size:14px;line-height:1.42857143;" size="54" type="text" placeholder="请输入热词名称" />
 																</div>
 																<span class="input-group-btn">
 																	<button type="button" id="search-btn" class="btn btn-purple btn-sm">
@@ -94,7 +94,7 @@
 																</span>
 																
 																<div class="pos-rel">
-																	<input id="shop-attn" class="typeahead scrollable" style="font-size:14px;line-height:1.42857143;" size="54" type="text" placeholder="请输入热词名称" />
+																	<input id="hot-attn" class="typeahead scrollable" style="font-size:14px;line-height:1.42857143;" size="54" type="text" placeholder="请输入热词名称" />
 																</div>
 																<span class="input-group-btn" style="left:-50px;">
 																	<button type="button" id="attn-btn" class="btn btn-purple btn-sm">
@@ -105,7 +105,7 @@
 															</div>
 														</div>
 														<div class="col-xs-12 col-sm-3">
-															<button type="button" class="btn btn-sm btn-success" id="shop-search">
+															<button type="button" class="btn btn-sm btn-success" id="hot-search">
 																<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
 																飚量热词搜索
 															</button>
@@ -120,7 +120,7 @@
 							
 							<div class="row">
 								<div class="col-xs-12">
-									<span class="pull-left" style="margin-top:15px;"> 热词数(<span id="shop-len"></span>/<span id="shop-total">${user.hotNum }</span>) </span>
+									<span class="pull-left" style="margin-top:15px;"> 热词数(<span id="hot-len"></span>/<span id="hot-total">${user.hotNum }</span>) </span>
 									<button class="pull-right btn btn-xs btn-success" id="del-btn" style="margin-top:5px;margin-left:10px;">
 										<i class="ace-icon fa fa-check"></i>
 										删除所选

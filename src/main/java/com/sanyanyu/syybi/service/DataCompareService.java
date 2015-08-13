@@ -79,11 +79,17 @@ public class DataCompareService extends BaseService {
 	 */
 	public List<Map<String, Object>> getCatByBrand(String brandName) throws Exception{
 		
+//		String sql = "select tt2.cat_no, tt2.cat_name, tt2.cat_name_single, tt2.isparent from ("
+//			+" select t1.cat_no from ("
+//			+" SELECT tbbase.getParentCatNo(cat_no) as cat_no FROM tbdaily.tb_tran_month_prop where prop_name = '品牌' and tran_month = ? and prop_value = ?"
+//			+" ) t1 group by t1.cat_no) tt1"
+//			+" join tbbase.tb_base_cat_api tt2 on tt1.cat_no = tt2.cat_no order by tt2.cat_name_single";
+		
 		String sql = "select tt2.cat_no, tt2.cat_name, tt2.cat_name_single, tt2.isparent from ("
-			+" select t1.cat_no from ("
-			+" SELECT tbbase.getParentCatNo(cat_no) as cat_no FROM tbdaily.tb_tran_month_prop where prop_name = '品牌' and tran_month = ? and prop_value = ?"
-			+" ) t1 group by t1.cat_no) tt1"
-			+" join tbbase.tb_base_cat_api tt2 on tt1.cat_no = tt2.cat_no order by tt2.cat_name_single";
+				+" SELECT b.top_cat_no as cat_no FROM tbdaily.tb_tran_month_prop a"
+				+" join tbbase.tb_base_cat_api b on a.cat_no = b.cat_no"
+				+" where a.prop_name = '品牌' and a.tran_month = ? and a.prop_value = ? group by b.top_cat_no) tt1"
+				+" join tbbase.tb_base_cat_api tt2 on tt1.cat_no = tt2.cat_no order by tt2.cat_name_single";
 		
 		return sqlUtil.searchList(sql, DateUtils.getOffsetMonth(-1, "yyyy-MM"), brandName);
 		
