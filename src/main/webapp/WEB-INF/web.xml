@@ -246,4 +246,15 @@
     <url-pattern>/a/fUploadServlet</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <description></description>
+    <display-name>HotAnalysisServlet</display-name>
+    <servlet-name>HotAnalysisServlet</servlet-name>
+    <servlet-class>com.sanyanyu.syybi.servlet.HotAnalysisServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>HotAnalysisServlet</servlet-name>
+    <url-pattern>/a/HotAnalysis</url-pattern>
+  </servlet-mapping>
+  
 </web-app>

@@ -10,6 +10,7 @@
 
 <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/modal.css">
 
+
 <style type="text/css">
 
 
@@ -60,7 +61,100 @@ z-index: 2001;
 font-size: 12px;
 }
 
+#vs-table {
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2)
+}
+
+#vs-table th {
+	text-align: center;
+}
+
+#vs-table th,#vs-table td {
+	vertical-align: middle;
+	background: #fff;
+}
+
+#vs-table td.th {
+	font-size: 18px;
+	color: #222;
+}
+
+#vs-table td.mf {
+	font-size: 18px;
+	color: #999;
+}
+
+#vs-table td.dzt {
+	font-size: 28px;
+	color: #41A85F;
+}
+
+#vs-table .yes::before {
+	content: '\e62f';
+	font-size: 32px;
+	color: #41A85F;
+}
+
+#vs-table .no::before {
+	content: '\e631';
+	font-size: 32px;
+	color: #ccc;
+}
+
+.margin-top-row {
+    margin-top: 34px;
+}
+
+.b {
+    font-weight: 700;
+}
+
+.data-table{margin-bottom: 0;letter-spacing:0.2px;}
+.data-table.grayth > thead > tr > th{background-color: #f7f7f7;}
+.data-table > thead:first-child > tr:first-child > th{border-bottom: none;border-top: 1px solid #e7e7e7;}
+.data-table > thead > tr > th:first-child{border-left: 1px solid #e7e7e7;}
+.data-table > thead > tr > th:last-child{border-right:1px solid #e7e7e7;}
+.data-table>tbody>tr>td{border: 1px solid #e7e7e7;}
+.data-table>thead>tr>th,.data-table>tbody>tr>td{padding:13px 8px;font-size: 13px;}
+.data-table>tbody>tr>td:first-child{text-align: right;}
+.data-table.nth1-left>tbody>tr>td:first-child{text-align: left;}
+.data-table a:hover{text-decoration: underline;}
+
+.table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 18px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+table {
+    background-color: transparent;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+.modal-dialog {
+    width: 900px;
+    margin: 30px auto;
+}
+
+.ico-before::before, .ico-after::after, .ico-font {
+    font-family: "iconfont" !important;
+    font-size: 12px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: normal;
+}
+
+
 </style>
+
+
 
 <script type="text/javascript">
 	var _speedMark = new Date();
@@ -341,8 +435,13 @@ font-size: 12px;
 				</div> 
 			</div>
 		</div>
-		
 			<div class="container">
+				<div class="faq">
+					<p class="q">有其他数据分析工具的对比吗？</p>
+					<p class="a">
+						请看这里：<a href="javascript:void(0);" onclick="showCompare()">数据分析工具对比</a>
+					</p>
+				</div>
 				<div class="faq">
 					<p class="q">数据来源哪里？</p>
 					<p class="a">
@@ -357,12 +456,7 @@ font-size: 12px;
 					<p class="q">套餐到期后数据还会保留吗？</p>
 					<p class="a">当套餐到期后，您可以自主选择付费或不付费，即便您没有付费，我们依然会将您的账户和数据保留一个月。</p>
 				</div>
-				<div class="faq">
-					<p class="q">有其他数据分析工具的对比吗？</p>
-					<p class="a">
-						请看这里：<a href="#">数据分析工具对比</a>
-					</p>
-				</div>
+				
 				<div class="faq">
 					<p class="q">如何索取发票？</p>
 					<p class="a">
@@ -464,5 +558,84 @@ font-size: 12px;
 	<!-- JiaThis Button BEGIN -->
 	<script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?type=left&amp;move=0&amp;btn=l1.gif" charset="utf-8"></script>
 	<!-- JiaThis Button END -->
+	
+	<script src="../assets/js/bootbox.js"></script>
+	
+	<script type="text/javascript">
+	
+		function showCompare(){
+			var message = '<div class="row">'
+				+'<div class="col-xs-12">'
+				+'<h1 class="text-center b">电商指数 VS 数据魔方</h1>'
+				+'<h3 class="text-center text-danger">看看我们的优势！</h3>'
+				+'</div>'
+				+'<div class="col-xs-12 text-center margin-top-row">'
+				+'<table id="vs-table" class="table data-table text-center">'
+				+'<thead>'
+				+'<tr>'
+				+'<th width="24%"></th>'
+				+'<th width="38%"><img src="http://d.tqdn.cn/static/images/mf_logo.png?q=1436798796" alt=""></th>'
+				+'<th width="38%"><img src="${pageContext.request.contextPath}/index/main/logo.png" alt=""></th>'
+				+'</tr>'
+				+'</thead>'
+				+'<tbody class="combo-detail">'
+				+'<tr>'
+				+'<td class="th">指定同行营收数据</td>'
+				+'<td class="mf"><span class="false" style="height:30px;"></span></td>'
+				+'<td class="dzt"><span class="true" style="height:30px;"></span></td>'
+				+'</tr>'
+				+'<tr>'
+				+'<td class="th">查看对手直通车词</td>'
+				+'<td class="mf"><span class="false" style="height:30px;"></span></td>'
+				+'<td class="dzt"><span class="true" style="height:30px;"></span></td>'
+				+'</tr>'
+				+'<tr>'
+				+'<td class="th">同行移动端直通车数据</td>'
+				+'<td class="mf"><span class="false" style="height:30px;"></span></td>'
+				+'<td class="dzt"><span class="true" style="height:30px;"></span></td>'
+				+'</tr>'
+				+'<tr>'
+				+'<td class="th">宝贝上下架分布跟踪</td>'
+				+'<td class="mf"><span class="false" style="height:30px;"></span></td>'
+				+'<td class="dzt"><span class="true" style="height:30px;"></span></td>'
+				+'</tr>'
+				+'<tr>'
+				+'<td class="th">站外活动监控</td>'
+				+'<td class="mf"><span class="false" style="height:30px;"></span></td>'
+				+'<td class="dzt"><span class="true" style="height:30px;"></span></td>'
+				+'</tr>'
+				+'<tr>'
+				+'<td class="th">搜索全行业词</td>'
+				+'<td class="mf">限店铺所属行业词</td>'
+				+'<td class="dzt"><span class="true" style="height:30px;"></span></td>'
+				+'</tr>'
+				+'<tr>'
+				+'<td class="th">数据范围</td>'
+				+'<td class="mf">单一行业</td>'
+				+'<td class="dzt">全淘宝行业</td>'
+				+'</tr>'
+				+'<tr>'
+				+'<td class="th">门槛</td>'
+				+'<td class="mf">五钻以上或天猫用户</td>'
+				+'<td class="dzt">全淘宝卖家</td>'
+				+'</tr>'
+				+'<tr>'
+				+'<td class="th">实用性</td>'
+				+'<td class="mf">中大卖家或品牌商</td>'
+				+'<td class="dzt">全淘宝卖家</td>'
+				+'</tr>'
+				+'</tbody>'
+				+'</table>'
+				+'</div>'
+				+'</div>';
+					  	
+			
+			bootbox.dialog({
+				message: message
+			});
+		}
+	
+	</script>
+	
 </body>
 </html>

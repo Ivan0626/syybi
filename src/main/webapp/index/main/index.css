@@ -443,7 +443,7 @@ img{
     left: 32%;
     width: 290px;
     height: 290px;
-    border: 1px dashed #388ade;
+    /* border: 1px dashed #388ade; */
     border-radius: 100%;
     list-style-type: none;
 }

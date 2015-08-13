@@ -7,7 +7,7 @@ import com.sanyanyu.syybi.annotation.Table;
 import com.sanyanyu.syybi.utils.DateUtils;
 
 @Table(name="tbweb.tb_attn_dir_detail")
-public class AttDirDetail implements Serializable {
+public class AttnDirDetail implements Serializable {
 
 	/**
 	 * 

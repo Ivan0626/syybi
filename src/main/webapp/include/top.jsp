@@ -9,7 +9,7 @@
 	<div class="navbar-container" id="navbar-container">
 		<div class="navbar-header pull-left">
 			<!-- #section:basics/navbar.layout.brand -->
-			<a href="#" class="navbar-brand">
+			<a href="${pageContext.request.contextPath }/f/Index" class="navbar-brand">
 				<small>
 					<i class="fa fa-leaf"></i>
 					电商指数

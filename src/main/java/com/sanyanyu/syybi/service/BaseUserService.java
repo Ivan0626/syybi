@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sanyanyu.syybi.constants.FinalConstants;
-import com.sanyanyu.syybi.entity.AttDir;
+import com.sanyanyu.syybi.entity.AttnDir;
 import com.sanyanyu.syybi.entity.BaseUser;
 import com.sanyanyu.syybi.entity.PointsLog;
 import com.sanyanyu.syybi.utils.Base64Util;
@@ -99,7 +99,7 @@ public class BaseUserService extends BaseService {
 			}
 			
 			//生成默认宝贝目录（未归属宝贝）
-			AttDir dir = new AttDir();
+			AttnDir dir = new AttnDir();
 			dir.setUid(uid);
 			dir.setDir_name(FinalConstants.DEFAULT_GOODS_DIR);
 			dir.setAdid(SysUtil.getUUID());

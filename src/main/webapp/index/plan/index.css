@@ -572,7 +572,7 @@ h3{
 	text-align: center;
 	box-shadow: 0 0 5px #000;
 	position: relative;
-	z-index: 2000;
+	/* z-index: 2000; */
 	box-shadow: 0 2px 3px #888;
 	filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#888888');
 }

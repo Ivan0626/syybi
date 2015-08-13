@@ -13,8 +13,8 @@ import com.sanyanyu.syybi.entity.AdvertHot;
 import com.sanyanyu.syybi.entity.AdvertJu;
 import com.sanyanyu.syybi.entity.AdvertTaoke;
 import com.sanyanyu.syybi.entity.AdvertZTC;
-import com.sanyanyu.syybi.entity.AttDir;
-import com.sanyanyu.syybi.entity.AttDirDetail;
+import com.sanyanyu.syybi.entity.AttnDir;
+import com.sanyanyu.syybi.entity.AttnDirDetail;
 import com.sanyanyu.syybi.entity.CatApi;
 import com.sanyanyu.syybi.entity.CatData;
 import com.sanyanyu.syybi.entity.ChngName;
@@ -130,7 +130,7 @@ public class GoodsService extends BaseService {
 		return cnt > 0;
 	}
 	
-	public void saveGoods(AttDirDetail detail) throws Exception{
+	public void saveGoods(AttnDirDetail detail) throws Exception{
 		
 		sqlUtil.insert(detail);
 		
@@ -166,7 +166,7 @@ public class GoodsService extends BaseService {
 			return "exist";
 		} else {// 存在才能新增
 			
-			AttDir dir = new AttDir();
+			AttnDir dir = new AttnDir();
 			dir.setAdid(SysUtil.getUUID());
 			dir.setDir_name(dirName);
 			dir.setUid(uid);
@@ -220,12 +220,12 @@ public class GoodsService extends BaseService {
 
 		String[] itemIdArr = itemIds.split(",");
 		
-		List<AttDirDetail> list = new ArrayList<AttDirDetail>();
+		List<AttnDirDetail> list = new ArrayList<AttnDirDetail>();
 		for(String itemId : itemIdArr){
 			
 			String[] iArr = itemId.split("@");
 			
-			AttDirDetail detail = new AttDirDetail();
+			AttnDirDetail detail = new AttnDirDetail();
 			
 			detail.setAddid(SysUtil.getUUID());
 			detail.setAdid(adid);
@@ -234,7 +234,7 @@ public class GoodsService extends BaseService {
 			
 			list.add(detail);
 		}
-		sqlUtil.batchInsert(AttDirDetail.class, list);
+		sqlUtil.batchInsert(AttnDirDetail.class, list);
 	}
 
 	/**

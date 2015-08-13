@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sanyanyu.syybi.entity.AdvertBase;
-import com.sanyanyu.syybi.entity.AttDirDetail;
+import com.sanyanyu.syybi.entity.AttnDirDetail;
 import com.sanyanyu.syybi.entity.CatApi;
 import com.sanyanyu.syybi.entity.DirEntity;
 import com.sanyanyu.syybi.entity.GoodsList;
@@ -223,7 +223,7 @@ public class GoodsAnalysisServlet extends BaseServlet {
 							status = "attned";
 						}else{
 							
-							AttDirDetail detail = new AttDirDetail();
+							AttnDirDetail detail = new AttnDirDetail();
 							detail.setAddid(SysUtil.getUUID());
 							detail.setAdid(adid);
 							detail.setItem_id(itemId);

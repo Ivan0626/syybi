@@ -14,7 +14,7 @@ import com.sanyanyu.syybi.annotation.Table;
  * @version V1.0
  */
 @Table(name="tbweb.tb_attn_dir")
-public class AttDir implements Serializable {
+public class AttnDir implements Serializable {
 
 	/**
 	 * 

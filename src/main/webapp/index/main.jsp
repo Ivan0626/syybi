@@ -158,34 +158,66 @@ user-select: none;
 		</div>
 
 		<!-- 核心功能 -->
-		<div id="core" class="row" style="height:480px;">
+		<div id="core" class="row" style="height:340px;">
 			<div class="container">
 				<p class="core-title">核心功能</p>
 				<div class="core-warp">
 					<ul class="core-content">
 		                <li class="one">
 		                    <img src="${pageContext.request.contextPath}/index/main/pic1.jpg">
-		                    <h3>产品监控</h3>
-		                    <p>实时监控全网主流电商平台产品的价格和销售情况。</p>
-		                    <a target="_blank" href="${pageContext.request.contextPath}/index/login.jsp">试用</a>
+		                    <h3>行业分析</h3>
+		                    <p>精准了解行业信息，细微洞察市场变化，为战略决策提供支持。</p>
 		                </li>
 		                <li class="two">
 		                    <img src="${pageContext.request.contextPath}/index/main/pic2.jpg">
-		                    <h3>口碑分析</h3>
-		                    <p>产品在各大电商网站历年口碑舆情监测情况。</p>
-		                    <a target="_blank" href="${pageContext.request.contextPath}/index/login.jsp">试用</a>
+		                    <h3>店铺分析</h3>
+		                    <p>跟踪对手动态，掌握一手信息，对比自身，取长补短。</p>
 		                </li>
 		                <li class="three">
 		                    <img src="${pageContext.request.contextPath}/index/main/pic3.jpg">
-		                    <h3>行业数据</h3>
-		                    <p>各大电商网站历年各个行业、类目的销售情况。</p>
-		                    <a target="_blank" href="${pageContext.request.contextPath}/index/login.jsp">试用</a>
+		                    <h3>运营分析</h3>
+		                    <p>全面直击飙量店铺，具体分析飙量原因，调整运营策略。</p>
 		                </li>
 		                <li class="four">
 		                    <img src="${pageContext.request.contextPath}/index/main/pic4.jpg">
+		                    <h3>品牌分析</h3>
+		                    <p>自身品牌，竞争品牌 各类数据收入囊中，迎合市场需求，优化品牌经营。</p>
+		                </li>
+		            </ul>
+		            <ol class="core-border">
+		                <li class="one"></li>
+		                <li class="two"></li>
+		                <li class="three"></li>
+		                <li class="four"></li>
+		            </ol>
+				</div>
+			</div>
+		</div>
+		
+		<div id="core" class="row" style="height:360px;">
+			<div class="container">
+				<!-- <p class="core-title">核心功能</p> -->
+				<div class="core-warp">
+					<ul class="core-content">
+		                <li class="one">
+		                    <img src="${pageContext.request.contextPath}/index/main/pic5.jpg">
+		                    <h3>宝贝分析</h3>
+		                    <p>关注热销宝贝，借鉴改善自身，轻松打造爆款。</p>
+		                </li>
+		                <li class="two">
+		                    <img src="${pageContext.request.contextPath}/index/main/pic6.jpg">
+		                    <h3>钻展透视</h3>
+		                    <p>深入了解钻展投放，构建创新创意思维，吸引更多店铺流量。</p>
+		                </li>
+		                <li class="three">
+		                    <img src="${pageContext.request.contextPath}/index/main/pic7.jpg">
+		                    <h3>刷单分析</h3>
+		                    <p>结合多重分析手法，精准识别刷单流量，洞悉真实市场。</p>
+		                </li>
+		                <li class="four">
+		                    <img src="${pageContext.request.contextPath}/index/main/pic8.jpg">
 		                    <h3>销量预测</h3>
-		                    <p>产品的销售情况、价格分析预测。</p>
-		                    <a target="_blank" href="${pageContext.request.contextPath}/index/login.jsp">试用</a>
+		                    <p>运用大数据算法结合多种因素，产品的销售情况、价格分析预测。敬请期待...</p>
 		                </li>
 		            </ul>
 		            <ol class="core-border">

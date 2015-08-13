@@ -17,7 +17,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sanyanyu.syybi.entity.AttDirDetail;
+import com.sanyanyu.syybi.entity.AttnDirDetail;
 import com.sanyanyu.syybi.entity.FileUpload;
 import com.sanyanyu.syybi.service.GoodsService;
 import com.sanyanyu.syybi.utils.FileUtils;
@@ -109,7 +109,7 @@ public class FileUploadServlet extends HttpServlet {
 								status = "attned";
 							}else{
 								
-								AttDirDetail detail = new AttDirDetail();
+								AttnDirDetail detail = new AttnDirDetail();
 								detail.setAddid(SysUtil.getUUID());
 								detail.setAdid(adid);
 								detail.setItem_id(itemId);

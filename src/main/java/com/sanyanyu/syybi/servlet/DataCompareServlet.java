@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sanyanyu.syybi.entity.AdvertBase;
-import com.sanyanyu.syybi.entity.AttDirDetail;
+import com.sanyanyu.syybi.entity.AttnDirDetail;
 import com.sanyanyu.syybi.entity.CatApi;
 import com.sanyanyu.syybi.entity.DataCompare;
 import com.sanyanyu.syybi.entity.DirEntity;
