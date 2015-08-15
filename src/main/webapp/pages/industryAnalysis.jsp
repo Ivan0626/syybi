@@ -363,6 +363,33 @@
 	<script src="../assets/js/industryAnalysis.js"></script>
 	
 	<script type="text/javascript">
+	
+		$(function(){
+			
+			var path = "${ctx}";
+			
+			$.get(path+'/a/AccountSetting', {
+		        'm': "attn_cnt"
+		    }, function(data) {
+		    	if(data.cnt == 0){
+		    		bootbox.dialog({
+						message : "<span class='bigger-110'>请先设置关注类目</span>",
+						"closeButton": false,
+						buttons : {
+							"button" : {
+								"label" : "确定",
+								"className" : "btn-sm",
+								"callback": function () {  
+		                            window.location.href = path + "/a/AccountSetting";
+		                        }  
+							}
+						}
+					});
+		    	}
+		    }, 'json');
+			
+		});
+	
 		//=================================================类目树===================================================
 		//加载行业下的类目信息
 		function loadInd(iid, indName){

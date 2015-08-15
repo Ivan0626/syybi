@@ -104,7 +104,7 @@ jQuery(function($) {
 		});
 		
 		if(category.length == 0){
-			showMsg("请选择商品类别");
+			showMsg("请选择品牌所在类别 ");
 			return;
 		}
 		
