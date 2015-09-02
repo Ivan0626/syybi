@@ -137,7 +137,7 @@ public class CatService extends BaseService {
 	 */
 	private List<Map<String, Object>> getLeafListByIid(String iid, String uid){
 		//查找类目对应的叶子节点
-		String sql = "select t1.cat_no,tbbase.getLeafLst(t1.cat_no) as leafNo from tbbase.tb_base_cat_api t1" 
+		String sql = "select t1.cat_no,ifnull(tbbase.getLeafLst(t1.cat_no),t1.cat_no) as leafNo from tbbase.tb_base_cat_api t1" 
 				+" join tbweb.tb_attn_cat t2 on t1.cat_no = t2.att_cat and t2.uid = ?"
 				+" where t1.iid = ?";
 		

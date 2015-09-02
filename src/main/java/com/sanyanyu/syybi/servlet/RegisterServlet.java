@@ -15,6 +15,7 @@ import com.sanyanyu.syybi.service.LogSystemService;
 import com.sanyanyu.syybi.utils.MD5Util;
 import com.sanyanyu.syybi.utils.SendEmail;
 import com.sanyanyu.syybi.utils.StringUtils;
+import com.sanyanyu.syybi.utils.SysUtil;
 
 /**
  * 用户注册
@@ -80,6 +81,7 @@ public class RegisterServlet extends BaseServlet {
 			String validateCode = MD5Util.encode2hex(username + email);
 			baseUser.setValidateCode(validateCode);
 			
+			baseUser.setUid(SysUtil.getUUID());
 			baseUserService.saveBaseUser(request, baseUser, p);
 			
 			JSONObject json = new JSONObject();

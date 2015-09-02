@@ -16,7 +16,7 @@ import com.sanyanyu.syybi.annotation.Table;
 @Table(name="bi_base_points_log")
 public class PointsLog {
 
-	private Integer pid;
+	private String pid;
 	private String uid;
 	private Timestamp createTime = new Timestamp(System.currentTimeMillis());
 	private Integer points;
@@ -31,14 +31,14 @@ public class PointsLog {
 	public void setCreateTimeFormat(String createTimeFormat) {
 		this.createTimeFormat = createTimeFormat;
 	}
+	
 	@Column(name="pid")
-	public Integer getPid() {
+	public String getPid() {
 		return pid;
 	}
-	public void setPid(Integer pid) {
+	public void setPid(String pid) {
 		this.pid = pid;
 	}
-	
 	@Column(name="uid")
 	public String getUid() {
 		return uid;

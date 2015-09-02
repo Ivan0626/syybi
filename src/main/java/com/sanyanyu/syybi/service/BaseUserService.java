@@ -60,10 +60,11 @@ public class BaseUserService extends BaseService {
 			apoints.setPointsType(1);
 			apoints.setRemark("新人注册大礼包");
 			
-			String uid = getBaseUserByUsername(baseUser.getUsername());
+			//String uid = getBaseUserByUsername(baseUser.getUsername());
 			
-			apoints.setUid(uid);
+			apoints.setUid(baseUser.getUid());
 			
+			apoints.setPid(SysUtil.getUUID());
 			sqlUtil.insert(JDBCUtils.getConnection(), apoints);
 			
 			//被推荐用户和推荐用户也要送积分
@@ -100,7 +101,7 @@ public class BaseUserService extends BaseService {
 			
 			//生成默认宝贝目录（未归属宝贝）
 			AttnDir dir = new AttnDir();
-			dir.setUid(uid);
+			dir.setUid(baseUser.getUid());
 			dir.setDir_name(FinalConstants.DEFAULT_GOODS_DIR);
 			dir.setAdid(SysUtil.getUUID());
 			

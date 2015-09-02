@@ -11,6 +11,7 @@ import com.sanyanyu.syybi.entity.LogLogin;
 import com.sanyanyu.syybi.entity.LogSystem;
 import com.sanyanyu.syybi.service.LogLoginService;
 import com.sanyanyu.syybi.service.LogSystemService;
+import com.sanyanyu.syybi.utils.SysUtil;
 
 /**
  * 请求处理基类
@@ -112,6 +113,7 @@ public abstract class BaseServlet extends HttpServlet {
 			logLogin.setRemark(remark);
 			logLogin.setAction(this.getClass().getSimpleName() + "." + method);
 			logLogin.setIp(getRemoteAddress(request));
+			logLogin.setLid(SysUtil.getUUID());
 			logLoginService.saveLogLogin(logLogin);
 		} catch (Exception e) {
 			logger.error("保存用户登录日志失败", e);

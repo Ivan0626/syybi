@@ -16,7 +16,7 @@ import com.sanyanyu.syybi.annotation.Table;
 @Table(name="bi_log_login")
 public class LogLogin {
 
-	private Integer lid;
+	private String lid;
 	private String uid;
 	private String action;
 	private String remark;
@@ -31,10 +31,10 @@ public class LogLogin {
 		this.ip = ip;
 	}
 	@Column(name="lid")
-	public Integer getLid() {
+	public String getLid() {
 		return lid;
 	}
-	public void setLid(Integer lid) {
+	public void setLid(String lid) {
 		this.lid = lid;
 	}
 	@Column(name="uid")

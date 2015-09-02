@@ -46,7 +46,7 @@
 		                    <ul>
 		                    	<c:forEach items="${indList }" var="ind">
 		                    		<c:if test="${ind.iid == attedCat.iid }">
-		                    			<li> <a href="javascript:void(0);" onclick="loadInd('${ind.iid}', '${ind.ind_name }')" >${ind.ind_name }</a> </li>
+		                    			<li> <a href="javascript:void(0);" style="font-weight:bold;" onclick="loadInd('${ind.iid}', '${ind.ind_name }')" >${ind.ind_name }</a> </li>
 		                    		</c:if>
 		                    		<c:if test="${ind.iid != attedCat.iid }">
 		                    			<li> <span style="color:gray;">${ind.ind_name }</span></li>
@@ -409,7 +409,7 @@
 						html += '<li> '+d.catName+'</li>';
 					}else{
 						if(d.att_cat){
-							html += '<li> <a href="javascript:void(0);" onclick=loadCat(\"'+d.catNo+'\",\"'+d.catName+'\");>'+d.catName+'</a></li>';
+							html += '<li> <a href="javascript:void(0);" style="font-weight:bold;" onclick=loadCat(\"'+d.catNo+'\",\"'+d.catName+'\");>'+d.catName+'</a></li>';
 						}else{
 							html += '<li> <span style="color:gray;">'+d.catName+'</span></li>';
 						}
@@ -462,9 +462,9 @@
 				
 				var html = '<div class="parent">';
 				if(parentCat.flag == 'ind'){//父级类目为行业
-					html += '<a href="javascript:void(0);" onclick=loadInd(\"'+parentCat.catNo+'\",\"'+parentCat.catName+'\");>'+parentCat.catName+'</a>';
+					html += '<a href="javascript:void(0);" style="font-weight:bold;" onclick=loadInd(\"'+parentCat.catNo+'\",\"'+parentCat.catName+'\");>'+parentCat.catName+'</a>';
 				}else if(parentCat.flag == 'cat'){//父级类目为类目
-					html += '<a href="javascript:void(0);" onclick=loadCat(\"'+parentCat.catNo+'\",\"'+parentCat.catName+'\");>'+parentCat.catName+'</a>';
+					html += '<a href="javascript:void(0);" style="font-weight:bold;" onclick=loadCat(\"'+parentCat.catNo+'\",\"'+parentCat.catName+'\");>'+parentCat.catName+'</a>';
 				}
 				
 				html += '</div>';
@@ -474,9 +474,9 @@
 				
 				$.each(childCats, function(idx, d){
 					if(d.isParent == '0'){//没有子类目，即叶子节点，需要加载叶子节点下的属性
-						html += '<li> <a href="javascript:void(0);" onclick=loadProp(\"'+d.catNo+'\",\"'+d.catName+'\");>'+d.catName+'</a></li>';
+						html += '<li> <a href="javascript:void(0);" style="font-weight:bold;" onclick=loadProp(\"'+d.catNo+'\",\"'+d.catName+'\");>'+d.catName+'</a></li>';
 					}else{
-						html += '<li> <a href="javascript:void(0);" onclick=loadCat(\"'+d.catNo+'\",\"'+d.catName+'\");>'+d.catName+'</a></li>';
+						html += '<li> <a href="javascript:void(0);" style="font-weight:bold;" onclick=loadCat(\"'+d.catNo+'\",\"'+d.catName+'\");>'+d.catName+'</a></li>';
 					}
 				});
 				html += '</ul>';
@@ -538,7 +538,7 @@
 					
 					var html = '<div class="parent">';
 					//父级类目为类目
-					html += '<a href="javascript:void(0);" onclick=loadCat(\"'+parentCat.catNo+'\",\"'+parentCat.catName+'\");>'+parentCat.catName+'</a>';
+					html += '<a href="javascript:void(0);" style="font-weight:bold;" onclick=loadCat(\"'+parentCat.catNo+'\",\"'+parentCat.catName+'\");>'+parentCat.catName+'</a>';
 					
 					html += '</div>';
 					
@@ -546,7 +546,7 @@
 					html += '<ul id="prop-list">';
 					
 					$.each(childProps, function(idx, d){
-						html += '<li> <a href="javascript:void(0);" onclick=\"loadLeaf(this, \''+d.propName+'\')\">'+d.propName+'</a></li>';
+						html += '<li> <a href="javascript:void(0);" style="font-weight:bold;" onclick=\"loadLeaf(this, \''+d.propName+'\')\">'+d.propName+'</a></li>';
 					});
 					html += '</ul>';
 					$("#syy-sidebar_category").empty().html(html);
@@ -594,7 +594,7 @@
 			$(obj).addClass('props-showy');
 			
 			var $seleced = $('#prop-list').prev();
-			$seleced.html('<a href="javascript:void(0);" onclick=\"loadProp(\''+$seleced.attr('data-cat')+'\',\''+$seleced.text()+'\')\">'+$seleced.text()+'</a>');
+			$seleced.html('<a href="javascript:void(0);" style="font-weight:bold;" onclick=\"loadProp(\''+$seleced.attr('data-cat')+'\',\''+$seleced.text()+'\')\">'+$seleced.text()+'</a>');
 			
 			var catNo = $('#selected-no').val();
 			$('#ajax-content').load(global.path+'/pages/propAnalysis.jsp',{}, function(){
