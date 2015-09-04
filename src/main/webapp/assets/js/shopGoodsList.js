@@ -21,6 +21,8 @@ jQuery(function($) {
 	goods_config.paging = true;
 	
 	goods_config.type = 'POST';
+	
+	goods_config.order = [[ 8, 'desc' ]];
 
 	goods_config.data = function(d) {
 		
@@ -440,7 +442,7 @@ jQuery(function($) {
 	function loadCatChart(chartWay, chartType){
 		var startDate = $('#cat-d4321').val();
 		var endDate = $('#cat-d4322').val();
-		$.get(global.path + '/a/ShopAnalysis?m=cat_analysis', {
+		$.get(global.path + '/a/ShopAnalysis?m=shop_cat_analysis', {
 			shopId : shopGoodsList.shopId,
 			startDate : startDate,
 			endDate : endDate,
@@ -474,7 +476,7 @@ jQuery(function($) {
 	
 	var cat_config = {}, catTable = null;
 	cat_config.tableId = 'cat-table';
-	cat_config.url = global.path + '/a/ShopAnalysis?m=cat_analysis';
+	cat_config.url = global.path + '/a/ShopAnalysis?m=shop_cat_analysis';
 	cat_config.maxIndex = 3;
 
 	cat_config.data = function(d) {

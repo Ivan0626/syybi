@@ -1319,6 +1319,29 @@ public class ShopService extends BaseService {
 		}
 	}
 	
+	private String buildShopCompareSql(String shopId){
+		String curMonth = DateUtils.getCurMonth();
+		String preMonth = DateUtils.getOffsetMonth(-1, "yyyy-MM");
+		
+		//这里使用union all而不用in,是由于shop_id是唯一索引，两者查询效率都差不多，而union all有排序功能
+		
+		String coreSql = "select t1.shop_name, t1.region, t1.item_count,t2.sales_amount,t2.sales_volume,t2.tran_count,"
+				 +" t3.sales_amount as sales_amount_pre,t3.sales_volume as sales_volume_pre,t3.tran_count as tran_count_pre,"
+				 +" t2.rise_index,t5.*,t7.* from tbbase.tb_base_shop t1 "
+				 +" left join tbdaily.tb_tran_month_shop t2 on t1.shop_id = t2.shop_id and t2.tran_month = '"+curMonth+"'"
+				 +" left join tbdaily.tb_tran_month_shop t3 on t1.shop_id = t3.shop_id and t3.tran_month = '"+preMonth+"'"
+				 +" left join (select t4.shop_id, sum(t4.ztc) as shop_ztc,sum(t4.normal) as shop_normal,sum(t4.hot) as shop_hot,sum(t4.tb_cu) as shop_tb_cu,"
+				 +" sum(t4.activity) as shop_activity, sum(t4.taobaoke) as shop_taobaoke,sum(t4.hot_mobile) as shop_hot_mobile,sum(t4.activity_mobile) as shop_activity_mobile,"
+				 +" sum(t4.sale) as shop_sale from tbdaily.tb_advert_shop t4 where date_format(t4.put_date, '%Y-%m') = '"+curMonth+"' and t4.shop_id = '"+shopId+"') t5"
+				 +" on t5.shop_id = t1.shop_id"
+				 +" left join (SELECT t6.shop_id,sum(t6.hot) as hot,sum(t6.normal) as normal,sum(t6.tb_cu) as tb_cu, sum(t6.activity) as activity,sum(t6.taobaoke) as taobaoke, sum(t6.ztc) as ztc,"
+				 +" sum(t6.ju) ju,sum(t6.normal_cu) as normal_cu,sum(t6.hot_mobile) as hot_mobile,sum(t6.tb_cu_mobile) as tb_cu_mobile,sum(t6.activity_mobile) as activity_mobile,"
+				 +" sum(t6.ztc_mobile) as ztc_mobile,sum(t6.normal_cu_mobile) as normal_cu_mobile FROM tbdaily.tb_advert_product t6 where date_format(t6.put_date, '%Y-%m') = '"+curMonth+"' and t6.shop_id = '"+shopId+"') t7"
+				 +" 	on t1.shop_id = t7.shop_id";
+		
+		return coreSql;
+	}
+	
 	/**
 	 * 店铺分析-店铺比对-数据表
 	 * @param shopIds
@@ -1328,32 +1351,15 @@ public class ShopService extends BaseService {
 	 */
 	public PageEntity<AdAnalysis> getShopCompares(String shopIds, PageParam pageParam) throws Exception{
 		
-		String curMonth = DateUtils.getCurMonth();
-		String preMonth = DateUtils.getOffsetMonth(-1, "yyyy-MM");
-		
 		String[] shopIdArr = shopIds.split(",");
-		//这里使用union all而不用in,是由于shop_id是唯一索引，两者查询效率都差不多，而union all有排序功能
-		
 		StringBuffer sb = new StringBuffer();
-		String coreSql = "select t1.shop_name, t1.region, t1.item_count,t2.sales_amount,t2.sales_volume,t2.tran_count,"
-				 +" t3.sales_amount as sales_amount_pre,t3.sales_volume as sales_volume_pre,t3.tran_count as tran_count_pre,"
-				 +" t2.rise_index,t5.*,t7.* from tbbase.tb_base_shop t1 "
-				 +" left join tbdaily.tb_tran_month_shop t2 on t1.shop_id = t2.shop_id and t2.tran_month = '"+curMonth+"'"
-				 +" left join tbdaily.tb_tran_month_shop t3 on t1.shop_id = t3.shop_id and t3.tran_month = '"+preMonth+"'"
-				 +" left join (select t4.shop_id, sum(t4.ztc) as shop_ztc,sum(t4.normal) as shop_normal,sum(t4.hot) as shop_hot,sum(t4.tb_cu) as shop_tb_cu,"
-				 +" sum(t4.activity) as shop_activity, sum(t4.taobaoke) as shop_taobaoke,sum(t4.hot_mobile) as shop_hot_mobile,sum(t4.activity_mobile) as shop_activity_mobile,"
-				 +" sum(t4.sale) as shop_sale from tbdaily.tb_advert_shop t4 where date_format(t4.put_date, '%Y-%m') = '"+curMonth+"' group by t4.shop_id) t5"
-				 +" on t5.shop_id = t1.shop_id"
-				 +" left join (SELECT t6.shop_id,sum(t6.hot) as hot,sum(t6.normal) as normal,sum(t6.tb_cu) as tb_cu, sum(t6.activity) as activity,sum(t6.taobaoke) as taobaoke, sum(t6.ztc) as ztc,"
-				 +" sum(t6.ju) ju,sum(t6.normal_cu) as normal_cu,sum(t6.hot_mobile) as hot_mobile,sum(t6.tb_cu_mobile) as tb_cu_mobile,sum(t6.activity_mobile) as activity_mobile,"
-				 +" sum(t6.ztc_mobile) as ztc_mobile,sum(t6.normal_cu_mobile) as normal_cu_mobile FROM tbdaily.tb_advert_product t6 where date_format(t6.put_date, '%Y-%m') = '"+curMonth+"' group by t6.shop_id) t7"
-				 +" 	on t1.shop_id = t7.shop_id";
+		
 		
 		for(int i = 0; i < shopIdArr.length; i++){
 			
 			String shopId = shopIdArr[i];
 			if(StringUtils.isNotBlank(shopId)){
-				sb.append(coreSql).append(" where t1.shop_id = '").append(shopId).append("'");
+				sb.append(buildShopCompareSql(shopId)).append(" where t1.shop_id = '").append(shopId).append("'");
 				
 				if(i != shopIdArr.length - 1){
 					sb.append(" union all ");
@@ -1438,7 +1444,7 @@ public class ShopService extends BaseService {
 		for(int i = 0; i < shopIdArr.length; i++){
 			
 			sql.append("select cat_no from (select t1.cat_no from tbbase.tb_base_product t1 ")
-			.append(" left join tbdaily.tb_tran_month t2 on t1.shop_id = t2.shop_id and t1.item_id = t2.item_id and t2.tran_month = '"+preMonth+"'")
+			.append(" join tbdaily.tb_tran_month t2 on t1.shop_id = t2.shop_id and t1.item_id = t2.item_id and t2.tran_month = '"+preMonth+"'")
 			.append(" where t1.shop_id = '"+shopIdArr[i]+"' group by t1.cat_no order by sum(t2.sales_amount) desc) t ");
 			
 			if(i != shopIdArr.length -1){
@@ -1772,7 +1778,12 @@ public class ShopService extends BaseService {
 		if(StringUtils.isNotBlank(pageParam.getOrderColumn())){
 			pageSql = pageParam.buildSql(sql);
 		}else{
-			sql += "  order by t3.sales_"+orderWay+"";
+			if("count".equals(orderWay)){
+				sql += "  order by t3.tran_"+orderWay+" desc";
+			}else{
+				sql += "  order by t3.sales_"+orderWay+" desc";
+			}
+			
 			pageSql = sql;
 		}
 		

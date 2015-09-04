@@ -557,6 +557,7 @@ function loadDataTable(config) {
 			destroy : config.destroy || false,
 			autoWidth : false,
 			processing : true,
+			serverSide: true,
 			language : dataTableConfig.language,
 			dom : dataTableConfig.dom,
 			columns : config.columns,

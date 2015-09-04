@@ -186,14 +186,14 @@
 														<tfoot>
 												            <tr>
 												                <th colspan="3" style="text-align:center">合计</th>
-												                <th style="text-align:right">11</th>
-												                <th style="text-align:right">11</th>
 												                <th style="text-align:right">-</th>
 												                <th style="text-align:right">-</th>
-												                <th style="text-align:right">11</th>
-												                <th style="text-align:right">11</th>
-												                <th style="text-align:right">11</th>
-												                <th style="text-align:right">11</th>
+												                <th style="text-align:right">-</th>
+												                <th style="text-align:right">-</th>
+												                <th style="text-align:right">-</th>
+												                <th style="text-align:right">-</th>
+												                <th style="text-align:right">-</th>
+												                <th style="text-align:right">-</th>
 												                <th colspan="2"></th>
 												            </tr>
 												        </tfoot>
@@ -373,9 +373,9 @@
 														<tfoot>
 												            <tr>
 												                <th style="text-align:center">合计</th>
-												                <th style="text-align:right">11</th>
-												                <th style="text-align:right">11</th>
-												                <th style="text-align:right">11</th>
+												                <th style="text-align:right">-</th>
+												                <th style="text-align:right">-</th>
+												                <th style="text-align:right">-</th>
 												            </tr>
 												        </tfoot>
 													</table>
@@ -487,9 +487,9 @@
 														<tfoot>
 												            <tr>
 												                <th style="text-align:center">合计</th>
-												                <th style="text-align:right">11</th>
-												                <th style="text-align:right">11</th>
-												                <th style="text-align:right">11</th>
+												                <th style="text-align:right">-</th>
+												                <th style="text-align:right">-</th>
+												                <th style="text-align:right">-</th>
 												            </tr>
 												        </tfoot>
 													</table>

@@ -168,7 +168,7 @@
 													<thead>
 														<tr role="row">
 															<th>店铺名称</th>
-															<th>标签</th>
+															<!-- <th>标签</th> -->
 															<th>飚量指数</th>
 															<th>宝贝数量</th>
 															<th>地域</th>

@@ -25,7 +25,7 @@ jQuery(function($) {
 	var shop_config = {};
 	shop_config.tableId = 'shop-table';
 	shop_config.url = global.path + '/a/ShopAnalysis?m=shop_list';
-	shop_config.maxIndex = 11;
+	shop_config.maxIndex = 10;
 	
 	shop_config.type = 'POST';
 
@@ -53,11 +53,11 @@ jQuery(function($) {
 
 					return html;
 				}
-			},
+			}/*,
 			{
 				data: 'tag',
 				name: 't1'
-			},
+			}*/,
 			{
 				data : 'rise_index',
 				name : 't3',
@@ -454,7 +454,8 @@ jQuery(function($) {
 	    		if(data.catList && data.catList.length > 0
 	    			&& data.catData && data.catData.length > 0){
 	    			
-	    			$('#echarts-compare').css('height', '2000px');
+	    			var width = data.catList.length * 60 + 200;
+	    			$('#echarts-compare').css('height', width + 'px');
 	    			
 	    			renderChart(option8(data),'echarts-compare');
 	    			

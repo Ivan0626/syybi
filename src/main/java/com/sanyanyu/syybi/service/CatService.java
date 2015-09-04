@@ -583,7 +583,7 @@ public class CatService extends BaseService {
 			params.add(shopType);
 		}
 		
-		sb.append(" and t2.cat_no in ("+catNoIns+") group by t1.shop_id)")
+		sb.append(" and t1.cat_no in ("+catNoIns+") group by t1.shop_id)")
 			.append(" t3 join tbbase.tb_base_shop t4 on t3.shop_id = t4.shop_id GROUP BY t3.shop_id");
 		
 		String pageSql = pageParam.buildSql(sb.toString());

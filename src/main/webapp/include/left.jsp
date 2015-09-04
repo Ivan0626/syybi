@@ -137,6 +137,7 @@
 			<b class="arrow"></b>
 		</li>
 		
+		<!-- 
 		<li class="hover" id="syy-scalpAnalysis">
 			<a href="${ctx }/a/ScalpAnalysis">
 				<i class="menu-icon fa fa-cutlery"></i>
@@ -147,6 +148,7 @@
 
 			<b class="arrow"></b>
 		</li>
+		 -->
 		
 		<li class="hover" id="syy-hotAnalysis">
 			<a href="${ctx }/a/HotAnalysis">

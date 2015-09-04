@@ -263,7 +263,7 @@ public class ShopAnalysisServlet extends BaseServlet {
 				logger.error("获取店铺分析-销售趋势数据表失败", e);
 			}
 			
-		}else if("cat_analysis".equals(m)){
+		}else if("shop_cat_analysis".equals(m)){
 			
 			String shopId = request.getParameter("shopId");
 			String orderWay = request.getParameter("orderWay");
