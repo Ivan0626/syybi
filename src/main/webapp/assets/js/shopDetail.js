@@ -276,6 +276,8 @@ jQuery(function($) {
 
 	goodsad_config.columns = goodsad.columns.c1;
 	goodsad_config.type = 'POST';
+	
+	goodsad_config.order = [[ 2, 'desc' ]];
 
 	goodsad_config.data = function(d) {// 这里要加载动态参数，所以只能用回调函数，
 

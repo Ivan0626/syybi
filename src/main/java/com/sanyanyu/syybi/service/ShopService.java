@@ -115,6 +115,24 @@ public class ShopService extends BaseService {
 		int baseCount = StringUtils.toInteger(baseMap.get("cnt"));
 		return baseCount > 0;
 	}
+	
+	public String getShopCatch(String uid, String shopId, String shopName) throws Exception {
+
+		String sql = "select catch from tbbase.tb_base_shop where shop_id = ? and shop_name = ?";
+		
+		Map<String, Object> baseMap = sqlUtil.search(sql, shopId, shopName);
+		if(baseMap != null && !baseMap.isEmpty() && baseMap.get("catch") != null){
+			String catchMsg = baseMap.get("catch").toString();
+			
+			if("Y".equals(catchMsg)){
+				return "catched";
+			}else{
+				return "notCatch";
+			}
+			
+		}
+		return "notExist";
+	}
 
 	/**
 	 * 关注店铺
@@ -126,8 +144,8 @@ public class ShopService extends BaseService {
 	 */
 	public String attnedShop(String uid, String shopId, String shopName) throws Exception {
 
-		boolean exist = getAttnedExist(uid, shopId, shopName);
-		if (exist) {// 存在则添加到关注列表
+		String catchMsg = getShopCatch(uid, shopId, shopName);
+		if ("catched".equals(catchMsg)) {// 存在则添加到关注列表
 
 			AttnShop shop = new AttnShop();
 			shop.setAsid(SysUtil.getUUID());
@@ -137,10 +155,8 @@ public class ShopService extends BaseService {
 			shop.setAttType(1);
 			sqlUtil.insert(shop);
 
-			return "success";
-		} else {
-			return "notexist";
 		}
+		return catchMsg;
 
 	}
 	

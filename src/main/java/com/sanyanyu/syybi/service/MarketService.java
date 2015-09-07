@@ -312,11 +312,12 @@ public class MarketService extends BaseService {
 				+ " left join (select shop_id, item_id,"
 				+ " sum(hot) as hot,sum(normal) as normal,sum(tb_cu) as tb_cu,sum(activity) as activity,sum(taobaoke) as taobaoke,sum(ztc) as ztc,sum(ju) as ju,"
 				+ " sum(normal_cu) as normal_cu,sum(hot_mobile) as hot_mobile,sum(tb_cu_mobile) as tb_cu_mobile,sum(activity_mobile) as activity_mobile,sum(ztc_mobile) as ztc_mobile,sum(normal_cu_mobile) as normal_cu_mobile"
-				+ " from tbdaily.tb_advert_product where date_format(put_date,'%Y-%m') = '2015-07' group by shop_id, item_id) t3 on t2.shop_id = t3.shop_id and t2.item_id = t3.item_id "
+				+ " from tbdaily.tb_advert_product where date_format(put_date,'%Y-%m') = '"+ DateUtils.getCurMonth() + "' and shop_id = ? group by shop_id, item_id) t3 on t2.shop_id = t3.shop_id and t2.item_id = t3.item_id "
 				+ " left join tbdaily.tb_tran_month t4 on t2.shop_id = t4.shop_id and t2.item_id = t4.item_id and t4.tran_month = '"+DateUtils.getOffsetMonth(-1, "yyyy-MM")+"' "
 				+ " where t2.shop_id = ? ";
 
 		List<Object> params = new ArrayList<Object>();
+		params.add(shopId);
 		params.add(shopId);
 		if (StringUtils.isNotBlank(category)) {
 			
@@ -381,12 +382,12 @@ public class MarketService extends BaseService {
 				+ " left join (select t4.shop_id, t4.put_date, sum(t4.hot) as hot, sum(t4.normal) as normal, sum(t4.tb_cu) as tb_cu, sum(t4.activity) as activity,sum(t4.taobaoke) as taobaoke,"
 				+ " sum(t4.ztc) as ztc,sum(t4.ju) as ju,sum(t4.normal_cu) as normal_cu,sum(t4.hot_mobile) as hot_mobile,sum(t4.tb_cu_mobile) as tb_cu_mobile,sum(t4.activity_mobile) as activity_mobile,"
 				+ " sum(t4.ztc_mobile) as ztc_mobile,sum(t4.normal_cu_mobile) as normal_cu_mobile "
-				+ " from tbdaily.tb_advert_product t4 group by t4.shop_id, t4.put_date ) t3 "
+				+ " from tbdaily.tb_advert_product t4 where t4.shop_id = ? and t4.put_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d') group by t4.shop_id, t4.put_date ) t3 "
 				+ " on t1.shop_id = t3.shop_id and t1.tran_date = t3.put_date"
 				+ " where t1.shop_id = ? and t1.tran_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d')) t";
 
 		
-		List<AdAnalysis> list = sqlUtil.searchList(AdAnalysis.class, pageParam.buildSql(sql), shopId, startDate, endDate);
+		List<AdAnalysis> list = sqlUtil.searchList(AdAnalysis.class, pageParam.buildSql(sql), shopId, startDate, endDate, shopId, startDate, endDate);
 	
 		PageEntity<AdAnalysis> pageEntity = PageEntity.getPageEntity(pageParam, list);
 	
@@ -728,12 +729,14 @@ public class MarketService extends BaseService {
 	public PageEntity<AdvertTaoke> getShopTaokes(PageParam pageParam, String shopId, String startDate, String endDate)
 			throws Exception {
 
-		String sql = "select t1.tran_date,t1.sales_amount,t1.sales_volume,t1.tran_count,t2.settle_amt,t2.settle_num,t2.commisiona_amt from tbdaily.tb_tran_day_shop t1"
-				+ " left join tbdaily.tb_advert_taoke_shop t2 on t1.shop_id = t2.shop_id and t1.tran_date = t2.catch_date"
+		String sql = "select t1.tran_date,t1.sales_amount,t1.sales_volume,t1.tran_count,t2.settle_amt,t2.settle_num,t2.commisiona_amt from tbdaily.tb_tran_day_shop t1" 
+				+ " left join (select t2.catch_date,t2.settle_amt,t2.settle_num,t2.commisiona_amt from tbdaily.tb_advert_taoke_shop t2 where t2.shop_id = ? and t2.catch_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d') group by t2.shop_id ) t2"
+				+ " on  t1.tran_date = t2.catch_date "
 				+ " where t1.shop_id = ? and t1.tran_date between str_to_date(?, '%Y-%m-%d') and str_to_date(?, '%Y-%m-%d')";
 
+		
 		List<AdvertTaoke> list = sqlUtil.searchList(AdvertTaoke.class, pageParam.buildSql(sql), shopId, startDate,
-				endDate);
+				endDate,shopId, startDate,endDate);
 
 		PageEntity<AdvertTaoke> pageEntity = PageEntity.getPageEntity(pageParam, list);
 
@@ -1004,7 +1007,7 @@ public class MarketService extends BaseService {
 		
 		String sql = "select t3.prd_name, t3.prd_img, t1.item_id,t1.sales_amount,t1.sales_volume,t1.tran_count,t2.activity_content from tbdaily.tb_tran_day t1 "
 					+" left join tbdaily.tb_advert_cu t2 on t1.tran_date = t2.put_date and t1.shop_id = t2.shop_id and t1.item_id = t2.item_id and t2.activity_type = '商品促销'"
-					+" left join tbbase.tb_base_product t3 on t1.shop_id = t3.shop_id and t1.item_id = t3.item_id "
+					+" inner join tbbase.tb_base_product t3 on t1.shop_id = t3.shop_id and t1.item_id = t3.item_id "
 					+" where t1.shop_id = ? and t1.tran_date = str_to_date(?, '%Y-%m-%d')";
 		
 		if(StringUtils.isNotBlank(prdName)){

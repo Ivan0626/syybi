@@ -247,9 +247,11 @@ jQuery(function($) {
 			'm' : "attned"
 		}, function(result) {
 
-			if (result.status === 'notexist') {
+			if (result.status === 'notExist') {
 				showMsg("该店铺不存在");
-			} else if (result.status === 'success') {
+			} else if (result.status === 'notCatch') {
+				showMsg("很抱歉，当前您关注的店铺不在我们的收录范围内，我们会在24小时内完成收录，店铺数据从收录后开始展现");
+			} else if (result.status === 'catched') {
 				
 				showMsg("添加成功！", function(){
 					
@@ -259,7 +261,6 @@ jQuery(function($) {
 					}
 					
 				});
-				
 				
 			} else {
 				showMsg("店铺关注失败");
