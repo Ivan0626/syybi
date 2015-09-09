@@ -104,7 +104,7 @@ public class AccountSettingServlet extends BaseServlet {
 				
 				request.setAttribute("indList", indList);
 				
-				Map<String, Object> attedCat = accountSettingService.getAttedCat(this.getUid(request));
+				Map<String, Object> attedCat = accountSettingService.getAttedCatSingle(this.getUid(request));
 				
 				request.setAttribute("attedCat", attedCat);
 				

@@ -200,7 +200,7 @@ jQuery(function($) {
                 }, 0 );
 
             // Update footer
-            $( api.column( value ).footer() ).html(pageTotal);
+            $( api.column( value ).footer() ).html(pageTotal.toFixed(2));
         });
         
     };
@@ -347,7 +347,7 @@ jQuery(function($) {
                 }, 0 );
 
             // Update footer
-            $( api.column( value ).footer() ).html(pageTotal);
+            $( api.column( value ).footer() ).html(pageTotal.toFixed(2));
         });
         
     };

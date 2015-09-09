@@ -1895,26 +1895,32 @@ public class ShopService extends BaseService {
 		}
 		if (StringUtils.isNotBlank(startAvgPrice)) {
 			reSql += " and t2.avg_price >= ?";
+			params.add(startAvgPrice);
 		}
 		if (StringUtils.isNotBlank(endAvgPrice)) {
 			reSql += " and t2.avg_price <= ?";
+			params.add(endAvgPrice);
 		}
 		if("cur".equals(monthType)){
 			
 			if (StringUtils.isNotBlank(startAvgPriceTran)) {
 				reSql += " and t2.avg_price_tran >= ?";
+				params.add(startAvgPriceTran);
 			}
 			if (StringUtils.isNotBlank(endAvgPriceTran)) {
 				reSql += " and t2.avg_price_tran <= ?";
+				params.add(endAvgPriceTran);
 			}
 			
 		}else if("pre".equals(monthType)){
 			
 			if (StringUtils.isNotBlank(startAvgPriceTran)) {
 				reSql += " and t2.avg_price_tran_pre >= ?";
+				params.add(startAvgPriceTran);
 			}
 			if (StringUtils.isNotBlank(endAvgPriceTran)) {
 				reSql += " and t2.avg_price_tran_pre <= ?";
+				params.add(endAvgPriceTran);
 			}
 			
 		}

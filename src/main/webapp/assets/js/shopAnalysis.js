@@ -28,6 +28,8 @@ jQuery(function($) {
 	shop_config.maxIndex = 10;
 	
 	shop_config.type = 'POST';
+	
+	shop_config.order = [[ 8, 'desc' ]];
 
 	shop_config.data = function(d) {
 		// 添加额外的参数传给服务器

@@ -2086,9 +2086,9 @@ public class GoodsService extends BaseService {
 			reSql += " and t3.sales_amount >= ?";
 			params.add(startAmount);
 		}
-		if (StringUtils.isNotBlank(startAmount)) {
+		if (StringUtils.isNotBlank(endAmount)) {
 			reSql += " and t3.sales_amount <= ?";
-			params.add(startAmount);
+			params.add(endAmount);
 		}
 		
 		String totalSql = "select count(0) as recordsTotal "+  reSql;

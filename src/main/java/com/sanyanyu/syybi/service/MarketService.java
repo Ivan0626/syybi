@@ -657,6 +657,7 @@ public class MarketService extends BaseService {
 			sql += " and t2.cat_path like '" + category + "%'";
 		}	
 		
+		sql += " group by t2.item_id ";
 		List<GoodsEntity> list = sqlUtil.searchList(GoodsEntity.class, pageParam.buildSql(sql), shopId, date);
 
 		PageEntity<GoodsEntity> pageEntity = PageEntity.getPageEntity(pageParam, list);

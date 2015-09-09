@@ -92,6 +92,8 @@ public class CategoryServlet extends BaseServlet {
 			String catNo = request.getParameter("catNo");
 			String chartWay = request.getParameter("chartWay");//排序字段
 			
+			String catPath = request.getParameter("catPath");
+			
 			if(StringUtils.isNotBlank(catNo)){
 				
 				List<CatData> catDataList = null;
@@ -107,7 +109,7 @@ public class CategoryServlet extends BaseServlet {
 				}
 				
 				try {
-					catDataList = catService.getCateDatasByCatNo(catNo, null, null, null, null, chartWay);
+					catDataList = catService.getCateDatasByCatNo(catNo, null, null, null, null, chartWay, catPath);
 				} catch (Exception e) {
 					logger.error("获取类目下对应叶子节点的统计数据失败", e);
 				}

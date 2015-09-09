@@ -342,9 +342,22 @@ public class IndustryAnalysisServlet extends BaseServlet {
 				
 				request.setAttribute("indList", indList);
 				
-				Map<String, Object> attedCat = accountSettingService.getAttedCat(this.getUid(request));
+				List<Map<String, Object>> attedCat = accountSettingService.getAttedCat(this.getUid(request));
 				
-				request.setAttribute("attedCat", attedCat);
+				
+				for(Map<String, Object> ind : indList){
+					
+					boolean isContain = false;
+					for(Map<String, Object> atted : attedCat){
+						if(ind.get("iid") != null && atted.get("iid") != null && ind.get("iid").toString().equals(atted.get("iid").toString())){
+							isContain = true;
+							break;
+						}
+					}
+					ind.put("isContain", isContain);
+					
+				}
+				//request.setAttribute("attedCat", attedCat);
 				
 				request.getRequestDispatcher("/pages/industryAnalysis.jsp").forward(request, response);
 			} catch (Exception e) {

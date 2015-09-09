@@ -642,7 +642,7 @@ function loadEcharts(ecfn){
 }
 
 //渲染图表
-function renderChart(option, chartId){
+function renderChart(option, chartId, event){
 	
 	var chart = null;
 	
@@ -663,6 +663,11 @@ function renderChart(option, chartId){
 			// 基于准备好的dom，初始化echarts图表
 			chart = ec.init(document.getElementById(chartId));
 			chart.setOption(option);
+			
+			if(event){
+				var ecConfig = require('echarts/config');
+				chart.on(ecConfig.EVENT.CLICK, event);
+			}
 		};
 		loadEcharts(ecfn);
 	}

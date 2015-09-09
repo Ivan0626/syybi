@@ -39,7 +39,7 @@ public class CatService extends BaseService {
 	 */
 	public List<CatEntity> getChildCatsByCatNo(String parentNo) throws Exception {
 		
-		String sql = "select cat_no as catNo, cat_name as catName, isparent as isParent from tbbase.tb_base_cat_api where parent_no = ? order by cat_name_single";
+		String sql = "select cat_no as catNo, cat_name as catName, isparent as isParent, cat_path from tbbase.tb_base_cat_api where parent_no = ? order by cat_name_single";
 		
 		return sqlUtil.searchList(CatEntity.class, sql, parentNo);
 		
@@ -68,9 +68,9 @@ public class CatService extends BaseService {
 	public CatEntity getParentByCatNo(String childNo) throws Exception{
 		
 		//获取父级
-		String sql = "select distinct iid as catNo, ind_name as catName, 'ind' as flag from  tbbase.tb_base_cat_api where iid = (select iid from tbbase.tb_base_cat_api where cat_no = ? limit 1)"
+		String sql = "select distinct iid as catNo, ind_name as catName, 'ind' as flag, '' as cat_path from  tbbase.tb_base_cat_api where iid = (select iid from tbbase.tb_base_cat_api where cat_no = ? limit 1)"
 				+" union all"
-				+" select cat_no as catNo, cat_name as catName, 'cat' from  tbbase.tb_base_cat_api where cat_no = (select parent_no from tbbase.tb_base_cat_api where cat_no = ? limit 1)";
+				+" select cat_no as catNo, cat_name as catName, 'cat' as flag, cat_path from  tbbase.tb_base_cat_api where cat_no = (select parent_no from tbbase.tb_base_cat_api where cat_no = ? limit 1)";
 		
 		return sqlUtil.search(CatEntity.class, sql, childNo, childNo);
 	}
@@ -85,7 +85,7 @@ public class CatService extends BaseService {
 		
 		//String sql = "select cat_no as catNo, cat_name as catName, isparent as isParent from tbbase.tb_base_cat_api where iid = ? order by cat_name_single";
 		
-		String sql = "select t1.cat_no as catNo, t1.cat_name as catName, t1.isparent as isParent, t2.att_cat from tbbase.tb_base_cat_api t1"
+		String sql = "select t1.cat_no as catNo, t1.cat_name as catName, t1.isparent as isParent, t2.att_cat, t1.cat_path from tbbase.tb_base_cat_api t1"
 		 +" left join tbweb.tb_attn_cat t2 on t1.cat_no = t2.att_cat  and t2.uid = ? where t1.iid = ? order by t1.cat_name_single";
 		
 		return sqlUtil.searchList(CatEntity.class, sql, uid, iid);
@@ -136,10 +136,22 @@ public class CatService extends BaseService {
 	 * @return
 	 */
 	private List<Map<String, Object>> getLeafListByIid(String iid, String uid){
+		
+		return getLeafListByIid(iid, uid, null);
+	}
+	
+	private List<Map<String, Object>> getLeafListByIid(String iid, String uid, String catPath){
 		//查找类目对应的叶子节点
-		String sql = "select t1.cat_no,ifnull(tbbase.getLeafLst(t1.cat_no),t1.cat_no) as leafNo from tbbase.tb_base_cat_api t1" 
-				+" join tbweb.tb_attn_cat t2 on t1.cat_no = t2.att_cat and t2.uid = ?"
-				+" where t1.iid = ?";
+		String sql = "";
+		if(StringUtils.isNotBlank(catPath)){
+			sql = "select t1.cat_no,ifnull(tbbase.getLeafLstByPath(CONCAT('"+catPath+"', ' » ', t1.cat_name)),t1.cat_no) as leafNo from tbbase.tb_base_cat_api t1" 
+					+" join tbweb.tb_attn_cat t2 on t1.cat_no = t2.att_cat and t2.uid = ?"
+					+" where t1.iid = ?";
+		}else{
+			sql = "select t1.cat_no,ifnull(tbbase.getLeafLstByPath(t1.cat_name),t1.cat_no) as leafNo from tbbase.tb_base_cat_api t1" 
+					+" join tbweb.tb_attn_cat t2 on t1.cat_no = t2.att_cat and t2.uid = ?"
+					+" where t1.iid = ?";
+		}
 		
 		List<Map<String, Object>> leafList = sqlUtil.searchList(sql, uid, iid);
 		
@@ -154,6 +166,14 @@ public class CatService extends BaseService {
 	private List<Map<String, Object>> getLeafListByCatNo(String catNo){
 		
 		String sql = "select cat_no, ifnull(tbbase.getLeafLst(cat_no),cat_no) as leafNo from tbbase.tb_base_cat_api where parent_no = ?";
+		
+		return sqlUtil.searchList(sql, catNo);
+		
+	}
+	
+	private List<Map<String, Object>> getLeafListByCatNo(String catNo, String catPath){
+		
+		String sql = "select cat_no, ifnull(tbbase.getLeafLstByPath(CONCAT('"+catPath+"', ' » ', cat_name)),cat_no) as leafNo from tbbase.tb_base_cat_api where parent_no = ?";
 		
 		return sqlUtil.searchList(sql, catNo);
 		
@@ -341,6 +361,16 @@ public class CatService extends BaseService {
 		
 	}
 	
+	public List<CatData> getCateDatasByCatNo(String catNo, String startMonth, String endMonth, String shopType, PageParam pageParam, String chartWay, String catPath) throws Exception{
+		
+		List<Map<String, Object>> leafList = getLeafListByCatNo(catNo, catPath);
+		
+		List<CatData> list = getCatDataByMonths(leafList, startMonth, endMonth, shopType, pageParam, chartWay);
+		
+		return list;
+		
+	}
+	
 	/**
 	 * 封装获取行业趋势的数据业务逻辑
 	 * @param leafList
@@ -481,7 +511,7 @@ public class CatService extends BaseService {
 //					+" union all"
 //					+" select cat_no as catNo, cat_name as catName, isparent as isParent, 'cat' as flag, cat_name_single  from tbbase.tb_base_cat_api where cat_name like '%"+queryCatName+"%') t  order by t.cat_name_single";
 		
-		 String sql = "select t1.cat_no as catNo, t1.cat_name as catName, t1.isparent as isParent, 'cat' as flag, t1.cat_name_single,t4.att_cat,t1.top_cat  from tbbase.tb_base_cat_api t1"
+		 String sql = "select t1.cat_no as catNo, t1.cat_name as catName, t1.isparent as isParent, 'cat' as flag, t1.cat_name_single,t4.att_cat,t1.top_cat, t1.cat_path  from tbbase.tb_base_cat_api t1"
 				 +" left join (select t2.att_cat, t3.top_cat from tbweb.tb_attn_cat t2 join tbbase.tb_base_cat_api t3 on t2.att_cat = t3.cat_no and t2.uid = ? ) t4 on t1.top_cat = t4.top_cat"
 				 +" where t1.cat_name like '%"+queryCatName+"%' order by t1.cat_name_single";
 		

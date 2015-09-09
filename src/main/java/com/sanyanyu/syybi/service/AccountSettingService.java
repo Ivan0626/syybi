@@ -61,12 +61,21 @@ public class AccountSettingService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public Map<String, Object> getAttedCat(String uid) throws Exception{
+	public Map<String, Object> getAttedCatSingle(String uid) throws Exception{
+		
+		String sql = "select t2.iid, t2.ind_name,t2.cat_no, t2.cat_name, t2.cat_name_single from tbweb.tb_attn_cat t1"
+				+ " join tbbase.tb_base_cat_api t2 on t1.att_cat = t2.cat_no where t1.uid = ? order by createtime desc limit 1";
+		
+		return sqlUtil.search(sql, uid);
+		
+	}
+	
+	public List<Map<String, Object>> getAttedCat(String uid) throws Exception{
 		
 		String sql = "select t2.iid, t2.ind_name,t2.cat_no, t2.cat_name, t2.cat_name_single from tbweb.tb_attn_cat t1"
 				+ " join tbbase.tb_base_cat_api t2 on t1.att_cat = t2.cat_no where t1.uid = ?";
 		
-		return sqlUtil.search(sql, uid);
+		return sqlUtil.searchList(sql, uid);
 		
 	}
 	

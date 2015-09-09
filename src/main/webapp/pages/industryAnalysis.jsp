@@ -45,10 +45,10 @@
 		                <div class="fz-14" id="syy-sidebar_category">
 		                    <ul>
 		                    	<c:forEach items="${indList }" var="ind">
-		                    		<c:if test="${ind.iid == attedCat.iid }">
+		                    		<c:if test="${ind.isContain }">
 		                    			<li> <a href="javascript:void(0);" style="font-weight:bold;" onclick="loadInd('${ind.iid}', '${ind.ind_name }')" >${ind.ind_name }</a> </li>
 		                    		</c:if>
-		                    		<c:if test="${ind.iid != attedCat.iid }">
+		                    		<c:if test="${!ind.isContain }">
 		                    			<li> <span style="color:gray;">${ind.ind_name }</span></li>
 		                    		</c:if>
 		                    	</c:forEach>
@@ -406,10 +406,10 @@
 				
 				$.each(data.catList, function(idx, d){
 					if(d.isParent == '0'){//没有子类目或者没有权限，即叶子节点
-						html += '<li> '+d.catName+'</li>';
+						html += '<li> <a href="javascript:void(0);" style="font-weight:bold;" onclick=loadProp(\"'+d.catNo+'\",\"'+d.catName+'\");>'+d.catName+'</a></li>';
 					}else{
 						if(d.att_cat){
-							html += '<li> <a href="javascript:void(0);" style="font-weight:bold;" onclick=loadCat(\"'+d.catNo+'\",\"'+d.catName+'\");>'+d.catName+'</a></li>';
+							html += '<li> <a href="javascript:void(0);" style="font-weight:bold;" onclick=loadCat(\"'+d.catNo+'\",\"'+d.catName+'\",\"'+d.cat_path+'\");>'+d.catName+'</a></li>';
 						}else{
 							html += '<li> <span style="color:gray;">'+d.catName+'</span></li>';
 						}
@@ -441,7 +441,9 @@
 					$('#chartDiv').show();
 					$('#tableDiv').hide();
 					
-					renderChart(option1(data.catDataList, chartWay, '各类别'),'echarts-scale');
+					renderChart(option1(data.catDataList, chartWay, '各类别'),'echarts-scale', function(param){
+						//console.log(param);  TODO:如何获取类目NO
+					});
 				});
 				
 			}
@@ -449,9 +451,10 @@
 		}
 		
 		//加载类目下的子类目信息以及父级（父类目或者行业）
-		function loadCat(catNo, catName){
+		function loadCat(catNo, catName, catPath){
 			$.post(global.path+'/a/Category', {
 		    'catNo': catNo,
+		    'catPath': catPath,
 		    'method': "loadCat",
 		    'chartWay': 'volume'
 		}, function(data) {
@@ -464,7 +467,7 @@
 				if(parentCat.flag == 'ind'){//父级类目为行业
 					html += '<a href="javascript:void(0);" style="font-weight:bold;" onclick=loadInd(\"'+parentCat.catNo+'\",\"'+parentCat.catName+'\");>'+parentCat.catName+'</a>';
 				}else if(parentCat.flag == 'cat'){//父级类目为类目
-					html += '<a href="javascript:void(0);" style="font-weight:bold;" onclick=loadCat(\"'+parentCat.catNo+'\",\"'+parentCat.catName+'\");>'+parentCat.catName+'</a>';
+					html += '<a href="javascript:void(0);" style="font-weight:bold;" onclick=loadCat(\"'+parentCat.catNo+'\",\"'+parentCat.catName+'\",\"'+parentCat.cat_path+'\");>'+parentCat.catName+'</a>';
 				}
 				
 				html += '</div>';
@@ -476,7 +479,7 @@
 					if(d.isParent == '0'){//没有子类目，即叶子节点，需要加载叶子节点下的属性
 						html += '<li> <a href="javascript:void(0);" style="font-weight:bold;" onclick=loadProp(\"'+d.catNo+'\",\"'+d.catName+'\");>'+d.catName+'</a></li>';
 					}else{
-						html += '<li> <a href="javascript:void(0);" style="font-weight:bold;" onclick=loadCat(\"'+d.catNo+'\",\"'+d.catName+'\");>'+d.catName+'</a></li>';
+						html += '<li> <a href="javascript:void(0);" style="font-weight:bold;" onclick=\"loadCat(\''+d.catNo+'\', \''+d.catName+'\', \''+d.cat_path+'\')\">'+d.catName+'</a></li>';
 					}
 				});
 				html += '</ul>';
@@ -493,7 +496,7 @@
 						$('.breadcrumb .active:last').remove();
 					}
 					//$('.breadcrumb').append('<li class="active"><a href="javascript:void(0);" data-no="'+parentCat.catNo+'" onclick=\"loadInd(\''+parentCat.catNo+'\', \''+parentCat.catName+'\')\">'+parentCat.catName+'</a></li>');
-					$('.breadcrumb').append('<li class="active"><a href="javascript:void(0);" data-no="'+catNo+'" onclick=\"loadCat(\''+catNo+'\', \''+catName+'\')\">'+catName+'</a></li>');
+					$('.breadcrumb').append('<li class="active"><a href="javascript:void(0);" data-no="'+catNo+'" onclick=\"loadCat(\''+catNo+'\', \''+catName+'\', \''+catPath+'\')\">'+catName+'</a></li>');
 					
 					$('.breadcrumb').append('<li class="active">子行业规模 (类目报表)</li>');
 					
@@ -538,7 +541,7 @@
 					
 					var html = '<div class="parent">';
 					//父级类目为类目
-					html += '<a href="javascript:void(0);" style="font-weight:bold;" onclick=loadCat(\"'+parentCat.catNo+'\",\"'+parentCat.catName+'\");>'+parentCat.catName+'</a>';
+					html += '<a href="javascript:void(0);" style="font-weight:bold;" onclick=loadCat(\"'+parentCat.catNo+'\",\"'+parentCat.catName+'\",\"'+parentCat.cat_path+'\");>'+parentCat.catName+'</a>';
 					
 					html += '</div>';
 					
@@ -665,10 +668,10 @@
 						//只检索类目
 						if(d.flag == 'cat'){
 							if(d.isParent == '0'){//没有子类目，即叶子节点
-				    				html += '<li> '+d.catName+'</li>';
-				    			}else{
-				    				html += '<li> <a href="javascript:void(0);" onclick=loadCat(\"'+d.catNo+'\",\"'+d.catName+'\");>'+d.catName+'</a></li>';
-				    			}
+				    			html += '<li> '+d.catName+'</li>';
+			    			}else{
+			    				html += '<li> <a href="javascript:void(0);" onclick=loadCat(\"'+d.catNo+'\",\"'+d.catName+'\",\"'+d.cat_path+'\");>'+d.catName+'</a></li>';
+			    			}
 						}
 						
 					});

@@ -36,7 +36,14 @@ public class CatEntity implements Serializable {
 	
 	private String att_cat;//行业下面有权限的类目或者类目下有权限的子类目
 	
+	private String cat_path;
 	
+	public String getCat_path() {
+		return cat_path;
+	}
+	public void setCat_path(String cat_path) {
+		this.cat_path = cat_path;
+	}
 	public String getPropName() {
 		return propName;
 	}

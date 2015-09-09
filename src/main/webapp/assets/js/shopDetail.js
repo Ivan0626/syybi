@@ -21,6 +21,8 @@ jQuery(function($) {
 	goods_list_config.paging = true;
 
 	goods_list_config.type = 'POST';
+	
+	goods_list_config.order = [[ 4, 'desc' ]];
 
 	goods_list_config.data = function(d) {
 

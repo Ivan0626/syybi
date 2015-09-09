@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.sanyanyu.syybi.entity.DiamondDetail;
 import com.sanyanyu.syybi.entity.DiamondEntity;
 import com.sanyanyu.syybi.entity.PageEntity;
 import com.sanyanyu.syybi.entity.PageParam;
+import com.sanyanyu.syybi.utils.StringUtils;
 
 /**
  * 钻展透视Service
@@ -88,17 +87,24 @@ public class DiamondService extends BaseService {
 		List<Object> params = new ArrayList<Object>();
 		params.add(bpid);
 		
-		recordsTotalSql += " and t2.category = ?";
-		listSql += " and t2.category = ?";
-		
 		if(StringUtils.isNotBlank(category)){
 			
+			recordsTotalSql += " and t2.category = ?";
+			listSql += " and t2.category = ?";
 			params.add(category);
 		}else {//获取有权限的类目
 			
-			Map<String, Object> map = accountSettingService.getAttedCat(uid);
+			List<Map<String, Object>> mapList = accountSettingService.getAttedCat(uid);
 			
-			params.add(map.get("cat_name"));
+			StringBuffer sb = new StringBuffer();
+			for(int i = 0; i < mapList.size(); i++){
+				sb.append(mapList.get(i).get("cat_name"));
+				if(i != mapList.size() - 1){
+					sb.append(",");
+				}
+			}
+			recordsTotalSql += " and t2.category in ("+StringUtils.strIn(sb.toString())+")";
+			listSql += " and t2.category in ("+StringUtils.strIn(sb.toString())+")";
 		}
 		if(StringUtils.isNotBlank(startDate) && StringUtils.isNotBlank(endDate)){
 			recordsTotalSql += " and t1.put_date between str_to_date(?,'%Y-%m-%d') and str_to_date(?,'%Y-%m-%d')";
