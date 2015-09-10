@@ -405,6 +405,7 @@ jQuery(function($) {
 	goods_config.data = function(d) {
 
 		d.catNo = $('#selected-no').val();
+		d.catPath = $('#selected-path').val();
 		d.startMonth = $('#d432113').val();
 		d.endMonth = $('#d432223').val();
 		d.shopType = $('input[name="shopType3"]:checked').val();

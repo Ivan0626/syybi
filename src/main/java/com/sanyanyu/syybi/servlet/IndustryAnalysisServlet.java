@@ -162,12 +162,13 @@ public class IndustryAnalysisServlet extends BaseServlet {
 			String startMonth = request.getParameter("startMonth");
 			String endMonth = request.getParameter("endMonth");
 			String shopType = request.getParameter("shopType");
+			String catPath = request.getParameter("catPath");
 			
 			try {
 				
 				PageParam pageParam = PageParam.getPageParam(request);
 				
-				PageEntity<HotGoods> pageEntity = catService.getHotGoods(this.getUid(request), catNo, startMonth, endMonth, shopType, pageParam, "ind");
+				PageEntity<HotGoods> pageEntity = catService.getHotGoods(this.getUid(request), catNo, startMonth, endMonth, shopType, pageParam, "ind", catPath);
 				
 				List<Map<String, Object>> dirList = goodsService.getAttnedDirs(this.getUid(request));
 				pageEntity.setExtList(dirList);;

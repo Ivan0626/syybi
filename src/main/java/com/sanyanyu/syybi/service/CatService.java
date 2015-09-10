@@ -226,6 +226,14 @@ public class CatService extends BaseService {
 		
 	}
 	
+	public Map<String, Object> getLeafListByCatPath2(String catPath){
+		
+		String sql = "select tbbase.getLeafLstByPath(?) as leafNo";
+		
+		return sqlUtil.search(sql, catPath);
+		
+	}
+	
 	/**
 	 * 统计类目的销量、销售额、成交次数
 	 * @param leafList
@@ -529,11 +537,11 @@ public class CatService extends BaseService {
 	 * @return
 	 * @throws Exception
 	 */
-	public PageEntity<HotGoods> getHotGoods(String uid, String catNo, String startMonth, String endMonth, String shopType, PageParam pageParam, String flag) throws Exception{
+	public PageEntity<HotGoods> getHotGoods(String uid, String catNo, String startMonth, String endMonth, String shopType, PageParam pageParam, String flag, String catPath) throws Exception{
 		
 		String catNoIns = "";
 		if("ind".equals(flag)){
-			Map<String, Object> leaf = this.getLeafListByCatNo2(catNo);
+			Map<String, Object> leaf = this.getLeafListByCatPath2(catPath);
 			catNoIns = StringUtils.strIn(leaf.get("leafNo").toString());
 		}else if("brand".equals(flag)){
 			catNoIns = catNo;
@@ -571,6 +579,12 @@ public class CatService extends BaseService {
 		List<HotGoods> list = sqlUtil.searchList(HotGoods.class, pageSql, params.toArray());
 		
 		return PageEntity.getPageEntity(pageParam, list);
+		
+	}
+	
+	public PageEntity<HotGoods> getHotGoods(String uid, String catNo, String startMonth, String endMonth, String shopType, PageParam pageParam, String flag) throws Exception{
+		
+		return getHotGoods(uid, catNo, startMonth, endMonth, shopType, pageParam, flag, null);
 		
 	}
 	

@@ -15,6 +15,7 @@
 	
 	<!-- 选中的行业或者类目编号 -->
 	<input type="hidden" id="selected-no" />
+	<input type="hidden" id="selected-path" />
 	<input type="hidden" id="propName" />
 	
 	<!-- /section:basics/navbar.layout -->
@@ -507,6 +508,7 @@
 					$("#trendSub,#goods,#shop").removeClass("in active");
 					
 					$('#selected-no').val(catNo);
+					$('#selected-path').val(catPath);
 					$('#propName').val('');
 					
 					//加载子行业数据图表
