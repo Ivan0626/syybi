@@ -12,6 +12,7 @@ import org.apache.commons.dbcp.BasicDataSourceFactory;
 public class JDBCUtils {
 	private static DataSource ds;
 	
+	//add by lcy
 	private static ThreadLocal<Connection> tl = new ThreadLocal<Connection>();  //map
 	
 	static{
